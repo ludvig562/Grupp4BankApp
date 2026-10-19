@@ -8,6 +8,7 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
+            //TESTING. Funderar på om man ska göra MenuManager till static
             MenuManager menuManager = new MenuManager();
 
             menuManager.Update();
