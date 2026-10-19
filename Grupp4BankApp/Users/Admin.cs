@@ -23,7 +23,7 @@ namespace Grupp4BankApp.Users
                     "[3] Avsluta meny/logga ut");
 
                 //check if user input is a number
-                if (!int.TryParse(Console.ReadLine(), out int adminMenuChoice)) //if user input is a number
+                if (int.TryParse(Console.ReadLine(), out int adminMenuChoice)) //if user input is a number
                 {
                     switch (adminMenuChoice)
                     {
@@ -53,7 +53,7 @@ namespace Grupp4BankApp.Users
                             //    $"[2] Nej, jag vill ändra informationen");
 
                             //create new Customer account
-                            //save customer info in list somewhere?
+                            //save customer info in dictionary!
                             Customer newCustomer = new Customer(newCustomerID, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
                             break;
 
