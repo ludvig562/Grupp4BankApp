@@ -11,11 +11,10 @@ namespace Grupp4BankApp.Users
 
         public UserRole Role { get; set; }
 
-        public enum UserRole
+        public enum UserRole //Maybe usefull to differentiate Admin from User Acounts If 
         {
             User,
             Admin
         }
-
     }
 }

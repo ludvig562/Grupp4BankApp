@@ -10,9 +10,10 @@ namespace Grupp4BankApp
         {
             Dictionary<string, User> users = new Dictionary<string, User>();
 
-            AuthenticationService authentication =
+            AuthenticationService authentication =// creates a new object for AuthenticationService that sends the dictionery to the construktor
                 new AuthenticationService(users);
 
+            //-------TEMPORARY TEST FOR LOGIN METHOD-------//
             User bob = new User();
 
             bob.Username = "bob";
@@ -20,10 +21,11 @@ namespace Grupp4BankApp
             bob.Role = UserRole.User;
 
             users.Add(bob.Username, bob);
+            //---------------------------------------------//
 
             User? loggedInUser = null;
 
-            while (loggedInUser == null)
+            while (loggedInUser == null)// while loggedinuser is null keep repeting the login method
             {
                 loggedInUser = authentication.Login();
             }

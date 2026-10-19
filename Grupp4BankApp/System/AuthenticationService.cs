@@ -22,17 +22,18 @@ namespace Grupp4BankApp.System
             Console.Write("Lösenord: ");
             string password = Console.ReadLine() ?? "";
 
-            if (_users.TryGetValue(username, out User? user))
+            //trys to get the same username as entered and then if found it calls the method VerifyPassword to verify if the saved hash to the username is the same as the hash of the entered password
+            if (_users.TryGetValue(username, out User? user)) 
             {
                 if (PasswordHasher.VerifyPassword(password, user.Password))
                 {
                     Console.WriteLine("Inloggningen lyckades!");
-                    return user;
+                    return user;// if correct it returns the user
                 }
             }
 
             Console.WriteLine("Fel användarnamn eller lösenord!");
-            return null;
+            return null;//if it fails it returns null so the program runs again
         }
     }
 }
