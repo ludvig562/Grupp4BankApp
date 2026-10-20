@@ -12,7 +12,10 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         CurrencyTypes Currency { get; set; }
-        public Customer Owner { get; set; }
+
+        //changed to Customer type bc we need to save the logged in customer
+        //so we can get their name when creating a new bankaccount
+        public Customer Owner { get; set; } 
 
         //private Dictionary<string, User> _users;
 
