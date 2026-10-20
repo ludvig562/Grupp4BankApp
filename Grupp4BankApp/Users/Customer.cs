@@ -27,6 +27,8 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[1] Vanligt konto");
             Console.WriteLine("[2] Sparkonto");
             bool accountTypeChosen = false;
+            //get an automated new number for the account
+            int bankAccountNumber = 1000000 + checkingaccount.Count + savingsaccount.Count;
 
             while (!accountTypeChosen)
             {
@@ -36,22 +38,28 @@ namespace Grupp4BankApp.Users
                     switch (accountType)
                     {
                         case 1: //open checking account
-                            CurrencyTypes chosenCurrency = ChooseCurrency(); //choose currency via method
-                            string bankAccountName = ChooseBankAccountName(); //choose name via method
-                            //add to list in Bankaccount.cs
-                            BankAccount newCheckingAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
+                            //choose currency + name via method
+                            CurrencyTypes chosenCurrency = ChooseCurrency();
+                            string bankAccountName = ChooseBankAccountName();
+                            //create bank account + add to checkingaccounts list
+                            BankAccount newCheckingAccount = new BankAccount("Svea", bankAccountNumber, bankAccountName, chosenCurrency);
                             checkingaccount.Add(newCheckingAccount);
-                            Console.WriteLine($"Du har nu lagt till ett konto i {chosenCurrency}.");
+                            //confirmation message that account has been created
+                            Console.WriteLine($"Du har nu skapat ett konto i {chosenCurrency}." +
+                                $"Ditt bankkontonummer är: {newCheckingAccount.BankAccountNumber}");
                             accountTypeChosen = true; //end while loop
                             break;
 
                         case 2: //open savings account
+                            //choose currency + name via method
                             chosenCurrency = ChooseCurrency();
                             bankAccountName = ChooseBankAccountName();
-                            //add to list in Bankaccount.cs
-                            BankAccount newSavingsAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
+                            //create bank account + add to savingsaccounts list
+                            BankAccount newSavingsAccount = new BankAccount("Svea", bankAccountNumber, bankAccountName, chosenCurrency);
                             checkingaccount.Add(newSavingsAccount);
-                            Console.WriteLine($"Du har nu lagt till ett sparkonto i {chosenCurrency}.");
+                            //confirmation message that account has been created
+                            Console.WriteLine($"Du har nu skapat ett sparkonto i {chosenCurrency}." +
+                                $"Ditt bankkontonummer är: {newSavingsAccount.BankAccountNumber}");
                             accountTypeChosen = true;
                             break;
 
