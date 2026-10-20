@@ -26,10 +26,8 @@ namespace Grupp4BankApp
             Bank bank = new();
             bank.RunLogin();
 
-
-
-
             Customer.OpenBankAccount();
+
         }
     }
 }
