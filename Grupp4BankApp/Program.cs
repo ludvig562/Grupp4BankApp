@@ -11,23 +11,23 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
+            MenuManager.Init();
             //-------TEMPORARY TEST FOR LOGIN METHOD-------//
             User bob = new User();
 
             bob.Username = "bob";
             bob.Password = PasswordHasher.HashPassword("1234");
-
+            bob.Role = UserRole.user;
 
             users.Add(bob.Username, bob);
             //---------------------------------------------//
+            MenuManager.Update();
 
             Bank bank = new();
             bank.RunLogin();
 
-            //TESTING. Funderar på om man ska göra MenuManager till static
 
-            MenuManager.Update();
-         
+
 
         }
     }

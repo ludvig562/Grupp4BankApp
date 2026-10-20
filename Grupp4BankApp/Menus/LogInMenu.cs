@@ -13,7 +13,7 @@ namespace Grupp4BankApp.Menus
         }
         public void BankLogo()
         {
-            Console.WriteLine(FiggleFonts.Chiseled.Render("Banken!"));
+            Console.WriteLine(FiggleFonts.Starwars.Render("N E T 26 Bank"));
         }
         public void Display()
         {
