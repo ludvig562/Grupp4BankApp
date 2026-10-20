@@ -18,9 +18,6 @@ namespace Grupp4BankApp.System
         private int AppMaxAttempts = 0;
         public User? Login()
         {
-            
-            
-
             Console.Write("Användarnamn: ");
             string username = Console.ReadLine() ?? "";
 
