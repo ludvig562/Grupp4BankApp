@@ -6,7 +6,7 @@ namespace Grupp4BankApp.State
 {
     enum eStates
     {
-        eLogIn,
+        eLogInMenu,
         eUserMenu,
         eAdminMenu,
 
@@ -18,7 +18,7 @@ namespace Grupp4BankApp.State
         
         public StateStack()
         {
-            myStateStack.Push(eStates.eLogIn);
+            myStateStack.Push(eStates.eLogInMenu);
         }
 
         public eStates GetCurrentStateEnum() 

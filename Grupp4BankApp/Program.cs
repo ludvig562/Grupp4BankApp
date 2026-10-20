@@ -25,12 +25,9 @@ namespace Grupp4BankApp
             bank.RunLogin();
 
             //TESTING. Funderar på om man ska göra MenuManager till static
-            MenuManager menuManager = new MenuManager();
 
-            menuManager.Update();
-            menuManager.Update();
-            menuManager.Update();
-
+            MenuManager.Update();
+         
 
         }
     }

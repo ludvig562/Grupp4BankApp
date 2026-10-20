@@ -3,43 +3,47 @@ using Grupp4BankApp.Menus;
 
 namespace Grupp4BankApp.Manager
 {
-    internal class MenuManager
+    internal static class MenuManager
     {
 
 
-        private StateStack myState = new StateStack();
+        static private StateStack myState = new StateStack();
 
-        private LogInMenu myLogInMenu;
-        private UserMenu myUserMenu;
-        private AdminMenu myAdminMenu = new AdminMenu();
+        static private LogInMenu? myLogInMenu;
+        static private UserMenu? myUserMenu;
+        static private AdminMenu? myAdminMenu;
 
-        public MenuManager()
+
+        public static void Init()
         {
             myLogInMenu = new LogInMenu(myState);
             myUserMenu = new UserMenu(myState);
+            myAdminMenu = new AdminMenu(myState);
         }
-
-        public void Update()
+        public static void Update()
         {
 
             switch (myState.GetCurrentStateEnum())
             {
-                case eStates.eLogIn:
-                    myLogInMenu.Display();
+                case eStates.eLogInMenu:
+                    if (myLogInMenu != null)
+                        myLogInMenu.Display();
                     break;
                 case eStates.eUserMenu:
-                    myUserMenu.Display();
+                    if (myUserMenu != null)
+                        myUserMenu.Display();
 
                     break;
                 case eStates.eAdminMenu:
-                    myAdminMenu.Display();
+                    if (myAdminMenu != null)
+                        myAdminMenu.Display();
 
                     break;
                 default:
                     break;
             }
         }
-        public void PushMenu(eStates menu)
+        public static void PushMenu(eStates menu)
         {
             myState.Push(menu);
         }
