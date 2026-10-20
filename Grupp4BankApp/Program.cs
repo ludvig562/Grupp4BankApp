@@ -36,7 +36,6 @@ namespace Grupp4BankApp
             //TESTING. Funderar på om man ska göra MenuManager till static
 
             MenuManager.Update();
-            MenuManager.Update();
          
 
         }
