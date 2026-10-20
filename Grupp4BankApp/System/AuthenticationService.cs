@@ -26,9 +26,9 @@ namespace Grupp4BankApp.System
 
             //trys to get the same username as entered and then if found it calls the method VerifyPassword to verify if the saved hash to the username is the same as the hash of the entered password
 
-            if (_users.TryGetValue(username, out User? user)) 
+            if (_users.TryGetValue(username, out User? user))
             {
-                if(UserMaxAttempts == 3)
+                if (UserMaxAttempts == 3)
                 {
                     user.IsLocked = true;
                 }
@@ -43,7 +43,7 @@ namespace Grupp4BankApp.System
                     Console.WriteLine("Förmånga mslyckade försök, du är ut låst från ditt konto\nKontakta support för att låsa up ditt konto");
                     return null;
                 }
-               
+
                 UserMaxAttempts++;
                 Console.WriteLine("Fel användarnamn eller lösenord!");
                 return null;
