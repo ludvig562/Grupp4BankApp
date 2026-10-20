@@ -20,7 +20,9 @@ namespace Grupp4BankApp.Users
             {
                 //ask for customer info
                 Console.WriteLine("Vad är kundens ID?");
-                int.TryParse(Console.ReadLine(), out int newCustomerID);
+                int newCustomerID = int.Parse(Console.ReadLine());
+                Console.WriteLine("Kundens användarnamn");
+                string newCustomerUsername = Console.ReadLine();
                 Console.WriteLine("Vad heter kunden?");
                 string newCustomerName = Console.ReadLine();
                 Console.WriteLine("Vad är kundens mejladdress?");
@@ -29,15 +31,15 @@ namespace Grupp4BankApp.Users
                 string newCustomerPhoneNumber = Console.ReadLine();
                 Console.WriteLine("Vad blir nya kundens lösenord?");
                 string newCustomerPassword = Console.ReadLine();
-                Console.Clear();
 
-                //write out to double check if info is correct
+                //write out to double check if info is correct ?
+                //add if/else case?
                 Console.WriteLine($"Vill du skapa ett nytt användarkonto med följande information?\n" +
                     $"ID: {newCustomerID}\n" +
-                    $"Namn: {newCustomerName}\n" +
-                    $"E-mail: {newCustomerMailAddress}\n" +
-                    $"Telefonnummer: {newCustomerPhoneNumber}\n" +
-                    $"Lösenord: {newCustomerPassword}\n\n" +
+                    $"Namn: {newCustomerName}" +
+                    $"E-mail: {newCustomerMailAddress}, " +
+                    $"Telefonnummer: {newCustomerPhoneNumber}" +
+                    $"Lösenord: {newCustomerPassword}\n" +
                     $"[1] Ja, det vill jag\n" +
                     $"[2] Nej, jag vill ändra informationen");
 
@@ -46,32 +48,6 @@ namespace Grupp4BankApp.Users
                     switch (adminMenuAddCustomer)
                     {
                         case 1: //create a new user account
-
-                            //ask for customer info
-                            Console.WriteLine("Vad är kundens ID?");
-                            int newCustomerID = int.Parse(Console.ReadLine());
-                            Console.WriteLine("Kundens användarnamn");
-                            string newCustomerUsername = Console.ReadLine();
-                            Console.WriteLine("Vad heter kunden?");
-                            string newCustomerName = Console.ReadLine();
-                            Console.WriteLine("Vad är kundens mejladdress?");
-                            string newCustomerMailAddress = Console.ReadLine();
-                            Console.WriteLine("Vad är kundens telefonnummer?");
-                            string newCustomerPhoneNumber = Console.ReadLine();
-                            Console.WriteLine("Vad blir nya kundens lösenord?");
-                            string newCustomerPassword = Console.ReadLine();
-
-                            //write out to double check if info is correct?
-                            //add if/else case?
-                            //Console.WriteLine($"Vill du skapa ett nytt användarkonto med följande information?\n" +
-                            //    $"ID: {newCustomerID}\n" +
-                            //    $"Namn: {newCustomerName}" +
-                            //    $"E-mail: {newCustomerMailAddress}, " +
-                            //    $"Telefonnummer: {newCustomerPhoneNumber}" +
-                            //    $"Lösenord: {newCustomerPassword}\n" +
-                            //    $"[1] Ja, det vill jag\n" +
-                            //    $"[2] Nej, jag vill ändra informationen");
-
                             //create new Customer account
                             //save customer info in dictionary!
                             Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
