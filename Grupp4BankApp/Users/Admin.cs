@@ -7,7 +7,7 @@ namespace Grupp4BankApp.Users
     internal class Admin : User
     {
         //constructor, child from User class
-        public Admin(int userID, string name, string email, string phonenumber, string password) : base(userID, name, email, phonenumber, password)
+        public Admin(int userID, string username, string name, string email, string phonenumber, string password) : base(userID, username, name, email, phonenumber, password)
         {
         }
 
@@ -32,6 +32,8 @@ namespace Grupp4BankApp.Users
                             //ask for customer info
                             Console.WriteLine("Vad är kundens ID?");
                             int newCustomerID = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Kundens användarnamn");
+                            string newCustomerUsername = Console.ReadLine();
                             Console.WriteLine("Vad heter kunden?");
                             string newCustomerName = Console.ReadLine();
                             Console.WriteLine("Vad är kundens mejladdress?");
@@ -54,7 +56,7 @@ namespace Grupp4BankApp.Users
 
                             //create new Customer account
                             //save customer info in dictionary!
-                            Customer newCustomer = new Customer(newCustomerID, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
+                            Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
                             break;
 
                         case 2: //update currency exchange
