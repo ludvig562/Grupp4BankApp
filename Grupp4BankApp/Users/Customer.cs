@@ -10,5 +10,10 @@ namespace Grupp4BankApp.Users
         public Customer(int userID, string name, string email, string phonenumber, string password) : base(userID, name, email, phonenumber, password)
         {
         }
+
+        //public override string ToString()
+        //{
+        //    return $"{UserID}, {Name}, {Email}, {PhoneNumber}, {Password}";
+        //}
     }
 }
