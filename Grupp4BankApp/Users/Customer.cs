@@ -13,9 +13,11 @@ namespace Grupp4BankApp.Users
         }
 
         //list for checking accounts
+        //make list related to customer only rather than one list for all customers?!
         public static List<BankAccount> checkingaccount = new List<BankAccount>();
 
         //list for saving accounts
+        //make list related to customer only rather than one list for all customers?!
         public static List<BankAccount> savingsaccount = new List<BankAccount>();
 
 
