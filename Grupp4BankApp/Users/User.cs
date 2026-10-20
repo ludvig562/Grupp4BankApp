@@ -6,6 +6,7 @@ namespace Grupp4BankApp.Users
 {
     internal class User
     {
+        //properties for users - set as protected? (can only be used in class+subclasses)
         public int UserID { get; set; }
         //somehow work with guid or another system to have an ID automatically assigned instead?
 

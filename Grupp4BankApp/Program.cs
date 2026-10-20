@@ -1,6 +1,9 @@
 ﻿using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
 using static Grupp4BankApp.Users.User;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.State;
+using System.ComponentModel.Design;
 
 namespace Grupp4BankApp
 {
@@ -29,6 +32,14 @@ namespace Grupp4BankApp
             {
                 loggedInUser = authentication.Login();
             }
+            //TESTING. Funderar på om man ska göra MenuManager till static
+            MenuManager menuManager = new MenuManager();
+
+            menuManager.Update();
+            menuManager.Update();
+            menuManager.Update();
+
+
         }
     }
 }
