@@ -21,7 +21,8 @@ namespace Grupp4BankApp
             users.Add(bob.Username, bob);
             //---------------------------------------------//
 
-            
+            Bank bank = new();
+            bank.RunLogin();
 
             //TESTING. Funderar på om man ska göra MenuManager till static
             MenuManager menuManager = new MenuManager();

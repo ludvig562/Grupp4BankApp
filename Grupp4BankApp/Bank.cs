@@ -24,6 +24,18 @@ namespace Grupp4BankApp
                 loggedInUser = authentication.Login();
             }
 
+            switch (loggedInUser.Role)
+            {
+                case User.UserRole.admin:
+
+                    break;
+                case User.UserRole.user:
+
+                    break;
+                default:
+                    Console.WriteLine("Är inte en användare i vårat system");
+                    break;
+            }
 
         }
     }
