@@ -22,6 +22,7 @@ namespace Grupp4BankApp
 
             while (loggedInUser == null)// while loggedinuser is null keep repeting the login method
             {
+                
                 loggedInUser = authentication.Login();
             }
 

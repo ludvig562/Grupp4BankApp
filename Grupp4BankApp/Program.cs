@@ -31,6 +31,7 @@ namespace Grupp4BankApp
 
 
 
+            Customer.OpenBankAccount();
         }
     }
 }
