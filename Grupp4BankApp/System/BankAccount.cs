@@ -12,12 +12,12 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         CurrencyTypes Currency { get; set; }
-        public string Owner { get; set; }
+        public Customer Owner { get; set; }
 
         //private Dictionary<string, User> _users;
 
         //constructor
-        public BankAccount(string owner, string bankAccountName, CurrencyTypes currency)
+        public BankAccount(Customer owner, string bankAccountName, CurrencyTypes currency)
         {
             Owner = owner;
             BankAccountName = bankAccountName;
