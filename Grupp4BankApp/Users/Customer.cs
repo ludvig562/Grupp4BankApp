@@ -27,8 +27,6 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[1] Vanligt konto");
             Console.WriteLine("[2] Sparkonto");
             bool accountTypeChosen = false;
-            //get an automated new number for the account
-            int bankAccountNumber = 1000000 + checkingaccount.Count + savingsaccount.Count;
 
             while (!accountTypeChosen)
             {
