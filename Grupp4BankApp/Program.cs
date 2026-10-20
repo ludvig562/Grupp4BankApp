@@ -12,6 +12,7 @@ namespace Grupp4BankApp
         static void Main(string[] args)
         {
             MenuManager.Init();
+#if DEBUG
             //-------TEMPORARY TEST FOR LOGIN METHOD-------//
             User bob = new User();
 
@@ -21,6 +22,7 @@ namespace Grupp4BankApp
 
             users.Add(bob.Username, bob);
             //---------------------------------------------//
+#endif
             MenuManager.Update();
 
             Bank bank = new();
