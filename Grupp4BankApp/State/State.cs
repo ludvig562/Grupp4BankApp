@@ -18,7 +18,7 @@ namespace Grupp4BankApp.State
         
         public StateStack()
         {
-            myStateStack.Push(eStates.eUserMenu);
+            myStateStack.Push(eStates.eLogInMenu);
         }
 
         public eStates GetCurrentStateEnum() 

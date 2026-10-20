@@ -21,12 +21,12 @@ namespace Grupp4BankApp.Menus
 
 
 
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < 3; j++)
             {
                 Console.Clear();
 
                 Console.WriteLine(FiggleFonts.Larry3d.Render(loadingIn));
-                Thread.Sleep(500);
+                Thread.Sleep(400);
                 for (int i = 0; i < dots.Length; i++)
                 {
                     Console.Clear();
@@ -39,7 +39,7 @@ namespace Grupp4BankApp.Menus
                   //  Console.WriteLine(FiggleFonts.Standard.Render(loadingIn + " " + temp));
 
 
-                    Thread.Sleep(300);
+                    Thread.Sleep(200);
                 }
             }
 
