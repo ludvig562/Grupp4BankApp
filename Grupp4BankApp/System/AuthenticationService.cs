@@ -16,19 +16,19 @@ namespace Grupp4BankApp.System
 
         public User? Login()
         {
-            Console.Write("Användarnamn: ");
-            string username = Console.ReadLine() ?? "";
+            Console.Write("Email: ");
+            string email = Console.ReadLine() ?? "";
 
             Console.Write("Lösenord: ");
             string password = Console.ReadLine() ?? "";
 
             //trys to get the same username as entered and then if found it calls the method VerifyPassword to verify if the saved hash to the username is the same as the hash of the entered password
-            if (_users.TryGetValue(username, out User? user)) 
+            if (_users.TryGetValue(email, out User? useremail)) 
             {
-                if (PasswordHasher.VerifyPassword(password, user.Password))
+                if (PasswordHasher.VerifyPassword(password, useremail.Password))
                 {
                     Console.WriteLine("Inloggningen lyckades!");
-                    return user;// if correct it returns the user
+                    return useremail;// if correct it returns the user
                 }
             }
 
