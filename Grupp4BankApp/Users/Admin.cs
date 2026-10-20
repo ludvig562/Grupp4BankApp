@@ -7,7 +7,7 @@ namespace Grupp4BankApp.Users
     internal class Admin : User
     {
         //constructor, child from User class
-        public Admin(int userID, string name, string email, string phonenumber, string password) : base(userID, name, email, phonenumber, password)
+        public Admin(int userID, string username, string name, string email, string phonenumber, string password) : base(userID, username, name, email, phonenumber, password)
         {
         }
 
@@ -45,10 +45,36 @@ namespace Grupp4BankApp.Users
                 {
                     switch (adminMenuAddCustomer)
                     {
-                        case 1: // if user wishes to add customer with current info
-                                //create new Customer account - save in dictionary?!
-                            Customer newCustomer = new Customer(newCustomerID, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
-                            customerCreated = true;
+                        case 1: //create a new user account
+
+                            //ask for customer info
+                            Console.WriteLine("Vad är kundens ID?");
+                            int newCustomerID = int.Parse(Console.ReadLine());
+                            Console.WriteLine("Kundens användarnamn");
+                            string newCustomerUsername = Console.ReadLine();
+                            Console.WriteLine("Vad heter kunden?");
+                            string newCustomerName = Console.ReadLine();
+                            Console.WriteLine("Vad är kundens mejladdress?");
+                            string newCustomerMailAddress = Console.ReadLine();
+                            Console.WriteLine("Vad är kundens telefonnummer?");
+                            string newCustomerPhoneNumber = Console.ReadLine();
+                            Console.WriteLine("Vad blir nya kundens lösenord?");
+                            string newCustomerPassword = Console.ReadLine();
+
+                            //write out to double check if info is correct?
+                            //add if/else case?
+                            //Console.WriteLine($"Vill du skapa ett nytt användarkonto med följande information?\n" +
+                            //    $"ID: {newCustomerID}\n" +
+                            //    $"Namn: {newCustomerName}" +
+                            //    $"E-mail: {newCustomerMailAddress}, " +
+                            //    $"Telefonnummer: {newCustomerPhoneNumber}" +
+                            //    $"Lösenord: {newCustomerPassword}\n" +
+                            //    $"[1] Ja, det vill jag\n" +
+                            //    $"[2] Nej, jag vill ändra informationen");
+
+                            //create new Customer account
+                            //save customer info in dictionary!
+                            Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
                             break;
                         case 2: //if user wishes to change info
                             Console.WriteLine("\nMata in informationen igen: ");

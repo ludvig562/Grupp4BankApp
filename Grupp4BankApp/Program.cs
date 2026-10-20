@@ -11,28 +11,19 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
-            MenuManager.Init();
-            //Dictionary<string, User> users = new Dictionary<string, User>();
+            //-------TEMPORARY TEST FOR LOGIN METHOD-------//
+            User bob = new User();
 
-            //AuthenticationService authentication =// creates a new object for AuthenticationService that sends the dictionery to the construktor
-            //    new AuthenticationService(users);
+            bob.Username = "bob";
+            bob.Password = PasswordHasher.HashPassword("1234");
 
-            ////-------TEMPORARY TEST FOR LOGIN METHOD-------//
-            //User bob = new User();
 
-            //bob.Email = "bob123@gmail.com";
-            //bob.Password = PasswordHasher.HashPassword("1234");
-            
+            users.Add(bob.Username, bob);
+            //---------------------------------------------//
 
-            //users.Add(bob.Email, bob);
-            ////---------------------------------------------//
+            Bank bank = new();
+            bank.RunLogin();
 
-            //User? loggedInUser = null;
-
-            //while (loggedInUser == null)// while loggedinuser is null keep repeting the login method
-            //{
-            //    loggedInUser = authentication.Login();
-            //}
             //TESTING. Funderar på om man ska göra MenuManager till static
 
             MenuManager.Update();
