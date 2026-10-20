@@ -16,6 +16,12 @@ namespace Grupp4BankApp.Users
         public string Password { get; set; }
 
         //constructor
+        
+        public User()
+        {
+
+        }
+
         public User(int userID, string name, string email, string phonenumber, string password)
         {
             UserID = userID;
