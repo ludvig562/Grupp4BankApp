@@ -19,11 +19,11 @@ namespace Grupp4BankApp
             //-------TEMPORARY TEST FOR LOGIN METHOD-------//
             User bob = new User();
 
-            bob.Email = "bob123@gmail.com";
+            bob.Username = "bob";
             bob.Password = PasswordHasher.HashPassword("1234");
             
 
-            users.Add(bob.Email, bob);
+            users.Add(bob.Username, bob);
             //---------------------------------------------//
 
             User? loggedInUser = null;

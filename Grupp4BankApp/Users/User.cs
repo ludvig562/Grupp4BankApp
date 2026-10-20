@@ -10,6 +10,7 @@ namespace Grupp4BankApp.Users
         public int UserID { get; set; }
         //somehow work with guid or another system to have an ID automatically assigned instead?
 
+        public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
@@ -22,9 +23,10 @@ namespace Grupp4BankApp.Users
 
         }
 
-        public User(int userID, string name, string email, string phonenumber, string password)
+        public User(int userID, string username, string name, string email, string phonenumber, string password)
         {
             UserID = userID;
+            Username = username;
             Name = name;
             Email = email;
             PhoneNumber = phonenumber;
