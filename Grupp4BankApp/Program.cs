@@ -1,4 +1,6 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.State;
+using System.ComponentModel.Design;
 
 namespace Grupp4BankApp
 {
@@ -6,7 +8,14 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
-            Admin.RunAdminMenu();
+            //TESTING. Funderar på om man ska göra MenuManager till static
+            MenuManager menuManager = new MenuManager();
+
+            menuManager.Update();
+            menuManager.Update();
+            menuManager.Update();
+
+
         }
     }
 }
