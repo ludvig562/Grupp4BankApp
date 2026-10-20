@@ -1,4 +1,5 @@
-﻿using Grupp4BankApp.Manager;
+﻿using Figgle.Fonts;
+using Grupp4BankApp.Manager;
 using Grupp4BankApp.State;
 
 namespace Grupp4BankApp.Menus
@@ -10,11 +11,14 @@ namespace Grupp4BankApp.Menus
         {
             myState = aState;
         }
+        public void BankLogo()
+        {
+            Console.WriteLine(FiggleFonts.Chiseled.Render("Banken!"));
+        }
         public void Display()
         {
-            Console.WriteLine("This Is log in menu");
-            myState.Push(eStates.eUserMenu);
-            
+            BankLogo();
+
 
         }
     }

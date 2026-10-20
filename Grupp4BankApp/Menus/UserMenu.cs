@@ -1,5 +1,5 @@
 ﻿using Grupp4BankApp.State;
-
+using Figgle;
 namespace Grupp4BankApp.Menus
 {
     internal class UserMenu
