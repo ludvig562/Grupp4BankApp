@@ -9,7 +9,7 @@ namespace Grupp4BankApp.System
     {
         //properties
         private static int _nextBankAccountNumber = 100000; //starting number for bank accounts
-        public int BankAccountNumber { get; set; }
+        public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         CurrencyTypes Currency { get; set; }
         public string Owner { get; set; }
