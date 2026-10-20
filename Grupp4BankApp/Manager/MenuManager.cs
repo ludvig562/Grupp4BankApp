@@ -46,6 +46,8 @@ namespace Grupp4BankApp.Manager
         public static void PushMenu(eStates menu)
         {
             myState.Push(menu);
+            Update();
+            
         }
 
     }

@@ -3,7 +3,8 @@ using Grupp4BankApp.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Grupp4BankApp.Manager;
+using Grupp4BankApp.State;
 namespace Grupp4BankApp
 {
     internal class Bank
@@ -27,10 +28,11 @@ namespace Grupp4BankApp
             switch (loggedInUser.Role)
             {
                 case User.UserRole.admin:
+                    MenuManager.PushMenu(eStates.eAdminMenu);
 
                     break;
                 case User.UserRole.user:
-
+                    MenuManager.PushMenu(eStates.eUserMenu);
                     break;
                 default:
                     Console.WriteLine("Är inte en användare i vårat system");
