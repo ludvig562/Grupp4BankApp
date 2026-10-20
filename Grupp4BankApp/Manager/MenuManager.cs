@@ -11,12 +11,13 @@ namespace Grupp4BankApp.Manager
 
         private LogInMenu myLogInMenu;
         private UserMenu myUserMenu;
-        private AdminMenu myAdminMenu = new AdminMenu();
+        private AdminMenu myAdminMenu;
 
         public MenuManager()
         {
             myLogInMenu = new LogInMenu(myState);
             myUserMenu = new UserMenu(myState);
+            myAdminMenu = new AdminMenu(myState);
         }
 
         public void Update()
@@ -24,7 +25,7 @@ namespace Grupp4BankApp.Manager
 
             switch (myState.GetCurrentStateEnum())
             {
-                case eStates.eLogIn:
+                case eStates.eLogInMenu:
                     myLogInMenu.Display();
                     break;
                 case eStates.eUserMenu:
