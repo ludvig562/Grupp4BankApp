@@ -12,6 +12,13 @@ namespace Grupp4BankApp.Users
         {
         }
 
+        //list for checking accounts
+        public static List<BankAccount> checkingaccount = new List<BankAccount>();
+
+        //list for saving accounts
+        public static List<BankAccount> savingsaccount = new List<BankAccount>();
+
+
         //method to open new bankaccount (that gets saved in list in bankaccount.cs)
         public static void OpenBankAccount()
         {
@@ -29,11 +36,25 @@ namespace Grupp4BankApp.Users
                     switch (accountType)
                     {
                         case 1: //open checking account
-                            ChooseCurrency();
+                            CurrencyTypes chosenCurrency = ChooseCurrency(); //choose currency via method
+                            string bankAccountName = ChooseBankAccountName(); //choose name via method
+                            //add to list in Bankaccount.cs
+                            BankAccount newCheckingAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
+                            checkingaccount.Add(newCheckingAccount);
+                            Console.WriteLine($"Du har nu lagt till ett konto i {chosenCurrency}.");
+                            accountTypeChosen = true; //end while loop
                             break;
+
                         case 2: //open savings account
-                            ChooseCurrency();
+                            chosenCurrency = ChooseCurrency();
+                            bankAccountName = ChooseBankAccountName();
+                            //add to list in Bankaccount.cs
+                            BankAccount newSavingsAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
+                            checkingaccount.Add(newSavingsAccount);
+                            Console.WriteLine($"Du har nu lagt till ett sparkonto i {chosenCurrency}.");
+                            accountTypeChosen = true;
                             break;
+
                         default: //if user input is a number but not 1 or 2
                             Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 2!\n");
                             break;
@@ -46,16 +67,23 @@ namespace Grupp4BankApp.Users
             }
         }
 
-        public static void ChooseCurrency()
+        //method for getting the bank account name
+        public static string ChooseBankAccountName()
         {
-            // Ask user which currency they want the account to be in.
+            Console.WriteLine("Vad ska ditt nya konto heta?");
+            return Console.ReadLine();
+        }
+
+        //method for choosing bank account currency
+        public static CurrencyTypes ChooseCurrency()
+        {
             Console.WriteLine("Vilken valuta vill du öppna kontot i?");
             Console.WriteLine("[1] SEK");
             Console.WriteLine("[2] EUR");
             Console.WriteLine("[3] USD");
 
             //create variable for chosen currency, with standard value SEK
-            Currency.CurrencyTypes chosenCurrency = Currency.CurrencyTypes.SEK;
+            CurrencyTypes chosenCurrency = CurrencyTypes.SEK;
 
             bool currencyChosen = false;
             while (!currencyChosen)
@@ -66,15 +94,15 @@ namespace Grupp4BankApp.Users
                     switch (currencyChoice)
                     {
                         case 1:
-                            chosenCurrency = Currency.CurrencyTypes.SEK;
+                            chosenCurrency = CurrencyTypes.SEK;
                             currencyChosen = true;
                             break;
                         case 2:
-                            chosenCurrency = Currency.CurrencyTypes.EUR;
+                            chosenCurrency = CurrencyTypes.EUR;
                             currencyChosen = true;
                             break;
                         case 3:
-                            chosenCurrency = Currency.CurrencyTypes.USD;
+                            chosenCurrency = CurrencyTypes.USD;
                             currencyChosen = true;
                             break;
                         default: //if user input is a number but not 1, 2 or 3
@@ -89,6 +117,7 @@ namespace Grupp4BankApp.Users
             }
             //confirmation message stating a new account currency has been chosen
             Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
+            return chosenCurrency;
         }
     }
 }
