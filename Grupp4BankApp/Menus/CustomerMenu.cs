@@ -5,7 +5,6 @@ namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
     {
-        Customer c = new();
         List<char> myAnimation = new List<char>();
         public CustomerMenu()
         {
@@ -88,11 +87,11 @@ namespace Grupp4BankApp.Menus
                 }
                 else
                 {
-                    Console.WriteLine("Du måste skriva en siffra"); 
+                    Console.WriteLine("Du måste skriva en siffra");
                 }
 
             }
-            
+
         }
 
         public void OpenBankAccount()
