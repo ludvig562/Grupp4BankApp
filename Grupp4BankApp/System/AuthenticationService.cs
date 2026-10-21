@@ -52,9 +52,8 @@ namespace Grupp4BankApp.System
                 return null;//if it fails it returns null so the program runs again
             }
         }
-        public User GetUser()
+        public static User? GetLoggedInUser()
         {
-           
             return currentLoggedUser;
         }
 
