@@ -13,14 +13,15 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         CurrencyTypes Currency { get; set; }
-        public enum AccountType { checkingsAccount, savingsAccount }
+        AccountType AccountType { get; set; }
 
 
         //private Dictionary<string, User> _users;
 
         //constructor
-        public BankAccount(string owner, string bankAccountName, CurrencyTypes currency)
+        public BankAccount(AccountType accountType, string bankAccountName, CurrencyTypes currency)
         {
+            AccountType = accountType;
             BankAccountName = bankAccountName;
             Currency = currency;
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
