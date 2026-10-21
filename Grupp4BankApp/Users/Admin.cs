@@ -11,7 +11,6 @@ namespace Grupp4BankApp.Users
         {
         }
 
-        
     }
 }
 
