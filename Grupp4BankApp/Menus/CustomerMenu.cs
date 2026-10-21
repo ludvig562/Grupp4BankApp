@@ -16,7 +16,6 @@ namespace Grupp4BankApp.Menus
             string dots = ". . .";
 
 
-
             for (int j = 0; j < 3; j++)
             {
                 Console.Clear();
@@ -34,11 +33,9 @@ namespace Grupp4BankApp.Menus
                     Console.WriteLine(FiggleFonts.Larry3d.Render(loadingIn + " " + temp));
                     //  Console.WriteLine(FiggleFonts.Standard.Render(loadingIn + " " + temp));
 
-
                     Thread.Sleep(200);
                 }
             }
-
 
         }
         public void Display()
@@ -47,7 +44,6 @@ namespace Grupp4BankApp.Menus
             Console.Clear();
 
             ShowCustomerMenu();
-
         }
 
         public void ShowCustomerMenu()
