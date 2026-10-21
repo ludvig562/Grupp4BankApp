@@ -18,9 +18,7 @@ namespace Grupp4BankApp
         {
             User? loggedInUser = null;
 
-
-            loggedInUser = authentication.GetUser();
-
+            loggedInUser = AuthenticationService.GetLoggedInUser();
 
 
             switch (loggedInUser.Role)
