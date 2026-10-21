@@ -49,7 +49,7 @@ namespace Grupp4BankApp.Users
                     {
                         case 1: //create a new user account
                             //create new Customer account
-                            //save customer info in dictionary!
+                            //save customer info in dictionary?!
                             Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
                             break;
                         case 2: //if user wishes to change info
