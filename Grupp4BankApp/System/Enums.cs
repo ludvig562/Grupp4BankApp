@@ -22,4 +22,10 @@ namespace Grupp4BankApp.System
         savingsAccount
     }
 
+    public enum UserRole
+    {
+        customer,
+        admin
+    }
+
 }
