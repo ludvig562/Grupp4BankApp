@@ -1,4 +1,5 @@
 ﻿using Figgle.Fonts;
+using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
 using System.Security.Cryptography.X509Certificates;
 namespace Grupp4BankApp.Menus
@@ -48,6 +49,7 @@ namespace Grupp4BankApp.Menus
 
         public void ShowCustomerMenu()
         {
+
             while (true)
             {
                 Console.WriteLine("1.  Lista alla konto\n" +
@@ -64,7 +66,6 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             break;
                         case 2:
-                            OpenBankAccount();
                             break;
                         case 3:
                             break;
@@ -90,13 +91,29 @@ namespace Grupp4BankApp.Menus
 
         }
 
-        public void OpenBankAccount()
-        {
-            Console.WriteLine("Vilken typ av konto vill du öppna?");
-            Console.WriteLine("[1] Vanligt konto");
-            Console.WriteLine("[2] Sparkonto");
-
-        }
+        //public static int OpenBankAccount()
+        //{
+            // Which type of bankaccount do they want (check or savings)
+            //Console.WriteLine("Vilken typ av konto vill du öppna?");
+            //Console.WriteLine("[1] Vanligt konto");
+            //Console.WriteLine("[2] Sparkonto");
+            //int accountType;
+            //int.TryParse(Console.ReadLine(), out accountType);
+            //if (accountType == 1 || accountType == 2)
+            //{
+            //    return accountType;
+            //}
+            //else
+            //{
+            //    do
+            //    {
+            //        Console.WriteLine("Välj en siffra mellan 1 och 2!");
+            //    }
+            //    while (!int.TryParse(Console.ReadLine(), out accountType) || (accountType < 1 || accountType > 2));
+            //    return accountType;
+            //}
+    //    }
+    //}
 
 
     }

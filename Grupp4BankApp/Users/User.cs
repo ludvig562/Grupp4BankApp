@@ -27,7 +27,7 @@ namespace Grupp4BankApp.Users
         public bool IsLocked { get; set; }
         public UserRole Role { get; set; }
 
-        public enum UserRole { user, admin }
+        public enum UserRole { customer, admin }
 
         //constructor
         public User()
