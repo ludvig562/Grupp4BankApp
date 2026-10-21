@@ -11,8 +11,6 @@ namespace Grupp4BankApp.System
         private readonly Dictionary<string, User> _users;
         private readonly Dictionary<string, int> _failedAttempts = new Dictionary<string, int>();
 
-        // Shared session: other classes can access AuthenticationService.CurrentUser.
-        // Never assign it directly; Login and Logout manage it.
         public static User? CurrentUser { get; private set; }
 
         public AuthenticationService(Dictionary<string, User> users) 
@@ -22,14 +20,14 @@ namespace Grupp4BankApp.System
 
         public User? Login(string username, string password)
         {
-            if (!_users.TryGetValue(username, out User? user))
+            if (!_users.TryGetValue(username, out User? user))//if it dosent find the user print Fel användarnamn eller lösenord! and return null 
             {
                 Console.WriteLine("Fel användarnamn eller lösenord!");
                 return null;
             }
             if (user.IsLocked)
             {
-                Console.WriteLine("Kontot är låst. Kontakta support.");
+                Console.WriteLine("Kontot är låst. Kontakta support.");//if the user is locked print Kontot är låst. Kontakta support.
                 return null;
             }
             if (!PasswordHasher.VerifyPassword(password, user.Password))
@@ -47,13 +45,12 @@ namespace Grupp4BankApp.System
                 }
                 return null;
             }
-            _failedAttempts.Remove(username);
+            _failedAttempts.Remove(username);// remove 
             CurrentUser = user;
             Console.WriteLine("Inloggningen lyckades!");
             return user;
         }
 
-        // Keep the old method name available for any teammate's existing code.
         public User? GetUser() 
         {
             return CurrentUser;

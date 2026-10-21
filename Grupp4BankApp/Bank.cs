@@ -8,7 +8,7 @@ namespace Grupp4BankApp
     {
         private readonly AuthenticationService authentication = new AuthenticationService(User.users);
 
-        public void Run()
+        public void Run()// runs the whold bank first it gose thru login then depending on role it opens admin or user menu
         {
             while (true)
             {

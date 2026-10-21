@@ -42,8 +42,6 @@ namespace Grupp4BankApp.Menus
                 { 
                     return user; 
                 }
-
-                Console.Clear();
             }
         }
     }
