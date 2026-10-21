@@ -7,37 +7,44 @@ namespace Grupp4BankApp.Menus
     internal class LogInMenu
     {
         private readonly AuthenticationService authentication;
-        public LogInMenu()
-        {
-            authentication = new AuthenticationService(User.users);
-        }
-      
-        public void BankLogo()
-        {
-            Console.WriteLine(FiggleFonts.Starwars.Render("N E T 26 Bank"));
-        }
-        public void Display()
+        public LogInMenu() : this(new AuthenticationService(User.users)) { }
+        public LogInMenu(AuthenticationService authenticationService) => authentication = authenticationService;
+
+        public void BankLogo() => Console.WriteLine(FiggleFonts.Starwars.Render("N E T 26 Bank"));
+        public User? Display()
         {
             BankLogo();
-            LogInUI();
-
+            return LogInUI();
         }
-
-        public void LogInUI()
+        public User? LogInUI()
         {
-            
-            User? tempUser = null;
-            while (tempUser == null)
+            while (true)
             {
                 Console.Write("Användarnamn: ");
-                string username = Console.ReadLine() ?? "";
+                string? username = Console.ReadLine();
+
+                if (string.IsNullOrWhiteSpace(username)) 
+                {
+                    return null;
+                }
 
                 Console.Write("Lösenord: ");
-                string password = Console.ReadLine() ?? "";
+                string? password = Console.ReadLine();
 
-                tempUser = authentication.Login(username, password);
+                if (password == null) 
+                { 
+                    return null; 
+                }
+
+                User? user = authentication.Login(username, password);
+
+                if (user != null) 
+                { 
+                    return user; 
+                }
+
+                Console.Clear();
             }
-            
         }
     }
 }

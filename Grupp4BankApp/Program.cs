@@ -10,6 +10,7 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
+            //-------TEMPORARY TEST FOR LOGIN METHOD-------//
             User bob = new User();
 
             bob.Username = "bob";
@@ -18,8 +19,6 @@ namespace Grupp4BankApp
 
             users.Add(bob.Username, bob);
 
-
-
             User bab = new User();
 
             bab.Username = "bab";
@@ -27,16 +26,13 @@ namespace Grupp4BankApp
             bab.Role = UserRole.admin;
 
             users.Add(bab.Username, bab);
-
-            MenuManager.Init();
-            MenuManager.SelectMenu(eMenus.eLogInMenu);
-            //-------TEMPORARY TEST FOR LOGIN METHOD-------//
-
             //---------------------------------------------//
 
             Bank bank = new();
-            bank.RunLogin();
+            bank.Run();
 
+            //MenuManager.Init();
+            //MenuManager.SelectMenu(eMenus.eLogInMenu);
             // Customer.OpenBankAccount();
 
         }
