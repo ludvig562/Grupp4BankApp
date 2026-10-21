@@ -35,7 +35,7 @@ namespace Grupp4BankApp.Menus
                     switch (adminMenuChoice)
                     {
                         case 1: //create a new user account
-                            Admin.CreateCustomer();
+                            CreateCustomer();
                             break;
 
                         case 2: //update currency exchange
