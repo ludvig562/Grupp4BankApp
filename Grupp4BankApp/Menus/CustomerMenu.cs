@@ -165,7 +165,7 @@ namespace Grupp4BankApp.Menus
         }
 
         //method for writing out a confirmation message when a new bankacount has been created
-        public void WriteConfirmationMessage(BankAccount account, Enums.CurrencyTypes chosenCurrency)
+        public static void WriteConfirmationMessage(BankAccount account, Enums.CurrencyTypes chosenCurrency)
         {
             Console.WriteLine($"Du har nu skapat ett konto:\n" +
                                 $"Namn: {account.BankAccountName}\n" +

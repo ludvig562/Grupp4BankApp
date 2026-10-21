@@ -26,6 +26,8 @@ namespace Grupp4BankApp.Users
         //2 metod for creating account
         //have the console writelines in customermenu + the actual logic in customer?
 
+
+
         //method to open new bankaccount
         public void OpenBankAccount()
         {
@@ -50,8 +52,7 @@ namespace Grupp4BankApp.Users
                             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
                             this.checkingAccounts.Add(newCheckingAccount);
                             //confirmation message that account has been created
-                            Console.WriteLine($"Du har nu skapat ett konto i {chosenCurrency}. " +
-                                $"Ditt bankkontonummer är: {newCheckingAccount.BankAccountNumber}\n");
+                            CustomerMenu.WriteConfirmationMessage(newCheckingAccount, chosenCurrency);
                             accountTypeChosen = true; //end while loop
                             break;
 
@@ -63,8 +64,7 @@ namespace Grupp4BankApp.Users
                             BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
                             this.savingsAccounts.Add(newSavingsAccount);
                             //confirmation message that account has been created
-                            Console.WriteLine($"Du har nu skapat ett sparkonto i {chosenCurrency}. " +
-                                $"Ditt bankkontonummer är: {newSavingsAccount.BankAccountNumber}\n");
+                            CustomerMenu.WriteConfirmationMessage(newSavingsAccount, chosenCurrency);
                             accountTypeChosen = true;
                             break;
 
