@@ -13,7 +13,6 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         CurrencyTypes Currency { get; set; }
-        public string Owner { get; set; } //change fromstring to Customer?
 
         //private Dictionary<string, User> _users;
 
