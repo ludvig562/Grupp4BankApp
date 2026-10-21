@@ -52,13 +52,14 @@ namespace Grupp4BankApp.Menus
 
             while (true)
             {
-                Console.WriteLine("1.  Lista alla konto\n" +
-                    "2. Öppna nya konto\n" +
-                    "3. Sätt in pengar\n" +
-                    "4. Överför pengar\n" +
-                    "5. Låna Pengar\n" +
-                    "6. Transaktioner\n" +
-                    "7. Logga ut\n");
+                Console.WriteLine("Vad vill du göra?\n" +
+                    "[1] Lista alla konto\n" +
+                    "[2] Öppna nya konto\n" +
+                    "[3] Sätt in pengar\n" +
+                    "[4] Överför pengar\n" +
+                    "[5] Låna Pengar\n" +
+                    "[6] Transaktioner\n" +
+                    "[7] Logga ut\n");
                 if (int.TryParse(Console.ReadLine(), out int customerMenuChoice))
                 {
                     switch (customerMenuChoice)
@@ -66,6 +67,11 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             break;
                         case 2:
+                            //check if User is a Customer - call getuser method from authenticationservice class
+                            if (AuthenticationService.GetLoggedInUser() is Customer customer) 
+                            {
+                                customer.OpenBankAccount(); //open bank account for the logged in Customer
+                            }
                             break;
                         case 3:
                             break;
