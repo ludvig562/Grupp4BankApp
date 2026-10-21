@@ -92,7 +92,7 @@ namespace Grupp4BankApp.Menus
                         case 1: //create a new user account
                             //create new Customer account
                             //save customer info in dictionary?!
-                            User newUser = new User(User.UserRole.admin, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
+                            Customer newUser = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
                             break;
                         case 2: //if user wishes to change info
                             Console.WriteLine("\nMata in informationen igen: ");

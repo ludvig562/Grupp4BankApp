@@ -7,9 +7,10 @@ namespace Grupp4BankApp.Users
     internal class Admin : User
     {
         //constructor, child from User class
-        //public Admin(int userID, string username, string name, string email, string password) : base(userID, username, name, email, password)
-        //{
-        //}
+        public Admin(string username, string name, string email, string password) : base(username, name, email, password)
+        {
+            Role = UserRole.admin;
+        }
 
     }
 }
