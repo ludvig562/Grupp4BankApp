@@ -159,8 +159,6 @@ namespace Grupp4BankApp.Menus
                     Console.WriteLine("Oops. Du måste välja en siffra!");
                 }
             }
-            //confirmation message stating a new account currency has been chosen
-            Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
             return chosenCurrency;
         }
 
