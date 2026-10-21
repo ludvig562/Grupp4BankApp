@@ -17,15 +17,13 @@ namespace Grupp4BankApp.Users
         }
 
         //properties for users - set as protected? (can only be used in class+subclasses)
-        public int UserID { get; set; }
-        //somehow work with guid or another system to have an ID automatically assigned instead?
 
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public bool IsLocked { get; set; }
-        public UserRole Role { get; set; }
+        public Enums.UserRole Role { get; set; }
 
 
         //constructor
