@@ -10,14 +10,13 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
-            User bob = new User();
+            Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
 
-            bob.Username = "bob";
-            bob.Password = PasswordHasher.HashPassword("1234");
-            bob.Role = Enums.UserRole.customer;
+            //bob.Username = "bob";
+            //bob.Password = PasswordHasher.HashPassword("1234");
+            //bob.Role = Enums.UserRole.customer;
 
             users.Add(bob.Username, bob);
-
 
 
             User bab = new User();
