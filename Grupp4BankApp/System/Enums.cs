@@ -8,24 +8,24 @@ namespace Grupp4BankApp.System
     internal class Enums
     {
 
-    }
-    public enum CurrencyTypes
-    {
-        SEK,
-        EUR,
-        USD
-    }
+        public enum CurrencyTypes
+        {
+            SEK,
+            EUR,
+            USD
+        }
 
-    public enum AccountType
-    {
-        checkingsAccount,
-        savingsAccount
-    }
+        public enum AccountType
+        {
+            checkingsAccount,
+            savingsAccount
+        }
 
-    public enum UserRole
-    {
-        customer,
-        admin
-    }
+        public enum UserRole
+        {
+            customer,
+            admin
+        }
 
+    }
 }
