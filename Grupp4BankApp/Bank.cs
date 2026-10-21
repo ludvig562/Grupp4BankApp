@@ -1,39 +1,36 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.Menus;
 using Grupp4BankApp.System;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Grupp4BankApp.Manager;
-using Grupp4BankApp.State;
+using Grupp4BankApp.Users;
 namespace Grupp4BankApp
 {
     internal class Bank
     {
         private readonly AuthenticationService authentication;
-
+        private readonly LogInMenu aLogInMenu;
         public Bank()
         {
             authentication = new AuthenticationService(User.users);
+            aLogInMenu = new LogInMenu();
         }
 
         public void RunLogin()
         {
             User? loggedInUser = null;
 
-            while (loggedInUser == null)// while loggedinuser is null keep repeting the login method
-            {
-                
-                loggedInUser = authentication.Login();
-            }
+
+            loggedInUser = authentication.GetUser();
+
+
 
             switch (loggedInUser.Role)
             {
                 case User.UserRole.admin:
-                    MenuManager.PushMenu(eStates.eAdminMenu);
+                    MenuManager.SelectMenu(eMenus.eAdminMenu);
 
                     break;
                 case User.UserRole.user:
-                    MenuManager.PushMenu(eStates.eUserMenu);
+                    MenuManager.SelectMenu(eMenus.eUserMenu);
                     break;
                 default:
                     Console.WriteLine("Är inte en användare i vårat system");

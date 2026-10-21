@@ -1,15 +1,12 @@
-﻿using Grupp4BankApp.State;
-using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Menus
 {
     internal class AdminMenu
     {
-        StateStack myState;
 
-        public AdminMenu(StateStack aState)
+        public AdminMenu( )
         {
-            myState = aState;
         }
 
         public void Display()

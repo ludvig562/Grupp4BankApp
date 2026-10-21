@@ -7,7 +7,7 @@ namespace Grupp4BankApp.Users
     internal class Admin : User
     {
         //constructor, child from User class
-        public Admin(int userID, string username, string name, string email, string phonenumber, string password) : base(userID, username, name, email, phonenumber, password)
+        public Admin(int userID, string username, string name, string email,  string password) : base(userID, username, name, email,  password)
         {
         }
 
@@ -50,7 +50,7 @@ namespace Grupp4BankApp.Users
                         case 1: //create a new user account
                             //create new Customer account
                             //save customer info in dictionary?!
-                            Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPhoneNumber, newCustomerPassword);
+                            Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress,  newCustomerPassword);
                             break;
                         case 2: //if user wishes to change info
                             Console.WriteLine("\nMata in informationen igen: ");

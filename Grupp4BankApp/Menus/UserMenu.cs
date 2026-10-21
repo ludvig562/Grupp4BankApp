@@ -1,17 +1,12 @@
-﻿using Grupp4BankApp.State;
-using Figgle;
-using Figgle.Fonts;
-using Microsoft.VisualBasic;
+﻿using Figgle.Fonts;
 namespace Grupp4BankApp.Menus
 {
     internal class UserMenu
     {
-        StateStack myState;
 
         List<char> myAnimation = new List<char>();
-        public UserMenu(StateStack aState)
+        public UserMenu( )
         {
-            myState = aState;
             myAnimation.DefaultIfEmpty();
         }
         public void LogInEvent()
