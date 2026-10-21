@@ -28,10 +28,10 @@ namespace Grupp4BankApp
             users.Add(bab.Username, bab);
             //---------------------------------------------//
 
-            Bank bank = new();
-            bank.Run();
 
-            //MenuManager.Init();
+            MenuManager.Init();
+            MenuManager.Run();
+
             //MenuManager.SelectMenu(eMenus.eLogInMenu);
             // Customer.OpenBankAccount();
 
