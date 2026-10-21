@@ -68,7 +68,7 @@ namespace Grupp4BankApp.Menus
                             break;
                         case 2:
                             //check if User is a Customer - call getuser method from authenticationservice class
-                            if (AuthenticationService.GetLoggedInUser() is Customer customer) 
+                            if (AuthenticationService.GetLoggedInUser() is Customer customer)
                             {
                                 customer.OpenBankAccount(); //open bank account for the logged in Customer
                             }
@@ -97,30 +97,72 @@ namespace Grupp4BankApp.Menus
 
         }
 
-        //public static int OpenBankAccount()
-        //{
-            // Which type of bankaccount do they want (check or savings)
-            //Console.WriteLine("Vilken typ av konto vill du öppna?");
-            //Console.WriteLine("[1] Vanligt konto");
-            //Console.WriteLine("[2] Sparkonto");
-            //int accountType;
-            //int.TryParse(Console.ReadLine(), out accountType);
-            //if (accountType == 1 || accountType == 2)
-            //{
-            //    return accountType;
-            //}
-            //else
-            //{
-            //    do
-            //    {
-            //        Console.WriteLine("Välj en siffra mellan 1 och 2!");
-            //    }
-            //    while (!int.TryParse(Console.ReadLine(), out accountType) || (accountType < 1 || accountType > 2));
-            //    return accountType;
-            //}
-    //    }
-    //}
+        //method for getting the bank account name
+        public static string ChooseBankAccountName()
+        {
+            Console.WriteLine("Vad ska ditt nya konto heta?");
+            string bankAccountName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(bankAccountName))
+            {
+                return bankAccountName;
+            }
+            else
+            {
+                do
+                {
+                    Console.WriteLine("Vänligen skriv ett namn för ditt konto.");
+                    bankAccountName = Console.ReadLine();
+                }
+                while (string.IsNullOrWhiteSpace(bankAccountName));
+                return bankAccountName;
+            }
+        }
 
+        //method for choosing bank account currency
+        public static Enums.CurrencyTypes ChooseCurrency()
+        {
+            Console.WriteLine("Vilken valuta vill du öppna kontot i?");
+            Console.WriteLine("[1] SEK");
+            Console.WriteLine("[2] EUR");
+            Console.WriteLine("[3] USD");
 
+            //create variable for chosen currency, with standard value SEK
+            Enums.CurrencyTypes chosenCurrency = Enums.CurrencyTypes.SEK;
+
+            bool currencyChosen = false;
+            while (!currencyChosen)
+            {
+                if (int.TryParse(Console.ReadLine(), out int currencyChoice))
+                {
+                    //add currency from enum to chosen currency
+                    switch (currencyChoice)
+                    {
+                        case 1:
+                            chosenCurrency = Enums.CurrencyTypes.SEK;
+                            currencyChosen = true;
+                            break;
+                        case 2:
+                            chosenCurrency = Enums.CurrencyTypes.EUR;
+                            currencyChosen = true;
+                            break;
+                        case 3:
+                            chosenCurrency = Enums.CurrencyTypes.USD;
+                            currencyChosen = true;
+                            break;
+                        default: //if user input is a number but not 1, 2 or 3
+                            Console.WriteLine("Ogiltigt val. Välj en siffra mellan 1 och 3!");
+                            break;
+                    }
+                }
+                else //if user input is not a number
+                {
+                    Console.WriteLine("Oops. Du måste välja en siffra!");
+                }
+            }
+            //confirmation message stating a new account currency has been chosen
+            Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
+            return chosenCurrency;
+        }
     }
+
 }
