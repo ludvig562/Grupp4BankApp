@@ -106,7 +106,7 @@ namespace Grupp4BankApp.Menus
             {
                 return bankAccountName;
             }
-            else
+            else //if user didn't write a name for the account
             {
                 do
                 {
@@ -163,6 +163,14 @@ namespace Grupp4BankApp.Menus
             Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
             return chosenCurrency;
         }
-    }
 
+        //method for writing out a confirmation message when a new bankacount has been created
+        public void WriteConfirmationMessage(BankAccount account, Enums.CurrencyTypes chosenCurrency)
+        {
+            Console.WriteLine($"Du har nu skapat ett konto:\n" +
+                                $"Namn: {account.BankAccountName}\n" +
+                                $"Valuta: {chosenCurrency}\n" +
+                                $"Bankkontonummer: {account.BankAccountNumber}\n");
+        }
+    }
 }
