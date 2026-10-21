@@ -25,6 +25,7 @@ namespace Grupp4BankApp.Menus
 
         public void LogInUI()
         {
+            
             User? tempUser = null;
             while (tempUser == null)
             {

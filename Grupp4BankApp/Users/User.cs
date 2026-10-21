@@ -29,7 +29,6 @@ namespace Grupp4BankApp.Users
 
         public enum UserRole { user, admin }
 
-
         //constructor
         public User()
         {

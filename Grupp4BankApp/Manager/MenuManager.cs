@@ -16,13 +16,13 @@ namespace Grupp4BankApp.Manager
        // static private StateStack myState = new StateStack();
 
         static private LogInMenu? myLogInMenu;
-        static private UserMenu? myUserMenu;
+        static private CustomerMenu? myUserMenu;
         static private AdminMenu? myAdminMenu;
 
         public static void Init()
         {
             myLogInMenu = new LogInMenu();
-            myUserMenu = new UserMenu();
+            myUserMenu = new CustomerMenu();
             myAdminMenu = new AdminMenu();
         }
 

@@ -1,11 +1,11 @@
 ﻿using Figgle.Fonts;
 namespace Grupp4BankApp.Menus
 {
-    internal class UserMenu
+    internal class CustomerMenu
     {
 
         List<char> myAnimation = new List<char>();
-        public UserMenu( )
+        public CustomerMenu( )
         {
             myAnimation.DefaultIfEmpty();
         }

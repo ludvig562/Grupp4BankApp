@@ -57,7 +57,7 @@ namespace Grupp4BankApp.System
            
             return currentLoggedUser;
         }
-  
+
 
     }
 }
