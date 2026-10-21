@@ -8,18 +8,19 @@ namespace Grupp4BankApp.Users
     internal class Customer : User
     {
         //constructor, child from User class
-        public Customer(int userID, string username, string name, string email,  string password) : base(userID, username, name, email,  password)
+        public Customer(int userID, string username, string name, string email, string password) : base(userID, username, name, email, password)
         {
         }
 
         //list for checking accounts
         //make list related to customer only rather than one list for all customers?!
-        public static List<BankAccount> checkingaccount = new List<BankAccount>();
+        public List<BankAccount> checkingAccounts = new List<BankAccount>();
 
         //list for saving accounts
         //make list related to customer only rather than one list for all customers?!
-        public static List<BankAccount> savingsaccount = new List<BankAccount>();
+        public List<BankAccount> savingsAccounts = new List<BankAccount>();
 
+        //add addbankaccount method here, that receives info from other methods in customermenu class?!
 
         //method to open new bankaccount (that gets saved in list in bankaccount.cs)
         public static void OpenBankAccount()
@@ -43,7 +44,7 @@ namespace Grupp4BankApp.Users
                             string bankAccountName = ChooseBankAccountName();
                             //create bank account + add to checkingaccounts list
                             BankAccount newCheckingAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            checkingaccount.Add(newCheckingAccount);
+                            checkingAccounts.Add(newCheckingAccount);
                             //confirmation message that account has been created
                             Console.WriteLine($"Du har nu skapat ett konto i {chosenCurrency}. " +
                                 $"Ditt bankkontonummer är: {newCheckingAccount.BankAccountNumber}");
@@ -56,7 +57,7 @@ namespace Grupp4BankApp.Users
                             bankAccountName = ChooseBankAccountName();
                             //create bank account + add to savingsaccounts list
                             BankAccount newSavingsAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            savingsaccount.Add(newSavingsAccount);
+                            savingsAccounts.Add(newSavingsAccount);
                             //confirmation message that account has been created
                             Console.WriteLine($"Du har nu skapat ett sparkonto i {chosenCurrency}. " +
                                 $"Ditt bankkontonummer är: {newSavingsAccount.BankAccountNumber}");
