@@ -25,11 +25,10 @@ namespace Grupp4BankApp
 
             switch (loggedInUser.Role)
             {
-                case User.UserRole.admin:
+                case Enums.UserRole.admin:
                     MenuManager.SelectMenu(eMenus.eAdminMenu);
-
                     break;
-                case User.UserRole.user:
+                case Enums.UserRole.customer:
                     MenuManager.SelectMenu(eMenus.eUserMenu);
                     break;
                 default:
