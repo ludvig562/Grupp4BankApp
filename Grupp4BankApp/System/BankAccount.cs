@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Grupp4BankApp.System
 {
+
     internal class BankAccount
     {
         //properties

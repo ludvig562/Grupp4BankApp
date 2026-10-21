@@ -8,8 +8,9 @@ namespace Grupp4BankApp.Users
     internal class Customer : User
     {
         //constructor, child from User class
-        public Customer(int userID, string username, string name, string email, string password) : base(userID, username, name, email, password)
+        public Customer(string username, string name, string email, string password) : base( username, name, email, password)
         {
+            Role = UserRole.user;   
         }
 
         //list for checking accounts

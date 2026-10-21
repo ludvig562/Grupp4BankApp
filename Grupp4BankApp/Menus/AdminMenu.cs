@@ -1,15 +1,12 @@
-﻿using Grupp4BankApp.State;
-using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Menus
 {
     internal class AdminMenu
     {
-        StateStack myState;
 
-        public AdminMenu(StateStack aState)
+        public AdminMenu( )
         {
-            myState = aState;
         }
 
         public void Display()
@@ -95,7 +92,7 @@ namespace Grupp4BankApp.Menus
                         case 1: //create a new user account
                             //create new Customer account
                             //save customer info in dictionary?!
-                            Customer newCustomer = new Customer(newCustomerID, newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
+                            Customer newUser = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
                             break;
                         case 2: //if user wishes to change info
                             Console.WriteLine("\nMata in informationen igen: ");

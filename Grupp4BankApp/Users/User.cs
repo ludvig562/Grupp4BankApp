@@ -29,16 +29,14 @@ namespace Grupp4BankApp.Users
 
         public enum UserRole { user, admin }
 
-
         //constructor
         public User()
         {
 
         }
 
-        public User(int userID, string username, string name, string email, string password)
+        public User(string username, string name, string email, string password)
         {
-            UserID = userID;
             Username = username;
             Name = name;
             Email = email;
