@@ -68,7 +68,7 @@ namespace Grupp4BankApp.Menus
                             break;
                         case 2:
                             //check if User is a Customer - call getuser method from authenticationservice class
-                            if (AuthenticationService.GetLoggedInUser() is Customer customer)
+                            if (AuthenticationService.GetUser() is Customer customer)
                             {
                                 customer.OpenBankAccount(); //open bank account for the logged in Customer
                             }
