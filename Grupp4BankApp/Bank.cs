@@ -6,34 +6,30 @@ namespace Grupp4BankApp
 {
     internal class Bank
     {
-        private readonly AuthenticationService authentication;
-        private readonly LogInMenu aLogInMenu;
-        public Bank()
-        {
-            authentication = new AuthenticationService(User.users);
-            aLogInMenu = new LogInMenu();
-        }
+        //private readonly AuthenticationService authentication = new AuthenticationService(User.users);
 
-        public void RunLogin()
-        {
-            User? loggedInUser = null;
+        //public void Run()// runs the whold bank first it gose thru login then depending on role it opens admin or user menu
+        //{
+        //    while (true)
+        //    {
+        //        User? user = new LogInMenu(authentication).Display();
 
-            loggedInUser = AuthenticationService.GetLoggedInUser();
+        //        if (user == null)
+        //        {
+        //            return;
+        //        }
 
+        //        if (user.Role == User.UserRole.admin)
+        //        { 
+        //            AdminMenu.RunAdminMenu();
+        //        }
+        //        else
+        //        {
+        //            new CustomerMenu().Display();
+        //        }
 
-            switch (loggedInUser.Role)
-            {
-                case Enums.UserRole.admin:
-                    MenuManager.SelectMenu(eMenus.eAdminMenu);
-                    break;
-                case Enums.UserRole.customer:
-                    MenuManager.SelectMenu(eMenus.eUserMenu);
-                    break;
-                default:
-                    Console.WriteLine("Är inte en användare i vårat system");
-                    break;
-            }
-
-        }
+        //        authentication.Logout(); 
+        //    }
+        //}
     }
 }
