@@ -16,7 +16,6 @@ namespace Grupp4BankApp.Menus
             string loadingIn = "Logging in";
             string dots = ". . .";
 
-
             for (int j = 0; j < 3; j++)
             {
                 Console.Clear();
@@ -44,10 +43,10 @@ namespace Grupp4BankApp.Menus
             LogInEvent();
             Console.Clear();
 
-            ShowCustomerMenu();
+            RunCustomerMenu();
         }
 
-        public void ShowCustomerMenu()
+        public void RunCustomerMenu()
         {
 
             while (true)

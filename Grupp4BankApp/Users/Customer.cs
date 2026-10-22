@@ -155,10 +155,11 @@ namespace Grupp4BankApp.Users
         //method for writing out a confirmation message when a new bankacount has been created
         public static void WriteConfirmationMessage(BankAccount account)
         {
-            Console.WriteLine($"Du har nu skapat ett konto:\n" +
+            Console.WriteLine($"\nDu har nu skapat ett konto:\n" +
                                 $"Namn: {account.BankAccountName}\n" +
                                 $"Valuta: {account.Currency}\n" +
-                                $"Bankkontonummer: {account.BankAccountNumber}\n");
+                                $"Bankkontonummer: {account.BankAccountNumber}\n" +
+                                $"Konto saldo: {account.AccountBalance}\n");
         }
     }
 }
