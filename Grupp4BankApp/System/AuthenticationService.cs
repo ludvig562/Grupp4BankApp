@@ -12,7 +12,9 @@ namespace Grupp4BankApp.System
         private readonly Dictionary<string, int> _failedAttempts = new Dictionary<string, int>();
 
         public static User? CurrentUser { get; private set; }
-
+        public AuthenticationService()
+        { 
+        }
         public AuthenticationService(Dictionary<string, User> users) 
         {
             _users = users;
