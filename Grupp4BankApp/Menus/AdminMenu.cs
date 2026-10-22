@@ -1,17 +1,18 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Menus
 {
     internal class AdminMenu
     {
-
         public AdminMenu( )
         {
         }
 
         public void Display()
         {
-            Console.WriteLine("This is Admin Menu");
+            Console.Clear();
+            RunAdminMenu();
         }
 
         //method for admin menu (once logged in)

@@ -7,13 +7,7 @@ namespace Grupp4BankApp.Manager
     
     internal static class MenuManager
     {
-
-
-        // static private StateStack myState = new StateStack();
-
-        //----------//
         private static AuthenticationService authentication;
-        //----------//
         static private LogInMenu? myLogInMenu;
         static private CustomerMenu? myUserMenu;
         static private AdminMenu? myAdminMenu;
@@ -24,12 +18,9 @@ namespace Grupp4BankApp.Manager
             myUserMenu = new CustomerMenu();
             myAdminMenu = new AdminMenu();
 
-            //-----//
             authentication = new AuthenticationService(User.users);
-            //-----//
         }
 
-        //-----------------------------------------------------------//
         public static void Run()
         {
             while (true)
@@ -57,7 +48,6 @@ namespace Grupp4BankApp.Manager
                 authentication.Logout();
             }
         }
-        //-----------------------------------------------------------//
 
         public static void SelectMenu(Enums.Menus aState)
         {
@@ -82,36 +72,5 @@ namespace Grupp4BankApp.Manager
                     break;
             }
         }
-
-        //public static void Update()
-        //{
-
-        //    switch (myState.GetCurrentStateEnum())
-        //    {
-        //        case eMenus.eLogInMenu:
-        //            if (myLogInMenu != null)
-        //                myLogInMenu.Display();
-        //            break;
-        //        case eMenus.eUserMenu:
-        //            if (myUserMenu != null)
-        //                myUserMenu.Display();
-
-        //            break;
-        //        case eMenus.eAdminMenu:
-        //            if (myAdminMenu != null)
-        //                myAdminMenu.Display();
-
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-        //public static void PushMenu(eMenus menu)
-        //{
-        //    myState.Push(menu);
-        //    Update();
-
-        //}
-
     }
 }

@@ -49,7 +49,7 @@ namespace Grupp4BankApp.System
             }
             _failedAttempts.Remove(username);// remove 
             CurrentUser = user;
-            Console.WriteLine("Inloggningen lyckades!");
+            Console.WriteLine("Inloggningen lyckades!\n");
             return user;
         }
 

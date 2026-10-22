@@ -13,7 +13,6 @@ namespace Grupp4BankApp.Users
             Role = Enums.UserRole.admin; //automatically add the role of admin
         }
 
-
         //method for creating a new user
         public static void CreateCustomer()
         {
@@ -22,25 +21,31 @@ namespace Grupp4BankApp.Users
             while (!customerCreated)
             {
                 //ask for customer info
-                Console.WriteLine("Vad är kundens ID?");
-                int newCustomerID = int.Parse(Console.ReadLine());
-                Console.WriteLine("Kundens användarnamn");
+                Console.WriteLine("Vad är kundens användarnamn?");
                 string newCustomerUsername = Console.ReadLine();
+
+                /*check if username already exists in dictionary via ContainsKey instead of TryGetValue
+                because here we only need to check if the name already exists in the dictionary,
+                we don't need to get the entire user*/
+                if (User.users.ContainsKey(newCustomerUsername))
+                {
+                    Console.WriteLine("Användarnamn finns redan. Välj ett annat användarnamn.");
+                    continue; //breaking the if loop but not the while loop, so admin can correct username
+                }
+
                 Console.WriteLine("Vad heter kunden?");
                 string newCustomerName = Console.ReadLine();
                 Console.WriteLine("Vad är kundens mejladdress?");
                 string newCustomerMailAddress = Console.ReadLine();
-                Console.WriteLine("Vad är kundens telefonnummer?");
-                string newCustomerPhoneNumber = Console.ReadLine();
                 Console.WriteLine("Vad blir nya kundens lösenord?");
                 string newCustomerPassword = Console.ReadLine();
+                Console.Clear();
 
-                Console.WriteLine($"Vill du skapa ett nytt användarkonto med följande information?\n" +
-                    $"ID: {newCustomerID}\n" +
-                    $"Namn: {newCustomerName}" +
-                    $"E-mail: {newCustomerMailAddress}, " +
-                    $"Telefonnummer: {newCustomerPhoneNumber}" +
-                    $"Lösenord: {newCustomerPassword}\n" +
+                Console.WriteLine($"Vill du skapa ett nytt användarkonto med följande information?\n\n" +
+                    $"Namn: {newCustomerName}\n" +
+                    $"Användarnamn: {newCustomerUsername}\n" +
+                    $"E-mail: {newCustomerMailAddress}\n" +
+                    $"Lösenord: {newCustomerPassword}\n\n" +
                     $"[1] Ja, det vill jag\n" +
                     $"[2] Nej, jag vill ändra informationen");
 
@@ -49,9 +54,10 @@ namespace Grupp4BankApp.Users
                     switch (adminMenuAddCustomer)
                     {
                         case 1: //create a new user account
-                            //create new Customer account
-                            //save customer info in dictionary?!
-                            Customer newUser = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
+                            Customer newCustomer = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
+                            User.users.Add(newCustomerUsername, newCustomer);
+                            Console.WriteLine($"Ny användare {newCustomerName} har skapats.\n");
+                            customerCreated = true;
                             break;
                         case 2: //if user wishes to change info
                             Console.WriteLine("\nMata in informationen igen: ");
@@ -67,7 +73,6 @@ namespace Grupp4BankApp.Users
                 }
             }
         }
-
     }
 }
 
