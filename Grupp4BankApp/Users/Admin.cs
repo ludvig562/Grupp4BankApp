@@ -13,8 +13,8 @@ namespace Grupp4BankApp.Users
             Role = Enums.UserRole.admin; //automatically add the role of admin
         }
 
-
-        public void GetCustomerInfo()
+        //method for creating a new user
+        public static void CreateCustomer()
         {
             bool customerCreated = false;
 
@@ -36,14 +36,8 @@ namespace Grupp4BankApp.Users
                     $"Lösenord: {newCustomerPassword}\n" +
                     $"[1] Ja, det vill jag\n" +
                     $"[2] Nej, jag vill ändra informationen");
-            }
-        }
 
-        //method for creating a new user
-        public static void CreateCustomer()
-        {
-
-            if (int.TryParse(Console.ReadLine(), out int adminMenuAddCustomer)) //if user input is a number
+                if (int.TryParse(Console.ReadLine(), out int adminMenuAddCustomer)) //if user input is a number
             {
                 switch (adminMenuAddCustomer)
                 {
