@@ -13,7 +13,6 @@ namespace Grupp4BankApp.System
             LogInMenu,
             UserMenu,
             AdminMenu,
-
         }
 
         public enum CurrencyTypes
