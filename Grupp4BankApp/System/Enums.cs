@@ -15,6 +15,7 @@ namespace Grupp4BankApp.System
             AdminMenu,
 
         }
+
         public enum CurrencyTypes
         {
             SEK,

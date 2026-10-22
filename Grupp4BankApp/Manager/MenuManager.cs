@@ -46,11 +46,11 @@ namespace Grupp4BankApp.Manager
                 // open the correct menu based on the user's role
                 if (user.Role == Enums.UserRole.admin)
                 {
-                    SelectMenu(eMenus.eAdminMenu);
+                    SelectMenu(Enums.Menus.AdminMenu);
                 }
                 else if (user.Role == Enums.UserRole.customer)
                 {
-                    SelectMenu(eMenus.eUserMenu);
+                    SelectMenu(Enums.Menus.UserMenu);
                 }
 
                 // clear the logged-in user after leaving the menu
@@ -59,21 +59,21 @@ namespace Grupp4BankApp.Manager
         }
         //-----------------------------------------------------------//
 
-        public static void SelectMenu(eMenus aState)
+        public static void SelectMenu(Enums.Menus aState)
         {
 
             switch (aState)
             {
-                case eMenus.eLogInMenu:
+                case Enums.Menus.LogInMenu:
                     if (myLogInMenu != null)
                         myLogInMenu.Display();
                     break;
-                case eMenus.eUserMenu:
+                case Enums.Menus.UserMenu:
                     if (myUserMenu != null)
                         myUserMenu.Display();
 
                     break;
-                case eMenus.eAdminMenu:
+                case Enums.Menus.AdminMenu:
                     if (myAdminMenu != null)
                         myAdminMenu.Display();
 
