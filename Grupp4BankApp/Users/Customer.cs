@@ -30,7 +30,6 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[2] Sparkonto");
             bool accountTypeChosen = false;
 
-
             while (!accountTypeChosen)
             {
                 if (int.TryParse(Console.ReadLine(), out int accountType))
@@ -39,13 +38,13 @@ namespace Grupp4BankApp.Users
                     switch (accountType)
                     {
                         case 1: //open checking account
-                            OpenCheckingAccount();
+                            OpenCheckingAccount(); //method to open checking account
                             accountTypeChosen = true; //end while loop
                             break;
 
                         case 2: //open savings account
-                            OpenSavingsAccount();
-                            accountTypeChosen = true;
+                            OpenSavingsAccount(); //method to open savings account
+                            accountTypeChosen = true; //end while loop
                             break;
 
                         default: //if user input is a number but not 1 or 2
