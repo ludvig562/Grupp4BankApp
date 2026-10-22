@@ -24,7 +24,9 @@ namespace Grupp4BankApp.Users
                 Console.WriteLine("Vad är kundens användarnamn?");
                 string newCustomerUsername = Console.ReadLine();
 
-                //check if username already exists in dictionary
+                /*check if username already exists in dictionary via ContainsKey instead of TryGetValue
+                because here we only need to check if the name already exists in the dictionary,
+                we don't need to get the entire user*/
                 if (User.users.ContainsKey(newCustomerUsername))
                 {
                     Console.WriteLine("Användarnamn finns redan. Välj ett annat användarnamn.");
