@@ -15,9 +15,6 @@ namespace Grupp4BankApp.System
         public Enums.CurrencyTypes Currency { get; private set; }
         public Enums.AccountType AccountType { get; set; }
 
-
-        //private Dictionary<string, User> _users;
-
         //constructor
         public BankAccount(Enums.AccountType accountType, string bankAccountName, Enums.CurrencyTypes currency)
         {
