@@ -4,13 +4,7 @@ using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Manager
 {
-    enum eMenus
-    {
-        eLogInMenu,
-        eUserMenu,
-        eAdminMenu,
-
-    }
+    
     internal static class MenuManager
     {
 
@@ -50,11 +44,11 @@ namespace Grupp4BankApp.Manager
                 }
 
                 // open the correct menu based on the user's role
-                if (user.Role == User.UserRole.admin)
+                if (user.Role == Enums.UserRole.admin)
                 {
                     SelectMenu(eMenus.eAdminMenu);
                 }
-                else if (user.Role == User.UserRole.user)
+                else if (user.Role == Enums.UserRole.customer)
                 {
                     SelectMenu(eMenus.eUserMenu);
                 }
