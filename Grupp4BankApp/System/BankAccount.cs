@@ -12,8 +12,8 @@ namespace Grupp4BankApp.System
         private static int _nextBankAccountNumber = 100000; //starting number for bank accounts
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
-        Enums.CurrencyTypes Currency { get; set; }
-        Enums.AccountType AccountType { get; set; }
+        public Enums.CurrencyTypes Currency { get; private set; }
+        public Enums.AccountType AccountType { get; set; }
 
 
         //private Dictionary<string, User> _users;
