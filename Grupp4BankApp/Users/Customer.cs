@@ -1,4 +1,5 @@
-﻿using Grupp4BankApp.System;
+﻿using Grupp4BankApp.Menus;
+using Grupp4BankApp.System;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,24 +8,26 @@ namespace Grupp4BankApp.Users
 {
     internal class Customer : User
     {
+        //properties: lists for bankaccounts
+        public List<BankAccount> checkingAccounts { get; set; }
+        public List<BankAccount> savingsAccounts { get; set; }
+
+
         //constructor, child from User class
-        public Customer(string username, string name, string email, string password) : base( username, name, email, password)
+        public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
-            Role = UserRole.user;   
+            Role = Enums.UserRole.customer; //automatically add the role of customer
+            checkingAccounts = new List<BankAccount>();
+            savingsAccounts = new List<BankAccount>();
         }
 
-        //list for checking accounts
-        //make list related to customer only rather than one list for all customers?!
-        public List<BankAccount> checkingAccounts = new List<BankAccount>();
-
-        //list for saving accounts
-        //make list related to customer only rather than one list for all customers?!
-        public List<BankAccount> savingsAccounts = new List<BankAccount>();
-
         //add addbankaccount method here, that receives info from other methods in customermenu class?!
+        //1 metod for choosing account type
+        //2 metod for creating account
+        //have the console writelines in customermenu + the actual logic in customer?
 
-        //method to open new bankaccount (that gets saved in list in bankaccount.cs)
-        public static void OpenBankAccount()
+        //method to open new bankaccount
+        public void OpenBankAccount()
         {
             // Which type of bankaccount do they want (check or savings)
             Console.WriteLine("Vilken typ av konto vill du öppna?");
@@ -41,14 +44,13 @@ namespace Grupp4BankApp.Users
                     {
                         case 1: //open checking account
                             //choose currency + name via method
-                            CurrencyTypes chosenCurrency = ChooseCurrency();
+                            Enums.CurrencyTypes chosenCurrency = ChooseCurrency();
                             string bankAccountName = ChooseBankAccountName();
                             //create bank account + add to checkingaccounts list
-                            BankAccount newCheckingAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            //checkingAccounts.Add(newCheckingAccount);
+                            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
+                            this.checkingAccounts.Add(newCheckingAccount);
                             //confirmation message that account has been created
-                            Console.WriteLine($"Du har nu skapat ett konto i {chosenCurrency}. " +
-                                $"Ditt bankkontonummer är: {newCheckingAccount.BankAccountNumber}");
+                            WriteConfirmationMessage(newCheckingAccount, chosenCurrency);
                             accountTypeChosen = true; //end while loop
                             break;
 
@@ -57,11 +59,10 @@ namespace Grupp4BankApp.Users
                             chosenCurrency = ChooseCurrency();
                             bankAccountName = ChooseBankAccountName();
                             //create bank account + add to savingsaccounts list
-                            BankAccount newSavingsAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            //savingsAccounts.Add(newSavingsAccount);
+                            BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
+                            this.savingsAccounts.Add(newSavingsAccount);
                             //confirmation message that account has been created
-                            Console.WriteLine($"Du har nu skapat ett sparkonto i {chosenCurrency}. " +
-                                $"Ditt bankkontonummer är: {newSavingsAccount.BankAccountNumber}");
+                            WriteConfirmationMessage(newSavingsAccount, chosenCurrency);
                             accountTypeChosen = true;
                             break;
 
@@ -77,15 +78,30 @@ namespace Grupp4BankApp.Users
             }
         }
 
+
         //method for getting the bank account name
         public static string ChooseBankAccountName()
         {
             Console.WriteLine("Vad ska ditt nya konto heta?");
-            return Console.ReadLine();
+            string bankAccountName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(bankAccountName))
+            {
+                return bankAccountName;
+            }
+            else //if user didn't write a name for the account
+            {
+                do
+                {
+                    Console.WriteLine("Vänligen skriv ett namn för ditt konto.");
+                    bankAccountName = Console.ReadLine();
+                }
+                while (string.IsNullOrWhiteSpace(bankAccountName));
+                return bankAccountName;
+            }
         }
 
         //method for choosing bank account currency
-        public static CurrencyTypes ChooseCurrency()
+        public static Enums.CurrencyTypes ChooseCurrency()
         {
             Console.WriteLine("Vilken valuta vill du öppna kontot i?");
             Console.WriteLine("[1] SEK");
@@ -93,7 +109,7 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[3] USD");
 
             //create variable for chosen currency, with standard value SEK
-            CurrencyTypes chosenCurrency = CurrencyTypes.SEK;
+            Enums.CurrencyTypes chosenCurrency = Enums.CurrencyTypes.SEK;
 
             bool currencyChosen = false;
             while (!currencyChosen)
@@ -104,15 +120,15 @@ namespace Grupp4BankApp.Users
                     switch (currencyChoice)
                     {
                         case 1:
-                            chosenCurrency = CurrencyTypes.SEK;
+                            chosenCurrency = Enums.CurrencyTypes.SEK;
                             currencyChosen = true;
                             break;
                         case 2:
-                            chosenCurrency = CurrencyTypes.EUR;
+                            chosenCurrency = Enums.CurrencyTypes.EUR;
                             currencyChosen = true;
                             break;
                         case 3:
-                            chosenCurrency = CurrencyTypes.USD;
+                            chosenCurrency = Enums.CurrencyTypes.USD;
                             currencyChosen = true;
                             break;
                         default: //if user input is a number but not 1, 2 or 3
@@ -125,9 +141,16 @@ namespace Grupp4BankApp.Users
                     Console.WriteLine("Oops. Du måste välja en siffra!");
                 }
             }
-            //confirmation message stating a new account currency has been chosen
-            Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
             return chosenCurrency;
+        }
+
+        //method for writing out a confirmation message when a new bankacount has been created
+        public static void WriteConfirmationMessage(BankAccount account, Enums.CurrencyTypes chosenCurrency)
+        {
+            Console.WriteLine($"Du har nu skapat ett konto:\n" +
+                                $"Namn: {account.BankAccountName}\n" +
+                                $"Valuta: {chosenCurrency}\n" +
+                                $"Bankkontonummer: {account.BankAccountNumber}\n");
         }
     }
 }

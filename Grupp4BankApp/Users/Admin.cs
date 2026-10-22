@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grupp4BankApp.System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace Grupp4BankApp.Users
         //constructor, child from User class
         public Admin(string username, string name, string email, string password) : base(username, name, email, password)
         {
-            Role = UserRole.admin;
+            Role = Enums.UserRole.admin; //automatically add the role of admin
         }
 
     }

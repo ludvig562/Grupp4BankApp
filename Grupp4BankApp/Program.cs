@@ -10,12 +10,11 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
-            //-------TEMPORARY TEST FOR LOGIN METHOD-------//
-            User bob = new User();
+            Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
 
-            bob.Username = "bob";
-            bob.Password = PasswordHasher.HashPassword("1234");
-            bob.Role = UserRole.user;
+            //bob.Username = "bob";
+            //bob.Password = PasswordHasher.HashPassword("1234");
+            //bob.Role = Enums.UserRole.customer;
 
             users.Add(bob.Username, bob);
 
@@ -23,7 +22,7 @@ namespace Grupp4BankApp
 
             bab.Username = "bab";
             bab.Password = PasswordHasher.HashPassword("1234");
-            bab.Role = UserRole.admin;
+            bab.Role = Enums.UserRole.admin;
 
             users.Add(bab.Username, bab);
             //---------------------------------------------//
