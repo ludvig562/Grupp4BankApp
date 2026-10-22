@@ -60,7 +60,7 @@ namespace Grupp4BankApp.Users
         }
 
         //method for opening checking account
-        public BankAccount OpenCheckingAccount()
+        public void OpenCheckingAccount()
         {
             Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
             string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
@@ -71,12 +71,10 @@ namespace Grupp4BankApp.Users
             this.checkingAccounts.Add(newCheckingAccount); 
 
             WriteConfirmationMessage(newCheckingAccount, chosenCurrency); //write confirmation message
-
-            return newCheckingAccount;
         }
 
         //method for opening savings account
-        public BankAccount OpenSavingsAccount()
+        public void OpenSavingsAccount()
         {
             Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
             string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
@@ -87,8 +85,6 @@ namespace Grupp4BankApp.Users
             this.savingsAccounts.Add(newSavingsAccount);
 
             WriteConfirmationMessage(newSavingsAccount, chosenCurrency); //write confirmation message
-
-            return newSavingsAccount;
         }
 
         //method for getting the bank account name
