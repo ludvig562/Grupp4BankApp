@@ -51,7 +51,7 @@ namespace Grupp4BankApp.System
             return user;
         }
 
-        public static User? GetUser() 
+        public User? GetUser() 
         {
             return CurrentUser;
         } 

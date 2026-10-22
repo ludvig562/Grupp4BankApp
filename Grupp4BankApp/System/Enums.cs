@@ -8,6 +8,13 @@ namespace Grupp4BankApp.System
     internal class Enums
     {
 
+        public enum Menus
+        {
+            LogInMenu,
+            UserMenu,
+            AdminMenu,
+
+        }
         public enum CurrencyTypes
         {
             SEK,
