@@ -1,4 +1,6 @@
 ﻿using Grupp4BankApp.Menus;
+using Grupp4BankApp.System;
+using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Manager
 {
@@ -13,8 +15,11 @@ namespace Grupp4BankApp.Manager
     {
 
 
-       // static private StateStack myState = new StateStack();
+        // static private StateStack myState = new StateStack();
 
+        //----------//
+        private static AuthenticationService authentication;
+        //----------//
         static private LogInMenu? myLogInMenu;
         static private CustomerMenu? myUserMenu;
         static private AdminMenu? myAdminMenu;
@@ -24,7 +29,41 @@ namespace Grupp4BankApp.Manager
             myLogInMenu = new LogInMenu();
             myUserMenu = new CustomerMenu();
             myAdminMenu = new AdminMenu();
+
+            //-----//
+            authentication = new AuthenticationService(User.users);
+            //-----//
         }
+
+        //-----------------------------------------------------------//
+        public static void Run()
+        {
+            while (true)
+            {
+                // login returns the user who logged in
+                User? user = myLogInMenu.Display();
+
+                // exit the program if login was cancelled
+                if (user == null)
+                {
+                    return;
+                }
+
+                // open the correct menu based on the user's role
+                if (user.Role == User.UserRole.admin)
+                {
+                    SelectMenu(eMenus.eAdminMenu);
+                }
+                else if (user.Role == User.UserRole.user)
+                {
+                    SelectMenu(eMenus.eUserMenu);
+                }
+
+                // clear the logged-in user after leaving the menu
+                authentication.Logout();
+            }
+        }
+        //-----------------------------------------------------------//
 
         public static void SelectMenu(eMenus aState)
         {

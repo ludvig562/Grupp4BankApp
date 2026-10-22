@@ -8,56 +8,56 @@ namespace Grupp4BankApp.System
 {
     internal class AuthenticationService
     {
-        private Dictionary<string, User> _users;
+        private readonly Dictionary<string, User> _users;
+        private readonly Dictionary<string, int> _failedAttempts = new Dictionary<string, int>();
 
-        public AuthenticationService(Dictionary<string, User> users)
+        public static User? CurrentUser { get; private set; }
+
+        public AuthenticationService(Dictionary<string, User> users) 
         {
             _users = users;
-        }
-        private int UserMaxAttempts = 0;
-        private int AppMaxAttempts = 0;
-        static User? currentLoggedUser;
-        public User? Login(string aUserName, string aPassword)
+        } 
+
+        public User? Login(string username, string password)
         {
-
-            //trys to get the same aUserName as entered and then if found it calls the method VerifyPassword to verify if the saved hash to the aUserName is the same as the hash of the entered password
-
-            if (_users.TryGetValue(aUserName, out User? currentUser))
+            if (!_users.TryGetValue(username, out User? user))//if it dosent find the user print Fel användarnamn eller lösenord! and return null 
             {
-                if (UserMaxAttempts == 3)
-                {
-                    currentUser.IsLocked = true;
-                }
-
-                if (PasswordHasher.VerifyPassword(aPassword, currentUser.Password) && currentUser.IsLocked == false)
-                {
-                    currentLoggedUser = currentUser;
-                    Console.WriteLine("Inloggningen lyckades!");
-                    return currentUser;// if correct it returns the currentUser
-                }
-                else if (currentUser.IsLocked == true)
-                {
-                    Console.WriteLine("Förmånga mslyckade försök, du är ut låst från ditt konto\nKontakta support för att låsa up ditt konto");
-                    return null;
-                }
-
-                UserMaxAttempts++;
                 Console.WriteLine("Fel användarnamn eller lösenord!");
                 return null;
             }
-            else
+            if (user.IsLocked)
             {
-                AppMaxAttempts++;
-                Console.WriteLine("Fel användarnamn eller lösenord!");
-                return null;//if it fails it returns null so the program runs again
+                Console.WriteLine("Kontot är låst. Kontakta support.");//if the user is locked print Kontot är låst. Kontakta support.
+                return null;
             }
+            if (!PasswordHasher.VerifyPassword(password, user.Password))
+            {
+                int failures = _failedAttempts.GetValueOrDefault(username) + 1;
+                _failedAttempts[username] = failures;
+                if (failures >= 3)
+                {
+                    user.IsLocked = true;
+                    Console.WriteLine("Kontot är låst efter tre felaktiga försök.");
+                }
+                else 
+                { 
+                    Console.WriteLine("Fel användarnamn eller lösenord!"); 
+                }
+                return null;
+            }
+            _failedAttempts.Remove(username);// remove 
+            CurrentUser = user;
+            Console.WriteLine("Inloggningen lyckades!");
+            return user;
         }
-        public User GetUser()
+
+        public User? GetUser() 
         {
-           
-            return currentLoggedUser;
-        }
-
-
+            return CurrentUser;
+        } 
+        public void Logout() 
+        {
+            CurrentUser = null;
+        } 
     }
 }

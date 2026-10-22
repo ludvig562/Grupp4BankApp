@@ -45,7 +45,7 @@ namespace Grupp4BankApp.Users
                             string bankAccountName = ChooseBankAccountName();
                             //create bank account + add to checkingaccounts list
                             BankAccount newCheckingAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            checkingAccounts.Add(newCheckingAccount);
+                            //checkingAccounts.Add(newCheckingAccount);
                             //confirmation message that account has been created
                             Console.WriteLine($"Du har nu skapat ett konto i {chosenCurrency}. " +
                                 $"Ditt bankkontonummer är: {newCheckingAccount.BankAccountNumber}");
@@ -58,7 +58,7 @@ namespace Grupp4BankApp.Users
                             bankAccountName = ChooseBankAccountName();
                             //create bank account + add to savingsaccounts list
                             BankAccount newSavingsAccount = new BankAccount("Svea", bankAccountName, chosenCurrency);
-                            savingsAccounts.Add(newSavingsAccount);
+                            //savingsAccounts.Add(newSavingsAccount);
                             //confirmation message that account has been created
                             Console.WriteLine($"Du har nu skapat ett sparkonto i {chosenCurrency}. " +
                                 $"Ditt bankkontonummer är: {newSavingsAccount.BankAccountNumber}");
