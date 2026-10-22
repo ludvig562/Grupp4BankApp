@@ -62,13 +62,15 @@ namespace Grupp4BankApp.Users
         //method for opening checking account
         public BankAccount OpenCheckingAccount()
         {
-            Enums.CurrencyTypes chosenCurrency = ChooseCurrency();
-            string bankAccountName = ChooseBankAccountName();
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
 
+            //create new bank account
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
-            this.checkingAccounts.Add(newCheckingAccount);
+            //add new bank account to customer's bank account list
+            this.checkingAccounts.Add(newCheckingAccount); 
 
-            WriteConfirmationMessage(newCheckingAccount, chosenCurrency);
+            WriteConfirmationMessage(newCheckingAccount, chosenCurrency); //write confirmation message
 
             return newCheckingAccount;
         }
@@ -76,13 +78,15 @@ namespace Grupp4BankApp.Users
         //method for opening savings account
         public BankAccount OpenSavingsAccount()
         {
-            Enums.CurrencyTypes chosenCurrency = ChooseCurrency();
-            string bankAccountName = ChooseBankAccountName();
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
 
+            //create new bank account
             BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
+            //add new bank account to customer's bank account list
             this.savingsAccounts.Add(newSavingsAccount);
 
-            WriteConfirmationMessage(newSavingsAccount, chosenCurrency);
+            WriteConfirmationMessage(newSavingsAccount, chosenCurrency); //write confirmation message
 
             return newSavingsAccount;
         }
