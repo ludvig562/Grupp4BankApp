@@ -21,11 +21,6 @@ namespace Grupp4BankApp.Users
             savingsAccounts = new List<BankAccount>();
         }
 
-        //add addbankaccount method here, that receives info from other methods in customermenu class?!
-        //1 metod for choosing account type
-        //2 metod for creating account
-        //have the console writelines in customermenu + the actual logic in customer?
-
         //method to open new bankaccount
         public void OpenBankAccount()
         {
@@ -43,27 +38,13 @@ namespace Grupp4BankApp.Users
                     switch (accountType)
                     {
                         case 1: //open checking account
-                            //choose currency + name via method
-                            Enums.CurrencyTypes chosenCurrency = ChooseCurrency();
-                            string bankAccountName = ChooseBankAccountName();
-                            //create bank account + add to checkingaccounts list
-                            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
-                            this.checkingAccounts.Add(newCheckingAccount);
-                            //confirmation message that account has been created
-                            WriteConfirmationMessage(newCheckingAccount, chosenCurrency);
+                            OpenCheckingAccount(); //method to open checking account
                             accountTypeChosen = true; //end while loop
                             break;
 
                         case 2: //open savings account
-                            //choose currency + name via method
-                            chosenCurrency = ChooseCurrency();
-                            bankAccountName = ChooseBankAccountName();
-                            //create bank account + add to savingsaccounts list
-                            BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
-                            this.savingsAccounts.Add(newSavingsAccount);
-                            //confirmation message that account has been created
-                            WriteConfirmationMessage(newSavingsAccount, chosenCurrency);
-                            accountTypeChosen = true;
+                            OpenSavingsAccount(); //method to open savings account
+                            accountTypeChosen = true; //end while loop
                             break;
 
                         default: //if user input is a number but not 1 or 2
@@ -78,6 +59,33 @@ namespace Grupp4BankApp.Users
             }
         }
 
+        //method for opening checking account
+        public void OpenCheckingAccount()
+        {
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
+
+            //create new bank account
+            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
+            //add new bank account to customer's bank account list
+            this.checkingAccounts.Add(newCheckingAccount); 
+
+            WriteConfirmationMessage(newCheckingAccount); //write confirmation message
+        }
+
+        //method for opening savings account
+        public void OpenSavingsAccount()
+        {
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
+
+            //create new bank account
+            BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
+            //add new bank account to customer's bank account list
+            this.savingsAccounts.Add(newSavingsAccount);
+
+            WriteConfirmationMessage(newSavingsAccount); //write confirmation message
+        }
 
         //method for getting the bank account name
         public static string ChooseBankAccountName()
@@ -145,11 +153,11 @@ namespace Grupp4BankApp.Users
         }
 
         //method for writing out a confirmation message when a new bankacount has been created
-        public static void WriteConfirmationMessage(BankAccount account, Enums.CurrencyTypes chosenCurrency)
+        public static void WriteConfirmationMessage(BankAccount account)
         {
             Console.WriteLine($"Du har nu skapat ett konto:\n" +
                                 $"Namn: {account.BankAccountName}\n" +
-                                $"Valuta: {chosenCurrency}\n" +
+                                $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n");
         }
     }
