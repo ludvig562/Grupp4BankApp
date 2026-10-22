@@ -70,7 +70,7 @@ namespace Grupp4BankApp.Users
             //add new bank account to customer's bank account list
             this.checkingAccounts.Add(newCheckingAccount); 
 
-            WriteConfirmationMessage(newCheckingAccount, chosenCurrency); //write confirmation message
+            WriteConfirmationMessage(newCheckingAccount); //write confirmation message
         }
 
         //method for opening savings account
@@ -84,7 +84,7 @@ namespace Grupp4BankApp.Users
             //add new bank account to customer's bank account list
             this.savingsAccounts.Add(newSavingsAccount);
 
-            WriteConfirmationMessage(newSavingsAccount, chosenCurrency); //write confirmation message
+            WriteConfirmationMessage(newSavingsAccount); //write confirmation message
         }
 
         //method for getting the bank account name
