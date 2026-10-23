@@ -12,6 +12,7 @@ namespace Grupp4BankApp.System
         private Customer? _customer => AuthenticationService.CurrentUser as Customer;
         public void MakeLoan(decimal loan, int accountChoice)
         {
+            
             if (accountChoice < 1 || accountChoice > _customer.checkingAccounts.Count)
             {
                 Console.WriteLine("Kontot finns inte.");
@@ -48,5 +49,26 @@ namespace Grupp4BankApp.System
             }
         }
         //----------------------------------------------------------------------//
+
+        public bool CheckCustomerMoney(decimal loan)
+        {
+            decimal moneyInAccounts = 0;
+            foreach(BankAccount checkingMoney in _customer.checkingAccounts)
+            {
+                moneyInAccounts += checkingMoney.AccountBalance;
+            }
+
+            foreach (BankAccount savingsMoney in _customer.savingsAccounts)
+            {
+                moneyInAccounts += savingsMoney.AccountBalance;
+            }
+
+            if(loan > moneyInAccounts * 5)
+            {
+                Console.WriteLine($"Du kan inte låna så mycket max 5 gånger det du har i våran bank\nDu har totalt: {moneyInAccounts} kr");
+                return false;
+            }
+            return true;
+        }
     }
 }

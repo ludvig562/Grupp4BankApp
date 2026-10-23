@@ -90,8 +90,10 @@ namespace Grupp4BankApp.Menus
                             {
                                 Console.WriteLine("Du måste ange ett giltit antal!");
                             }
-                            loans.MakeLoan(loan, accountChoise);
-
+                            if(loans.CheckCustomerMoney(loan))
+                            {
+                                loans.MakeLoan(loan, accountChoise);
+                            }
                             break;
                         case 6:
                             break;
