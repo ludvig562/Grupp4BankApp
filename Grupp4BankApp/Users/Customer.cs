@@ -13,6 +13,7 @@ namespace Grupp4BankApp.Users
         public List<BankAccount> checkingAccounts { get; set; }
         public List<BankAccount> savingsAccounts { get; set; }
 
+        public List<Loan> Loans { get; set; }
 
         //constructor, child from User class
         public Customer(string username, string name, string email, string password) : base(username, name, email, password)
@@ -20,6 +21,8 @@ namespace Grupp4BankApp.Users
             Role = Enums.UserRole.customer; //automatically add the role of customer
             checkingAccounts = new List<BankAccount>();
             savingsAccounts = new List<BankAccount>();
+
+            Loans = new List<Loan>();
         }
 
         //method to open new bankaccount
