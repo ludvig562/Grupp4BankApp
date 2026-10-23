@@ -48,8 +48,9 @@ namespace Grupp4BankApp.Menus
 
         public void RunCustomerMenu()
         {
+            bool customerMenuRunning = true;
 
-            while (true)
+            while (customerMenuRunning)
             {
                 Console.WriteLine("Vad vill du göra?\n" +
                     "[1] Lista alla konto\n" +
@@ -78,9 +79,11 @@ namespace Grupp4BankApp.Menus
                         case 6:
                             break;
                         case 7:
-                            return;
+                            Console.WriteLine("Du har nu loggats ut.");
+                            customerMenuRunning = false;
+                            break;
                         default:
-                            Console.WriteLine("Du måste skriva mellan 1 - 7");
+                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
                             break;
                     }
                 }
