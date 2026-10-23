@@ -71,6 +71,13 @@ namespace Grupp4BankApp.Users
                 Console.WriteLine("Vad är kundens användarnamn?");
                 newCustomerUsername = Console.ReadLine();
 
+                //check if user input is not null/empty
+                if (string.IsNullOrWhiteSpace(newCustomerUsername))
+                {
+                    Console.WriteLine("Användarnamn får inte vara tomt! Vänligen skriv ett användarnamn.");
+                    continue; //breaking the if loop but not the while loop, so admin can write username
+                }
+
                 /*check if username already exists in dictionary via ContainsKey instead of TryGetValue
                 because here we only need to check if the name already exists in the dictionary,
                 we don't need to get the entire user*/
@@ -80,7 +87,7 @@ namespace Grupp4BankApp.Users
                     continue; //breaking the if loop but not the while loop, so admin can correct username
                 }
             }
-            while (User.users.ContainsKey(newCustomerUsername));
+            while (string.IsNullOrWhiteSpace(newCustomerUsername) || User.users.ContainsKey(newCustomerUsername));
             return newCustomerUsername;
         }
     }
