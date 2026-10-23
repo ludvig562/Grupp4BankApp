@@ -98,7 +98,7 @@ namespace Grupp4BankApp.Users
             return newCustomerUsername;
         }
 
-        //method for getting the customer's username
+        //method for getting the customer's name
         public static string GetName()
         {
             string newCustomerName;
