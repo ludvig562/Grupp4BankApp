@@ -77,22 +77,39 @@ namespace Grupp4BankApp.Menus
                         case 4:
                             break;
                         case 5:
-                            Console.Write("Hur mycket vill du låna?: ");
-                            int loan = 0;
-                            while (!int.TryParse(Console.ReadLine(), out loan))
+                            Console.Clear();
+                            Console.WriteLine("vad vill du göra?\n" +
+                                "[1] Lista över dina lån\n" +
+                                "[2] Låna Pengar\n" +
+                                "[3] Gå tillbaka\n");
+                            int loanChoise = 0;
+                            while(!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
                             {
-                                Console.WriteLine("Du måste ange ett giltit antal!");
+                                Console.WriteLine("Du måste ange ett giltit tal!");
                             }
-                            loans.PrintAccounts();
-                            Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                            int accountChoise = 0;
-                            while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                            if(loanChoise == 1)
                             {
-                                Console.WriteLine("Du måste ange ett giltit antal!");
+                                loans.PrintLoans();
                             }
-                            if(loans.CheckCustomerMoney(loan))
+                            else if(loanChoise == 2)
                             {
-                                loans.MakeLoan(loan, accountChoise);
+                                Console.Write("Hur mycket vill du låna?: ");
+                                int loan = 0;
+                                while (!int.TryParse(Console.ReadLine(), out loan))
+                                {
+                                    Console.WriteLine("Du måste ange ett giltit antal!");
+                                }
+                                loans.PrintAccounts();
+                                Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
+                                int accountChoise = 0;
+                                while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                                {
+                                    Console.WriteLine("Du måste ange ett giltit tal!");
+                                }
+                                if(loans.CheckCustomerMoney(loan))
+                                {
+                                    loans.MakeLoan(loan, accountChoise);
+                                }
                             }
                             break;
                         case 6:
