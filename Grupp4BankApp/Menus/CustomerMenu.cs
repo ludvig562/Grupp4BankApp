@@ -96,10 +96,8 @@ namespace Grupp4BankApp.Menus
                         case 6:
                             break;
                         case 7:
-                            Console.WriteLine("Du har nu loggats ut.");
-                            customerMenuRunning = false;
-                            break;
                             Console.Clear();
+                            Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
                             return;
                         default:
