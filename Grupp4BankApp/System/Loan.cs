@@ -10,15 +10,15 @@ namespace Grupp4BankApp.System
     {
         private decimal _interestRate = 0.08m; // 8% annual interest
         private Customer? _customer => AuthenticationService.CurrentUser as Customer;
-        public void MakeLoan(decimal loan, int accountChoise)
+        public void MakeLoan(decimal loan, int accountChoice)
         {
-            if (accountChoise < 1 || accountChoise > _customer.checkingAccounts.Count)
+            if (accountChoice < 1 || accountChoice > _customer.checkingAccounts.Count)
             {
                 Console.WriteLine("Kontot finns inte.");
                 return;
             }
 
-            BankAccount selectedAccount = _customer.checkingAccounts[accountChoise - 1];
+            BankAccount selectedAccount = _customer.checkingAccounts[accountChoice - 1];
 
             decimal yearlyInterest = loan * _interestRate;
 
