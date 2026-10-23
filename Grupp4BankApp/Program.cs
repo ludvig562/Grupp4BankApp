@@ -14,6 +14,9 @@ namespace Grupp4BankApp
             Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
             users.Add(bob.Username, bob);
 
+            Customer bobelina = new Customer("bobelina", "bobelina", "test@gmail.com", PasswordHasher.HashPassword("1234"));
+            users.Add(bobelina.Username, bobelina);
+
             //bob.Username = "bob";
             //bob.Password = PasswordHasher.HashPassword("1234");
             //bob.Role = Enums.UserRole.customer;

@@ -6,6 +6,8 @@ namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
     {
+        AuthenticationService Auth = new();
+        Loan loans = new();
         List<char> myAnimation = new List<char>();
         public CustomerMenu()
         {
@@ -75,6 +77,21 @@ namespace Grupp4BankApp.Menus
                         case 4:
                             break;
                         case 5:
+                            Console.Write("Hur mycket vill du låna?: ");
+                            int loan = 0;
+                            while (!int.TryParse(Console.ReadLine(), out loan))
+                            {
+                                Console.WriteLine("Du måste ange ett giltit antal!");
+                            }
+                            loans.PrintAccounts();
+                            Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
+                            int accountChoise = 0;
+                            while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                            {
+                                Console.WriteLine("Du måste ange ett giltit antal!");
+                            }
+                            loans.MakeLoan(loan, accountChoise);
+
                             break;
                         case 6:
                             break;
@@ -82,6 +99,9 @@ namespace Grupp4BankApp.Menus
                             Console.WriteLine("Du har nu loggats ut.");
                             customerMenuRunning = false;
                             break;
+                            Console.Clear();
+                            Auth.Logout();
+                            return;
                         default:
                             Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
                             break;
