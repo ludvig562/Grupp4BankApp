@@ -1,26 +1,32 @@
-﻿using Grupp4BankApp.System;
+﻿using Grupp4BankApp.Menus;
+using Grupp4BankApp.System;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Grupp4BankApp.Users
 {
     internal class Customer : User
     {
+        //properties: lists for bankaccounts
+        public List<BankAccount> checkingAccounts { get; set; }
+        public List<BankAccount> savingsAccounts { get; set; }
+
+        public List<Loan> Loans { get; set; }
+
         //constructor, child from User class
-        public Customer(int userID, string username, string name, string email, string phonenumber, string password) : base(userID, username, name, email, phonenumber, password)
+        public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
+            Role = Enums.UserRole.customer; //automatically add the role of customer
+            checkingAccounts = new List<BankAccount>();
+            savingsAccounts = new List<BankAccount>();
+
+            Loans = new List<Loan>();
         }
 
-        //list for checking accounts
-        public static List<BankAccount> checkingaccount = new List<BankAccount>();
-
-        //list for saving accounts
-        public static List<BankAccount> savingsaccount = new List<BankAccount>();
-
-
-        //method to open new bankaccount (that gets saved in list in bankaccount.cs)
-        public static void OpenBankAccount()
+        //method to open new bankaccount
+        public void OpenBankAccount()
         {
             // Which type of bankaccount do they want (check or savings)
             Console.WriteLine("Vilken typ av konto vill du öppna?");
@@ -36,23 +42,13 @@ namespace Grupp4BankApp.Users
                     switch (accountType)
                     {
                         case 1: //open checking account
-                            CurrencyTypes chosenCurrency = ChooseCurrency(); //choose currency via method
-                            string bankAccountName = ChooseBankAccountName(); //choose name via method
-                            //add to list in Bankaccount.cs
-                            BankAccount newCheckingAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
-                            checkingaccount.Add(newCheckingAccount);
-                            Console.WriteLine($"Du har nu lagt till ett konto i {chosenCurrency}.");
+                            OpenCheckingAccount(); //method to open checking account
                             accountTypeChosen = true; //end while loop
                             break;
 
                         case 2: //open savings account
-                            chosenCurrency = ChooseCurrency();
-                            bankAccountName = ChooseBankAccountName();
-                            //add to list in Bankaccount.cs
-                            BankAccount newSavingsAccount = new BankAccount("Svea", 007, bankAccountName, chosenCurrency);
-                            checkingaccount.Add(newSavingsAccount);
-                            Console.WriteLine($"Du har nu lagt till ett sparkonto i {chosenCurrency}.");
-                            accountTypeChosen = true;
+                            OpenSavingsAccount(); //method to open savings account
+                            accountTypeChosen = true; //end while loop
                             break;
 
                         default: //if user input is a number but not 1 or 2
@@ -67,15 +63,57 @@ namespace Grupp4BankApp.Users
             }
         }
 
+        //method for opening checking account
+        public void OpenCheckingAccount()
+        {
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
+
+            //create new bank account
+            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
+            //add new bank account to customer's bank account list
+            this.checkingAccounts.Add(newCheckingAccount); 
+
+            WriteConfirmationMessage(newCheckingAccount); //write confirmation message
+        }
+
+        //method for opening savings account
+        public void OpenSavingsAccount()
+        {
+            Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
+            string bankAccountName = ChooseBankAccountName(); //ask for name of bank account
+
+            //create new bank account
+            BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
+            //add new bank account to customer's bank account list
+            this.savingsAccounts.Add(newSavingsAccount);
+
+            WriteConfirmationMessage(newSavingsAccount); //write confirmation message
+        }
+
         //method for getting the bank account name
         public static string ChooseBankAccountName()
         {
             Console.WriteLine("Vad ska ditt nya konto heta?");
-            return Console.ReadLine();
+            string bankAccountName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(bankAccountName))
+            {
+                return bankAccountName;
+            }
+            else //if user didn't write a name for the account
+            {
+                do
+                {
+                    Console.WriteLine("Vänligen skriv ett namn för ditt konto.");
+                    bankAccountName = Console.ReadLine();
+                }
+                while (string.IsNullOrWhiteSpace(bankAccountName));
+                return bankAccountName;
+            }
         }
 
         //method for choosing bank account currency
-        public static CurrencyTypes ChooseCurrency()
+        public static Enums.CurrencyTypes ChooseCurrency()
         {
             Console.WriteLine("Vilken valuta vill du öppna kontot i?");
             Console.WriteLine("[1] SEK");
@@ -83,7 +121,7 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[3] USD");
 
             //create variable for chosen currency, with standard value SEK
-            CurrencyTypes chosenCurrency = CurrencyTypes.SEK;
+            Enums.CurrencyTypes chosenCurrency = Enums.CurrencyTypes.SEK;
 
             bool currencyChosen = false;
             while (!currencyChosen)
@@ -94,15 +132,15 @@ namespace Grupp4BankApp.Users
                     switch (currencyChoice)
                     {
                         case 1:
-                            chosenCurrency = CurrencyTypes.SEK;
+                            chosenCurrency = Enums.CurrencyTypes.SEK;
                             currencyChosen = true;
                             break;
                         case 2:
-                            chosenCurrency = CurrencyTypes.EUR;
+                            chosenCurrency = Enums.CurrencyTypes.EUR;
                             currencyChosen = true;
                             break;
                         case 3:
-                            chosenCurrency = CurrencyTypes.USD;
+                            chosenCurrency = Enums.CurrencyTypes.USD;
                             currencyChosen = true;
                             break;
                         default: //if user input is a number but not 1, 2 or 3
@@ -115,9 +153,17 @@ namespace Grupp4BankApp.Users
                     Console.WriteLine("Oops. Du måste välja en siffra!");
                 }
             }
-            //confirmation message stating a new account currency has been chosen
-            Console.WriteLine($"Du har valt att ha ditt konto i {chosenCurrency}");
             return chosenCurrency;
+        }
+
+        //method for writing out a confirmation message when a new bankacount has been created
+        public static void WriteConfirmationMessage(BankAccount account)
+        {
+            Console.WriteLine($"\nDu har nu skapat ett konto:\n" +
+                                $"Namn: {account.BankAccountName}\n" +
+                                $"Valuta: {account.Currency}\n" +
+                                $"Bankkontonummer: {account.BankAccountNumber}\n" +
+                                $"Konto saldo: {account.AccountBalance}\n");
         }
     }
 }

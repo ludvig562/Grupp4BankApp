@@ -1,45 +1,35 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.Menus;
 using Grupp4BankApp.System;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Grupp4BankApp.Manager;
-using Grupp4BankApp.State;
+using Grupp4BankApp.Users;
 namespace Grupp4BankApp
 {
     internal class Bank
     {
-        private readonly AuthenticationService authentication;
+        //private readonly AuthenticationService authentication = new AuthenticationService(User.users);
 
-        public Bank()
-        {
-            authentication = new AuthenticationService(User.users);
-        }
+        //public void Run()// runs the whold bank first it gose thru login then depending on role it opens admin or user menu
+        //{
+        //    while (true)
+        //    {
+        //        User? user = new LogInMenu(authentication).Display();
 
-        public void RunLogin()
-        {
-            User? loggedInUser = null;
+        //        if (user == null)
+        //        {
+        //            return;
+        //        }
 
-            while (loggedInUser == null)// while loggedinuser is null keep repeting the login method
-            {
-                
-                loggedInUser = authentication.Login();
-            }
+        //        if (user.Role == User.UserRole.admin)
+        //        { 
+        //            AdminMenu.RunAdminMenu();
+        //        }
+        //        else
+        //        {
+        //            new CustomerMenu().Display();
+        //        }
 
-            switch (loggedInUser.Role)
-            {
-                case User.UserRole.admin:
-                    MenuManager.PushMenu(eStates.eAdminMenu);
-
-                    break;
-                case User.UserRole.user:
-                    MenuManager.PushMenu(eStates.eUserMenu);
-                    break;
-                default:
-                    Console.WriteLine("Är inte en användare i vårat system");
-                    break;
-            }
-
-        }
+        //        authentication.Logout(); 
+        //    }
+        //}
     }
 }

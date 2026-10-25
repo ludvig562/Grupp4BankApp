@@ -1,20 +1,21 @@
-﻿using Grupp4BankApp.State;
+﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
 
 namespace Grupp4BankApp.Menus
 {
     internal class AdminMenu
     {
-        StateStack myState;
+        public static AuthenticationService Auth = new();
 
-        public AdminMenu(StateStack aState)
+        public AdminMenu( )
         {
-            myState = aState;
         }
 
         public void Display()
         {
-            Console.WriteLine("This is Admin Menu");
+            Console.Clear();
+            RunAdminMenu();
         }
 
         //method for admin menu (once logged in)
@@ -42,10 +43,10 @@ namespace Grupp4BankApp.Menus
                             break;
 
                         case 3: //end admin menu
-                            Console.WriteLine("Du har nu loggats ut.");
-                            adminMenuRunning = false;
-                            break;
-
+                            Console.Clear();
+                            Console.WriteLine("Du har loggats ut ");
+                            Auth.Logout();
+                            return;
                         default: //if user input is a number but not between 1 and 3
                             Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 3!\n");
                             break;

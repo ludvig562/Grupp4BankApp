@@ -1,10 +1,142 @@
-﻿using System;
+﻿using Grupp4BankApp.Users;
+using System;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using System.Text;
 
 namespace Grupp4BankApp.System
 {
     internal class Loan
     {
+        private decimal _interestRate = 0.08m; // 8% annual interest
+        private Customer? _customer => AuthenticationService.CurrentUser as Customer;
+
+        public decimal LoanAmount { get; set; }
+        public decimal InterestRate { get; set; }
+        public int LoanYears { get; set; }
+        public decimal TotalLoan { get; set; }
+
+        public Loan()
+        {
+        }
+        public Loan(decimal loanAmount, decimal interestRate, int loanYears, decimal totalLoan)
+        {
+            LoanAmount = loanAmount;
+            InterestRate = interestRate;
+            LoanYears = loanYears;
+            TotalLoan = totalLoan;
+        }
+
+        public void MakeLoan(decimal loan, int accountChoice)
+        {
+            Console.Write("Ange återbetalningstid i år (1–10): ");
+            int loanYears = 0;
+            while(!int.TryParse(Console.ReadLine(), out loanYears))
+            {
+                Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
+            }
+
+            if (accountChoice < 1 || accountChoice > _customer.checkingAccounts.Count)
+            {
+                Console.WriteLine("Kontot finns inte.");
+                return;
+            }
+
+            BankAccount selectedAccount = _customer.checkingAccounts[accountChoice - 1];
+
+            decimal yearlyInterest = loan * _interestRate;
+
+            selectedAccount.AccountBalance += loan;
+
+            Loan newLoan = new Loan(loan, _interestRate, loanYears, CalculateTotalInterest(loan, loanYears));
+
+            _customer.Loans.Add(newLoan);
+
+            Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
+            Console.WriteLine($"Lånebelopp: {loan} kr");
+            Console.WriteLine($"Årsränta: {_interestRate:P0}");
+            Console.WriteLine($"Återbetalningstid: {loanYears} år" );
+            Console.WriteLine($"Total Räntekostnad: {CalculateTotalInterest(loan, loanYears) - loan} kr");
+            Console.WriteLine();
+        }
+
+        //------illfällig prin metod tills att yevgeniy fixar print konto------// 
+        public void PrintAccounts()
+        {
+            Console.WriteLine("----- Dina konton -----");
+            int i = 1;
+            foreach (BankAccount account in _customer.checkingAccounts)
+            {
+                Console.WriteLine($"[{i}].");
+                Console.WriteLine($"Namn: {account.BankAccountName}");
+                Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+                Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
+                Console.WriteLine($"Valuta: {account.Currency}");
+                Console.WriteLine();
+                i++;
+            }
+        }
+        //----------------------------------------------------------------------//
+
+        public bool CheckCustomerMoney(decimal loan)
+        {
+            decimal moneyInAccounts = 0;
+            foreach(BankAccount checkingMoney in _customer.checkingAccounts)
+            {
+                moneyInAccounts += checkingMoney.AccountBalance;
+            }
+
+            foreach (BankAccount savingsMoney in _customer.savingsAccounts)
+            {
+                moneyInAccounts += savingsMoney.AccountBalance;
+            }
+
+            if(loan > moneyInAccounts * 5)
+            {
+                Console.WriteLine($"Du kan inte låna så mycket max 5 gånger det du har i våran bank\nDu har totalt: {moneyInAccounts} kr");
+                return false;
+            }
+            return true;
+        }
+
+        public decimal CalculateTotalInterest(decimal loan, int years)
+        {
+            decimal yearlyAmount = loan / years;
+            decimal remainingDebt = loan;
+            decimal totalInterest = 0;
+
+            for (int year = 1; year <= years; year++)
+            {
+                decimal yearlyInterest = remainingDebt * _interestRate;
+
+                totalInterest += yearlyInterest;
+
+                remainingDebt -= yearlyAmount;
+            }
+
+            return loan + totalInterest;
+        }
+
+        public void PrintLoans()
+        {
+            if (_customer.Loans.Count == 0)
+            {
+                Console.WriteLine("Du har inga lån.");
+                return;
+            }
+
+            int i = 1;
+            foreach (Loan loan in _customer.Loans)
+            {
+                Console.WriteLine("-----Dina lån-----");
+                Console.WriteLine($"[{i}].");
+                Console.WriteLine($"Lånebelopp: {loan.LoanAmount} kr");
+                Console.WriteLine($"Årsränta: {loan.InterestRate:P0}");
+                Console.WriteLine($"Återbetalningstid: {loan.LoanYears} år");
+                Console.WriteLine($"Total skuld: {loan.TotalLoan} kr");
+                Console.WriteLine();
+                i++;
+            }
+        }
     }
 }
