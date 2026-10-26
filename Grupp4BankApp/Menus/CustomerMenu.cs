@@ -6,6 +6,7 @@ namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
     {
+        private Customer? currentUser;
         AuthenticationService Auth = new();
         Loan loans = new();
         List<char> myAnimation = new List<char>();
@@ -50,6 +51,8 @@ namespace Grupp4BankApp.Menus
 
         public void RunCustomerMenu()
         {
+            currentUser = AuthenticationService.CurrentUser as Customer;
+
             bool customerMenuRunning = true;
 
             while (customerMenuRunning)
@@ -69,7 +72,6 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             break;
                         case 2:
-                            Customer? currentUser = (Customer)AuthenticationService.CurrentUser; //convert user to customer type
                             currentUser.OpenBankAccount(); //customer opens bank account
                             break;
                         case 3:
@@ -77,7 +79,7 @@ namespace Grupp4BankApp.Menus
                         case 4:
                             break;
                         case 5:
-                            loans.AskCustomer();
+                            loans.ShowLoanMenu();
                             break;
                         case 6:
                             break;

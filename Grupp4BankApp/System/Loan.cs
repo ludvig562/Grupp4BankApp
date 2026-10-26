@@ -27,7 +27,7 @@ namespace Grupp4BankApp.System
             TotalLoan = totalLoan;
         }
 
-        public void AskCustomer()
+        public void ShowLoanMenu()
         {
             Console.Clear();
             Console.WriteLine("vad vill du göra?\n" +
