@@ -77,7 +77,11 @@ namespace Grupp4BankApp.Users
             WriteConfirmationMessage(newCheckingAccount); //write confirmation message
         }
 
+
+
         //method for opening savings account
+        //add option to put in money directly when opening savings account
+        //add option to calculate interest rate on money in savings account
         public void OpenSavingsAccount()
         {
             Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
@@ -90,6 +94,13 @@ namespace Grupp4BankApp.Users
 
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
         }
+
+        //method for asking if they wish to deposit money directly into their savings account when opening
+        public static void DepositMoney()
+        {
+
+        }
+
 
         //method for getting the bank account name
         public static string ChooseBankAccountName()

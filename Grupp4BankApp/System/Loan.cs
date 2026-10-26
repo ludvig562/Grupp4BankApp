@@ -30,24 +30,24 @@ namespace Grupp4BankApp.System
         public void ShowLoanMenu()// loan menu
         {
             Console.Clear();
-            Console.WriteLine("vad vill du göra?\n" +
+            Console.WriteLine("Vad vill du göra?\n" +
                 "[1] Lista över dina lån\n" +
                 "[2] Låna Pengar\n" +
                 "[3] Gå tillbaka\n");
-            int loanChoise = 0;
-            while (!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
+            int loanMenuChoice = 0;
+            while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
             {
                 Console.WriteLine("Du måste ange ett giltit tal!");
             }
-            if (loanChoise == 1)
+            if (loanMenuChoice == 1)
             {
                 PrintLoans();
             }
-            else if (loanChoise == 2)
+            else if (loanMenuChoice == 2)
             {
                 Console.Write("Hur mycket vill du låna?: ");
                 int loan = 0;
-                while (!int.TryParse(Console.ReadLine(), out loan))
+                while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
                 {
                     Console.WriteLine("Du måste ange ett giltit antal!");
                 }
@@ -70,7 +70,7 @@ namespace Grupp4BankApp.System
         {
             Console.Write("Ange återbetalningstid i år (1–10): ");
             int loanYears = 0;
-            while(!int.TryParse(Console.ReadLine(), out loanYears))
+            while(!int.TryParse(Console.ReadLine(), out loanYears) || loanYears <1 || loanYears > 10)
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
