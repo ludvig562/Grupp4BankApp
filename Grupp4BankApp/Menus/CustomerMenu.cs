@@ -43,7 +43,7 @@ namespace Grupp4BankApp.Menus
         }
         public void Display()
         {
-            LogInEvent();
+            // LogInEvent();
             Console.Clear();
 
             RunCustomerMenu();
@@ -77,6 +77,8 @@ namespace Grupp4BankApp.Menus
                         case 3:
                             break;
                         case 4:
+                            Console.Clear();
+                            Transaction();
                             break;
                         case 5:
                             loans.ShowLoanMenu(); // opens loan menu
@@ -98,6 +100,91 @@ namespace Grupp4BankApp.Menus
                     Console.WriteLine("Du måste skriva en siffra");
                 }
             }
+        }
+
+        public void Transaction()
+        {
+            if (AuthenticationService.CurrentUser is Customer currentUser)
+            {
+                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                {
+                    Console.WriteLine($"{item}\n");
+                }
+
+                Console.Write("Från: ");
+                string? from = Console.ReadLine() ?? "";
+
+                BankAccount? FromAccount = currentUser.checkingAccounts.
+                    Concat(currentUser.savingsAccounts).
+                    FirstOrDefault(a => a.BankAccountName == from);
+
+                if (FromAccount == null)
+                {
+                    Console.WriteLine("Konto finns inte!");
+                    return;
+                }
+
+                Console.Write("Till: ");
+
+                if (!int.TryParse(Console.ReadLine(), out int bankNumber))
+                {
+                    string? to = Console.ReadLine() ?? "";
+
+                    BankAccount? toAccount = currentUser.checkingAccounts.
+                        Concat(currentUser.savingsAccounts).
+                        FirstOrDefault(a => a.BankAccountName == to);
+
+                    if (toAccount == null)
+                    {
+                        Console.WriteLine("Konto finns inte!");
+                        return;
+                    }
+                    Factor(FromAccount, toAccount);
+                }
+                else 
+                {
+                    BankAccount? toAccount = User.users.Values
+                         .OfType<Customer>()
+                         .SelectMany(c => c.checkingAccounts.Concat(c.savingsAccounts))
+                         .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
+
+                    if (toAccount == null)
+                    {
+                        Console.WriteLine("Konto finns inte!");
+                        return;
+                    }
+
+                    Factor(FromAccount, toAccount);
+                }
+
+            }
+
+        }
+
+        //Flytta till transaction klassen sen
+
+        public void Factor(BankAccount fromACC, BankAccount toACC)
+        {
+
+            Console.Write("Belopp: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int belopp))
+            {
+                Console.WriteLine("Nummer tack");
+                return;
+            }
+
+            if (fromACC.AccountBalance >= belopp)
+            {
+                fromACC.AccountBalance -= belopp;
+            }
+            else
+            {
+                Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+            }
+
+            toACC.AccountBalance += belopp;
+
         }
     }
 }

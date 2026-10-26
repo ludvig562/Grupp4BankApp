@@ -226,5 +226,21 @@ namespace Grupp4BankApp.Users
                 Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
             }
         }
+
+        public void PrintBankAccounts()
+        {
+            Console.WriteLine("CheckingAccounts: \n");
+            foreach (var item in checkingAccounts)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine("\nSaveAccounts: \n");
+            foreach (var item in savingsAccounts)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
+        }
     }
 }
