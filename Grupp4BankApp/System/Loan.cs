@@ -30,7 +30,7 @@ namespace Grupp4BankApp.System
         public void AskCustomer()
         {
             Console.Clear();
-            Console.WriteLine("vad vill du göra?\n" +
+            Console.WriteLine("Vad vill du göra?\n" +
                 "[1] Lista över dina lån\n" +
                 "[2] Låna Pengar\n" +
                 "[3] Gå tillbaka\n");
