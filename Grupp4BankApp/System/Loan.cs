@@ -51,15 +51,16 @@ namespace Grupp4BankApp.System
                 {
                     Console.WriteLine("Du måste ange ett giltit antal!");
                 }
-                PrintAccounts();
-                Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                int accountChoise = 0;
-                while (!int.TryParse(Console.ReadLine(), out accountChoise))
-                {
-                    Console.WriteLine("Du måste ange ett giltit tal!");
-                }
+
                 if (CheckCustomerMoney(loan))
                 {
+                    PrintAccounts();
+                    Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
+                    int accountChoise = 0;
+                    while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                    {
+                        Console.WriteLine("Du måste ange ett giltit tal!");
+                    }
                     MakeLoan(loan, accountChoise);
                 }
             }
