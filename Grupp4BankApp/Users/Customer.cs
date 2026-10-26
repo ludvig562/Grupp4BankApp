@@ -230,13 +230,13 @@ namespace Grupp4BankApp.Users
         public void PrintBankAccounts()
         {
             Console.WriteLine("CheckingAccounts: \n");
-            foreach (var item in checkingAccounts)
+            foreach (var item in CheckingAccounts)
             {
                 Console.WriteLine(item);
             }
 
             Console.WriteLine("\nSaveAccounts: \n");
-            foreach (var item in savingsAccounts)
+            foreach (var item in SavingsAccounts)
             {
                 Console.WriteLine(item);
             }

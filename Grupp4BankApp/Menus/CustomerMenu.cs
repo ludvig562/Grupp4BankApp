@@ -106,7 +106,7 @@ namespace Grupp4BankApp.Menus
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
-                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                foreach (var item in currentUser.CheckingAccounts.Concat(currentUser.SavingsAccounts))
                 {
                     Console.WriteLine($"{item}\n");
                 }
@@ -114,8 +114,8 @@ namespace Grupp4BankApp.Menus
                 Console.Write("Från: ");
                 string? from = Console.ReadLine() ?? "";
 
-                BankAccount? FromAccount = currentUser.checkingAccounts.
-                    Concat(currentUser.savingsAccounts).
+                BankAccount? FromAccount = currentUser.CheckingAccounts.
+                    Concat(currentUser.SavingsAccounts).
                     FirstOrDefault(a => a.BankAccountName == from);
 
                 if (FromAccount == null)
@@ -130,8 +130,8 @@ namespace Grupp4BankApp.Menus
                 {
                     string? to = Console.ReadLine() ?? "";
 
-                    BankAccount? toAccount = currentUser.checkingAccounts.
-                        Concat(currentUser.savingsAccounts).
+                    BankAccount? toAccount = currentUser.CheckingAccounts.
+                        Concat(currentUser.SavingsAccounts).
                         FirstOrDefault(a => a.BankAccountName == to);
 
                     if (toAccount == null)
@@ -141,11 +141,11 @@ namespace Grupp4BankApp.Menus
                     }
                     Factor(FromAccount, toAccount);
                 }
-                else 
+                else
                 {
                     BankAccount? toAccount = User.users.Values
                          .OfType<Customer>()
-                         .SelectMany(c => c.checkingAccounts.Concat(c.savingsAccounts))
+                         .SelectMany(c => c.CheckingAccounts.Concat(c.SavingsAccounts))
                          .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
 
                     if (toAccount == null)
