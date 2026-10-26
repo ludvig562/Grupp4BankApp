@@ -125,21 +125,37 @@ namespace Grupp4BankApp.Menus
                 }
 
                 Console.Write("Till: ");
-                string? to = Console.ReadLine() ?? "";
 
-                BankAccount? toAccount = currentUser.checkingAccounts.
-                    Concat(currentUser.savingsAccounts).
-                    FirstOrDefault(a => a.BankAccountName == to);
-
-                if (toAccount == null)
+                if (!int.TryParse(Console.ReadLine(), out int bankNumber))
                 {
-                    Console.WriteLine("Konto finns inte!");
-                    return;
+                    string? to = Console.ReadLine() ?? "";
+
+                    BankAccount? toAccount = currentUser.checkingAccounts.
+                        Concat(currentUser.savingsAccounts).
+                        FirstOrDefault(a => a.BankAccountName == to);
+
+                    if (toAccount == null)
+                    {
+                        Console.WriteLine("Konto finns inte!");
+                        return;
+                    }
+                    Factor(FromAccount, toAccount);
                 }
+                else 
+                {
+                    BankAccount? toAccount = User.users.Values
+                         .OfType<Customer>()
+                         .SelectMany(c => c.checkingAccounts.Concat(c.savingsAccounts))
+                         .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
 
-                Factor(FromAccount, toAccount);
+                    if (toAccount == null)
+                    {
+                        Console.WriteLine("Konto finns inte!");
+                        return;
+                    }
 
-
+                    Factor(FromAccount, toAccount);
+                }
 
             }
 
@@ -162,11 +178,11 @@ namespace Grupp4BankApp.Menus
             {
                 fromACC.AccountBalance -= belopp;
             }
-            else 
+            else
             {
                 Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
             }
-            
+
             toACC.AccountBalance += belopp;
 
         }
