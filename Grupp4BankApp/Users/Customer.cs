@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 
 namespace Grupp4BankApp.Users
@@ -117,6 +118,8 @@ namespace Grupp4BankApp.Users
                             {
                                 newAccount.AccountBalance += depositMoneyAmount;
                                 Console.WriteLine($"{depositMoneyAmount} {newAccount.Currency} har satts i ditt nya konto.");
+                                decimal yearlyInterest = newAccount.CalculateInterest();
+                                Console.WriteLine($"Din beräknad årdränta är: {yearlyInterest} {newAccount.Currency}.\n");
                                 depositMenuChoice = true;
                             }
                             else //if answer is not a number or is below zero
@@ -214,6 +217,12 @@ namespace Grupp4BankApp.Users
                                 $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
+
+            if(account.AccountType == Enums.AccountType.savingsAccount)
+            {
+                decimal yearlyInterest = account.CalculateInterest();
+                Console.WriteLine($"Din beräknad årdränta är: {yearlyInterest} {account.Currency}.\n");
+            }
         }
     }
 }
