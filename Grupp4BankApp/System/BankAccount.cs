@@ -15,7 +15,7 @@ namespace Grupp4BankApp.System
         public decimal AccountBalance { get; set; }
         public decimal SavingsInterestRate { get; set; } = 0.03m; //3% savings interest rate
         public Enums.CurrencyTypes Currency { get; private set; }
-        public Enums.AccountType AccountType { get; set; }
+        public Enums.AccountType AccountType { get; private set; }
 
         //constructor
         public BankAccount(Enums.AccountType accountType, string bankAccountName, Enums.CurrencyTypes currency)
