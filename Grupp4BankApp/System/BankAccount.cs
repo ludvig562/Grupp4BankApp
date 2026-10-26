@@ -29,6 +29,11 @@ namespace Grupp4BankApp.System
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
         }
 
+        public decimal CalculateInterest()
+        {
+            return AccountBalance * SavingsInterestRate;
+        }
+
         public override string ToString()
         {
             return $"Bank Account Name: {BankAccountName}\n" +
