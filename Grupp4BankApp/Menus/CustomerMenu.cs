@@ -125,10 +125,10 @@ namespace Grupp4BankApp.Menus
                 }
 
                 Console.Write("Till: ");
+                string? to = Console.ReadLine() ?? "";
 
-                if (!int.TryParse(Console.ReadLine(), out int bankNumber))
+                if (!int.TryParse(to, out int bankNumber))
                 {
-                    string? to = Console.ReadLine() ?? "";
 
                     BankAccount? toAccount = currentUser.checkingAccounts.
                         Concat(currentUser.savingsAccounts).
@@ -141,7 +141,7 @@ namespace Grupp4BankApp.Menus
                     }
                     Factor(FromAccount, toAccount);
                 }
-                else 
+                else
                 {
                     BankAccount? toAccount = User.users.Values
                          .OfType<Customer>()
@@ -174,13 +174,22 @@ namespace Grupp4BankApp.Menus
                 return;
             }
 
-            if (fromACC.AccountBalance >= belopp)
+            if (fromACC.AccountBalance >= belopp && belopp >= 1)
             {
                 fromACC.AccountBalance -= belopp;
             }
             else
             {
-                Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+                if (belopp < 1)
+                {
+                    Console.WriteLine("Det är 0 skärp dig");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+                    return;
+                }
             }
 
             toACC.AccountBalance += belopp;
