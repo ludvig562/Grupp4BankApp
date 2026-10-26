@@ -90,13 +90,13 @@ namespace Grupp4BankApp.Users
             //add new bank account to customer's bank account list
             this.SavingsAccounts.Add(newSavingsAccount);
 
-            DepositMoneyNewAccount(newSavingsAccount); //ask if user wishes to deposit money
+            DepositMoney(newSavingsAccount); //ask if user wishes to deposit money
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
 
         }
 
         //method for asking if they wish to deposit money directly into their savings account when opening
-        public void DepositMoneyNewAccount(BankAccount newAccount)
+        public void DepositMoney(BankAccount account)
         {
             //ask user if they wish to put money into their newly opened account
             Console.WriteLine("Vill du sätta i pengar i ditt konto?\n" +
@@ -109,15 +109,19 @@ namespace Grupp4BankApp.Users
                     switch (depositChoice)
                     {
                         case 1: //they wish to deposit money into account
-                            Console.WriteLine("Hur mycket pengar vill du sätta i ditt nya konto?");
+                            Console.WriteLine("Hur mycket pengar vill du sätta i ditt konto?");
                             //check if answer if a number and more than zero
                             if (decimal.TryParse(Console.ReadLine(), out decimal depositMoneyAmount)
                                 && depositMoneyAmount > 0)
                             {
-                                newAccount.AccountBalance += depositMoneyAmount;
-                                Console.WriteLine($"{depositMoneyAmount} {newAccount.Currency} har satts i ditt nya konto.");
-                                decimal yearlyInterest = newAccount.CalculateInterest();
-                                Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {newAccount.Currency}.\n");
+                                account.AccountBalance += depositMoneyAmount;
+                                Console.WriteLine($"{depositMoneyAmount} {account.Currency} har satts i ditt nya konto.");
+
+                                if (account.AccountType == Enums.AccountType.savingsAccount)
+                                {
+                                    decimal yearlyInterest = account.CalculateInterest();
+                                    Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
+                                }
                                 depositMenuChoice = true;
                             }
                             else //if answer is not a number or is below zero
@@ -126,7 +130,7 @@ namespace Grupp4BankApp.Users
                             }
                             break;
                         case 2: //they do not wish to deposit money into account
-                            Console.WriteLine("Inga pengar har satts i ditt nya konto."); 
+                            Console.WriteLine("Inga pengar har satts i ditt konto."); 
                             depositMenuChoice = true;
                             break;
                         default: //if input is a number that is not 1 or 2
