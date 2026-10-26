@@ -13,7 +13,6 @@ namespace Grupp4BankApp.Users
         //properties: lists for bankaccounts
         public List<BankAccount> checkingAccounts { get; set; }
         public List<BankAccount> savingsAccounts { get; set; }
-
         public List<Loan> Loans { get; set; }
 
         //constructor, child from User class

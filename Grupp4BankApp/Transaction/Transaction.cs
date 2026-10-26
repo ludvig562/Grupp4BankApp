@@ -1,0 +1,188 @@
+﻿using Grupp4BankApp.System;
+using Grupp4BankApp.Users;
+
+namespace Grupp4BankApp.Transaction
+{
+
+    internal class TransactionSystem
+    {
+        public void TransferMoney()
+        {
+            if (AuthenticationService.CurrentUser is Customer currentUser)
+            {
+                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                {
+                    Console.WriteLine($"{item}\n");
+                }
+
+                Console.Write("Från: ");
+                string? from = Console.ReadLine() ?? "";
+
+                BankAccount? FromAccount = currentUser.checkingAccounts.
+                    Concat(currentUser.savingsAccounts).
+                    FirstOrDefault(a => a.BankAccountName == from);
+
+                if (FromAccount == null)
+                {
+                    Console.WriteLine("Konto finns inte!");
+                    return;
+                }
+
+                Console.Write("Till: ");
+                string? to = Console.ReadLine() ?? "";
+
+                if (!int.TryParse(to, out int bankNumber))
+                {
+
+                    BankAccount? toAccount = currentUser.checkingAccounts.
+                        Concat(currentUser.savingsAccounts).
+                        FirstOrDefault(a => a.BankAccountName == to);
+
+
+                    if (toAccount == null || FromAccount == toAccount)
+                    {
+                        Console.WriteLine("Konto finns inte!");
+                        return;
+                    }
+                    TransferFunds(FromAccount, toAccount);
+                }
+                else
+                {
+                    BankAccount? toAccount = User.users.Values
+                         .OfType<Customer>()
+                         .SelectMany(c => c.checkingAccounts.Concat(c.savingsAccounts))
+                         .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
+
+                    if (toAccount == null || FromAccount == toAccount)
+                    {
+                        Console.WriteLine("Konto finns inte! eller samma kotno");
+                        return;
+                    }
+
+                    TransferFunds(FromAccount, toAccount);
+                }
+
+            }
+
+        }
+        public void TransferFunds(BankAccount fromAccount, BankAccount toAccount)
+        {
+
+            Console.Write("Belopp: ");
+
+            if (!decimal.TryParse(Console.ReadLine(), out decimal belopp))
+            {
+                Console.WriteLine("Nummer tack");
+                return;
+            }
+            if (fromAccount.AccountBalance >= belopp && belopp >= 1)
+            {
+                fromAccount.AccountBalance -= belopp;
+            }
+            else
+            {
+                if (belopp < 1)
+                {
+                    Console.WriteLine("Det är under 1, skärp dig");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+                    return;
+                }
+            }
+
+            toAccount.AccountBalance += belopp;
+
+            Customer? sender = FindAccountOwner(fromAccount);
+            Customer? reciever = FindAccountOwner(toAccount);
+
+
+            //Sender
+            TransactionLogg SenderLogg = new TransactionLogg
+            {
+                Date = DateTime.Now,
+                Amount = new Amount
+                {
+                    PlusMinus = "-",
+                    Value = belopp,
+                    Currency = fromAccount.Currency,
+
+                },
+                Description = $"Skickad till {toAccount.BankAccountName}",
+                FromCustomerName = sender.Name,
+                ToCustomerName = reciever.Name,
+                FromAccountName = fromAccount.BankAccountName, ToAccountName = toAccount.BankAccountName,
+
+            };
+
+            //Reciever
+            TransactionLogg ReciverLogg = new TransactionLogg
+            {
+                Date = DateTime.Now,
+                Amount = new Amount
+                {
+                    PlusMinus = "+",
+                    Value = belopp,
+                    Currency = toAccount.Currency,
+                },
+                Description = $"Mottagen från {fromAccount.BankAccountName}",
+                FromCustomerName = sender.Name,
+                ToCustomerName = reciever.Name,
+                FromAccountName = fromAccount.BankAccountName,
+                ToAccountName = toAccount.BankAccountName,
+
+            };
+            fromAccount.TransactionsLogg.Add(SenderLogg);
+            toAccount.TransactionsLogg.Add(ReciverLogg);
+
+        }
+
+
+        public void TransactionLog()
+        {
+            if (AuthenticationService.CurrentUser is Customer currentUser)
+            {
+
+                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                {
+                    Console.WriteLine($"{item}\n");
+                }
+
+                Console.Write("Skriv in vilken Konto: ");
+                string? temp = Console.ReadLine() ?? "";
+                Console.WriteLine();
+                BankAccount? pickedAccount = currentUser.checkingAccounts.
+                    Concat(currentUser.savingsAccounts).
+                    FirstOrDefault(a => a.BankAccountName == temp);
+
+                if (pickedAccount == null)
+                {
+                    Console.WriteLine("Konto finns inte!");
+                    return;
+                }
+
+                Console.WriteLine("========== TRANSAKTIONSHISTORIK ==========\n\n");
+                foreach (var item in pickedAccount.TransactionsLogg)
+                {
+                    Console.WriteLine(item);
+                    Console.WriteLine("----------------------------------------\n");
+
+                }
+
+            }
+        }
+
+        private Customer? FindAccountOwner(BankAccount account)
+        {
+            return User.users.Values
+                .OfType<Customer>()
+                .FirstOrDefault(c =>
+                   c.checkingAccounts
+                        .Concat(c.savingsAccounts)
+                        .Any(b => b.BankAccountNumber == account.BankAccountNumber));
+        }
+
+    }
+}
