@@ -223,20 +223,6 @@ namespace Grupp4BankApp.Users
             }
         }
 
-        public void PrintBankAccounts()
-        {
-            Console.WriteLine("CheckingAccounts: \n");
-            foreach (var item in checkingAccounts)
-            {
-                Console.WriteLine(item);
-            }
-
-            Console.WriteLine("\nSaveAccounts: \n");
-            foreach (var item in savingsAccounts)
-            {
-                Console.WriteLine(item);
-            }
-            Console.WriteLine();
-        }
+    
     }
 }

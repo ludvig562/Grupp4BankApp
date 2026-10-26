@@ -10,7 +10,7 @@ namespace Grupp4BankApp.Transaction
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
-                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                foreach (var item in currentUser.CheckingAccounts.Concat(currentUser.SavingsAccounts))
                 {
                     Console.WriteLine($"{item}\n");
                 }
@@ -18,8 +18,8 @@ namespace Grupp4BankApp.Transaction
                 Console.Write("Från: ");
                 string? from = Console.ReadLine() ?? "";
 
-                BankAccount? FromAccount = currentUser.checkingAccounts.
-                    Concat(currentUser.savingsAccounts).
+                BankAccount? FromAccount = currentUser.CheckingAccounts.
+                    Concat(currentUser.SavingsAccounts).
                     FirstOrDefault(a => a.BankAccountName == from);
 
                 if (FromAccount == null)
@@ -34,8 +34,8 @@ namespace Grupp4BankApp.Transaction
                 if (!int.TryParse(to, out int bankNumber))
                 {
 
-                    BankAccount? toAccount = currentUser.checkingAccounts.
-                        Concat(currentUser.savingsAccounts).
+                    BankAccount? toAccount = currentUser.CheckingAccounts.
+                        Concat(currentUser.SavingsAccounts).
                         FirstOrDefault(a => a.BankAccountName == to);
 
 
@@ -50,7 +50,7 @@ namespace Grupp4BankApp.Transaction
                 {
                     BankAccount? toAccount = User.users.Values
                          .OfType<Customer>()
-                         .SelectMany(c => c.checkingAccounts.Concat(c.savingsAccounts))
+                         .SelectMany(c => c.CheckingAccounts.Concat(c.SavingsAccounts))
                          .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
 
                     if (toAccount == null || FromAccount == toAccount)
@@ -145,7 +145,7 @@ namespace Grupp4BankApp.Transaction
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
 
-                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                foreach (var item in currentUser.CheckingAccounts.Concat(currentUser.SavingsAccounts))
                 {
                     Console.WriteLine($"{item}\n");
                 }
@@ -153,8 +153,8 @@ namespace Grupp4BankApp.Transaction
                 Console.Write("Skriv in vilken Konto: ");
                 string? temp = Console.ReadLine() ?? "";
                 Console.WriteLine();
-                BankAccount? pickedAccount = currentUser.checkingAccounts.
-                    Concat(currentUser.savingsAccounts).
+                BankAccount? pickedAccount = currentUser.CheckingAccounts.
+                    Concat(currentUser.SavingsAccounts).
                     FirstOrDefault(a => a.BankAccountName == temp);
 
                 if (pickedAccount == null)
@@ -179,8 +179,8 @@ namespace Grupp4BankApp.Transaction
             return User.users.Values
                 .OfType<Customer>()
                 .FirstOrDefault(c =>
-                   c.checkingAccounts
-                        .Concat(c.savingsAccounts)
+                   c.CheckingAccounts
+                        .Concat(c.SavingsAccounts)
                         .Any(b => b.BankAccountNumber == account.BankAccountNumber));
         }
 
