@@ -25,5 +25,11 @@ namespace Grupp4BankApp.System
             Currency = currency;
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
         }
+
+        public decimal CalculateInterest()
+        {
+            return AccountBalance * SavingsInterestRate;
+        }
+
     }
 }
