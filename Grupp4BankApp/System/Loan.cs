@@ -45,7 +45,7 @@ namespace Grupp4BankApp.System
             }
             else if (loanMenuChoice == 2)
             {
-                Console.Write("Hur mycket vill du låna?: ");
+                Console.Write("Hur mycket vill du låna i SEK?: ");
                 int loan = 0;
                 while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
                 {
@@ -99,7 +99,6 @@ namespace Grupp4BankApp.System
             Console.WriteLine();
         }
 
-        //------illfällig prin metod tills att yevgeniy fixar print konto------// 
         public void PrintAccounts()
         {
             Console.WriteLine("----- Dina konton -----");
@@ -115,8 +114,7 @@ namespace Grupp4BankApp.System
                 i++;
             }
         }
-        //----------------------------------------------------------------------//
-
+        
         public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
@@ -177,5 +175,24 @@ namespace Grupp4BankApp.System
                 i++;
             }
         }
+
+        public void CalculateLoanExchangeRate(Enums.CurrencyTypes currency)
+        {
+            switch (currency)
+            {
+                case Enums.CurrencyTypes.SEK:
+                    // add loan to bank account
+                    break;
+
+                case Enums.CurrencyTypes.EUR:
+                    //convert the loan from SEK to EUR and add to bank acount
+                    break;
+
+                case Enums.CurrencyTypes.USD:
+                    //convert the loan from SEK to USD and add to bank acount
+                    break;
+            }
+        }
+
     }
 }
