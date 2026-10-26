@@ -13,6 +13,7 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         public decimal AccountBalance { get; set; }
+        public decimal InterestRate { get; set; }
         public Enums.CurrencyTypes Currency { get; private set; }
         public Enums.AccountType AccountType { get; set; }
 
