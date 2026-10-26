@@ -75,13 +75,13 @@ namespace Grupp4BankApp.System
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
 
-            if (accountChoice < 1 || accountChoice > _customer.checkingAccounts.Count)
+            if (accountChoice < 1 || accountChoice > _customer.CheckingAccounts.Count)
             {
                 Console.WriteLine("Kontot finns inte.");
                 return;
             }
 
-            BankAccount selectedAccount = _customer.checkingAccounts[accountChoice - 1];
+            BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
 
             decimal yearlyInterest = loan * _interestRate;
 
@@ -104,7 +104,7 @@ namespace Grupp4BankApp.System
         {
             Console.WriteLine("----- Dina konton -----");
             int i = 1;
-            foreach (BankAccount account in _customer.checkingAccounts)
+            foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Namn: {account.BankAccountName}");
@@ -120,12 +120,12 @@ namespace Grupp4BankApp.System
         public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
-            foreach(BankAccount checkingMoney in _customer.checkingAccounts)
+            foreach(BankAccount checkingMoney in _customer.CheckingAccounts)
             {
                 moneyInAccounts += checkingMoney.AccountBalance;
             }
 
-            foreach (BankAccount savingsMoney in _customer.savingsAccounts)
+            foreach (BankAccount savingsMoney in _customer.SavingsAccounts)
             {
                 moneyInAccounts += savingsMoney.AccountBalance;
             }
