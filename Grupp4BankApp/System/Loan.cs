@@ -27,6 +27,44 @@ namespace Grupp4BankApp.System
             TotalLoan = totalLoan;
         }
 
+        public void AskCustomer()
+        {
+            Console.Clear();
+            Console.WriteLine("vad vill du göra?\n" +
+                "[1] Lista över dina lån\n" +
+                "[2] Låna Pengar\n" +
+                "[3] Gå tillbaka\n");
+            int loanChoise = 0;
+            while (!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
+            {
+                Console.WriteLine("Du måste ange ett giltit tal!");
+            }
+            if (loanChoise == 1)
+            {
+                PrintLoans();
+            }
+            else if (loanChoise == 2)
+            {
+                Console.Write("Hur mycket vill du låna?: ");
+                int loan = 0;
+                while (!int.TryParse(Console.ReadLine(), out loan))
+                {
+                    Console.WriteLine("Du måste ange ett giltit antal!");
+                }
+                PrintAccounts();
+                Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
+                int accountChoise = 0;
+                while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                {
+                    Console.WriteLine("Du måste ange ett giltit tal!");
+                }
+                if (CheckCustomerMoney(loan))
+                {
+                    MakeLoan(loan, accountChoise);
+                }
+            }
+        }
+
         public void MakeLoan(decimal loan, int accountChoice)
         {
             Console.Write("Ange återbetalningstid i år (1–10): ");
