@@ -70,6 +70,16 @@ namespace Grupp4BankApp.Menus
                     switch (customerMenuChoice)
                     {
                         case 1:
+                            // Gets the logged-in customer and displays their bank accounts
+                            if (AuthenticationService.CurrentUser is Customer customer)
+                            {
+                                customer.ShowBankAccounts();
+                            }
+                            else
+                            {
+                                Console.WriteLine("Ingen kund är inloggad.");
+                            }
+
                             break;
                         case 2:
                             currentUser.OpenBankAccount(); //customer opens bank account
