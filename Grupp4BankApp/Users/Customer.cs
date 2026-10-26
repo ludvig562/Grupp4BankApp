@@ -2,6 +2,7 @@
 using Grupp4BankApp.System;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -10,8 +11,8 @@ namespace Grupp4BankApp.Users
     internal class Customer : User
     {
         //properties: lists for bankaccounts
-        public List<BankAccount> checkingAccounts { get; set; }
-        public List<BankAccount> savingsAccounts { get; set; }
+        public List<BankAccount> CheckingAccounts { get; set; }
+        public List<BankAccount> SavingsAccounts { get; set; }
 
         public List<Loan> Loans { get; set; }
 
@@ -19,8 +20,8 @@ namespace Grupp4BankApp.Users
         public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
             Role = Enums.UserRole.customer; //automatically add the role of customer
-            checkingAccounts = new List<BankAccount>();
-            savingsAccounts = new List<BankAccount>();
+            CheckingAccounts = new List<BankAccount>();
+            SavingsAccounts = new List<BankAccount>();
 
             Loans = new List<Loan>();
         }
@@ -72,12 +73,10 @@ namespace Grupp4BankApp.Users
             //create new bank account
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
             //add new bank account to customer's bank account list
-            this.checkingAccounts.Add(newCheckingAccount); 
+            this.CheckingAccounts.Add(newCheckingAccount);
 
             WriteConfirmationMessage(newCheckingAccount); //write confirmation message
         }
-
-
 
         //method for opening savings account
         //add option to put in money directly when opening savings account
@@ -90,15 +89,55 @@ namespace Grupp4BankApp.Users
             //create new bank account
             BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
             //add new bank account to customer's bank account list
-            this.savingsAccounts.Add(newSavingsAccount);
+            this.SavingsAccounts.Add(newSavingsAccount);
 
+            DepositMoneyNewAccount(newSavingsAccount); //ask if user wishes to deposit money
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
+
         }
 
         //method for asking if they wish to deposit money directly into their savings account when opening
-        public static void DepositMoney()
+        public void DepositMoneyNewAccount(BankAccount newAccount)
         {
-
+            //ask user if they wish to put money into their newly opened account
+            Console.WriteLine("Vill du sätta i pengar i ditt konto?\n" +
+                "[1] Ja\n[2] Nej");
+            bool depositMenuChoice = false;
+            while (!depositMenuChoice)
+            {
+                if (int.TryParse(Console.ReadLine(), out int depositChoice)) //if input is a number
+                {
+                    switch (depositChoice)
+                    {
+                        case 1: //they wish to deposit money into account
+                            Console.WriteLine("Hur mycket pengar vill du sätta i ditt nya konto?");
+                            //check if answer if a number and more than zero
+                            if (decimal.TryParse(Console.ReadLine(), out decimal depositMoneyAmount)
+                                && depositMoneyAmount > 0)
+                            {
+                                newAccount.AccountBalance += depositMoneyAmount;
+                                Console.WriteLine($"{depositMoneyAmount} {newAccount.Currency} har satts i ditt nya konto.");
+                                depositMenuChoice = true;
+                            }
+                            else //if answer is not a number or is below zero
+                            {
+                                Console.WriteLine("Ogiltigt belopp. Vänligen välj en beloop större än noll.");
+                            }
+                            break;
+                        case 2: //they do not wish to deposit money into account
+                            Console.WriteLine("Inga pengar har satts i ditt nya konto."); 
+                            depositMenuChoice = true;
+                            break;
+                        default: //if input is a number that is not 1 or 2
+                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 2!\n");
+                            break;
+                    }
+                }
+                else //if input is not a number
+                {
+                    Console.WriteLine("Oops. Du måste välja en siffra.");
+                }
+            }
         }
 
 
