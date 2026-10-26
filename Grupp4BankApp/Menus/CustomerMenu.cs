@@ -77,7 +77,7 @@ namespace Grupp4BankApp.Menus
                         case 4:
                             break;
                         case 5:
-                            loans.AskCustomer();
+                            loans.ShowLoanMenu();
                             break;
                         case 6:
                             break;
