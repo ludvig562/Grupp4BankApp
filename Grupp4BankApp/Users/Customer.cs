@@ -80,8 +80,6 @@ namespace Grupp4BankApp.Users
         }
 
         //method for opening savings account
-        //add option to put in money directly when opening savings account
-        //add option to calculate interest rate on money in savings account
         public void OpenSavingsAccount()
         {
             Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
@@ -119,7 +117,7 @@ namespace Grupp4BankApp.Users
                                 newAccount.AccountBalance += depositMoneyAmount;
                                 Console.WriteLine($"{depositMoneyAmount} {newAccount.Currency} har satts i ditt nya konto.");
                                 decimal yearlyInterest = newAccount.CalculateInterest();
-                                Console.WriteLine($"Din beräknad årdränta är: {yearlyInterest} {newAccount.Currency}.\n");
+                                Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {newAccount.Currency}.\n");
                                 depositMenuChoice = true;
                             }
                             else //if answer is not a number or is below zero
@@ -221,7 +219,7 @@ namespace Grupp4BankApp.Users
             if(account.AccountType == Enums.AccountType.savingsAccount)
             {
                 decimal yearlyInterest = account.CalculateInterest();
-                Console.WriteLine($"Din beräknad årdränta är: {yearlyInterest} {account.Currency}.\n");
+                Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
             }
         }
     }
