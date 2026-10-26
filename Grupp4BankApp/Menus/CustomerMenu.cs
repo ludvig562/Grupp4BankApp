@@ -42,7 +42,7 @@ namespace Grupp4BankApp.Menus
         }
         public void Display()
         {
-            LogInEvent();
+            // LogInEvent();
             Console.Clear();
 
             RunCustomerMenu();
@@ -75,6 +75,8 @@ namespace Grupp4BankApp.Menus
                         case 3:
                             break;
                         case 4:
+                            Console.Clear();
+                            Transaction();
                             break;
                         case 5:
                             Console.Clear();
@@ -83,15 +85,15 @@ namespace Grupp4BankApp.Menus
                                 "[2] Låna Pengar\n" +
                                 "[3] Gå tillbaka\n");
                             int loanChoise = 0;
-                            while(!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
+                            while (!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
                             {
                                 Console.WriteLine("Du måste ange ett giltit tal!");
                             }
-                            if(loanChoise == 1)
+                            if (loanChoise == 1)
                             {
                                 loans.PrintLoans();
                             }
-                            else if(loanChoise == 2)
+                            else if (loanChoise == 2)
                             {
                                 Console.Write("Hur mycket vill du låna?: ");
                                 int loan = 0;
@@ -106,7 +108,7 @@ namespace Grupp4BankApp.Menus
                                 {
                                     Console.WriteLine("Du måste ange ett giltit tal!");
                                 }
-                                if(loans.CheckCustomerMoney(loan))
+                                if (loans.CheckCustomerMoney(loan))
                                 {
                                     loans.MakeLoan(loan, accountChoise);
                                 }
@@ -129,6 +131,75 @@ namespace Grupp4BankApp.Menus
                     Console.WriteLine("Du måste skriva en siffra");
                 }
             }
+        }
+
+        public void Transaction()
+        {
+            if (AuthenticationService.CurrentUser is Customer currentUser)
+            {
+                foreach (var item in currentUser.checkingAccounts.Concat(currentUser.savingsAccounts))
+                {
+                    Console.WriteLine($"{item}\n");
+                }
+
+                Console.Write("Från: ");
+                string? from = Console.ReadLine() ?? "";
+
+                BankAccount? FromAccount = currentUser.checkingAccounts.
+                    Concat(currentUser.savingsAccounts).
+                    FirstOrDefault(a => a.BankAccountName == from);
+
+                if (FromAccount == null)
+                {
+                    Console.WriteLine("Konto finns inte!");
+                    return;
+                }
+
+                Console.Write("Till: ");
+                string? to = Console.ReadLine() ?? "";
+
+                BankAccount? toAccount = currentUser.checkingAccounts.
+                    Concat(currentUser.savingsAccounts).
+                    FirstOrDefault(a => a.BankAccountName == to);
+
+                if (toAccount == null)
+                {
+                    Console.WriteLine("Konto finns inte!");
+                    return;
+                }
+
+                Factor(FromAccount, toAccount);
+
+
+
+            }
+
+        }
+
+        //Flytta till transaction klassen sen
+
+        public void Factor(BankAccount fromACC, BankAccount toACC)
+        {
+
+            Console.Write("Belopp: ");
+
+            if (!int.TryParse(Console.ReadLine(), out int belopp))
+            {
+                Console.WriteLine("Nummer tack");
+                return;
+            }
+
+            if (fromACC.AccountBalance >= belopp)
+            {
+                fromACC.AccountBalance -= belopp;
+            }
+            else 
+            {
+                Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+            }
+            
+            toACC.AccountBalance += belopp;
+
         }
     }
 }
