@@ -95,6 +95,13 @@ namespace Grupp4BankApp.Users
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
         }
 
+        //method for asking if they wish to deposit money directly into their savings account when opening
+        public static void DepositMoney()
+        {
+
+        }
+
+
         //method for getting the bank account name
         public static string ChooseBankAccountName()
         {

@@ -69,7 +69,7 @@ namespace Grupp4BankApp.System
         {
             Console.Write("Ange återbetalningstid i år (1–10): ");
             int loanYears = 0;
-            while(!int.TryParse(Console.ReadLine(), out loanYears))
+            while(!int.TryParse(Console.ReadLine(), out loanYears) || loanYears <1 || loanYears > 10)
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
