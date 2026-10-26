@@ -15,7 +15,7 @@ namespace Grupp4BankApp
             users.Add(bob.Username, bob);
 
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "bob account", Enums.CurrencyTypes.SEK);
-            bob.checkingAccounts.Add(newCheckingAccount);
+            bob.CheckingAccounts.Add(newCheckingAccount);
             newCheckingAccount.AccountBalance = 1000000;
 
             Customer bobelina = new Customer("bobelina", "bobelina", "test@gmail.com", PasswordHasher.HashPassword("1234"));
