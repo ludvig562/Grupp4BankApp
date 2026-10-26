@@ -6,6 +6,7 @@ namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
     {
+        private Customer? currentUser;
         AuthenticationService Auth = new();
         Loan loans = new();
         List<char> myAnimation = new List<char>();
@@ -50,6 +51,8 @@ namespace Grupp4BankApp.Menus
 
         public void RunCustomerMenu()
         {
+            currentUser = AuthenticationService.CurrentUser as Customer;
+
             bool customerMenuRunning = true;
 
             while (customerMenuRunning)
@@ -69,7 +72,6 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             break;
                         case 2:
-                            Customer? currentUser = (Customer)AuthenticationService.CurrentUser; //convert user to customer type
                             currentUser.OpenBankAccount(); //customer opens bank account
                             break;
                         case 3:
@@ -79,40 +81,7 @@ namespace Grupp4BankApp.Menus
                             Transaction();
                             break;
                         case 5:
-                            Console.Clear();
-                            Console.WriteLine("vad vill du göra?\n" +
-                                "[1] Lista över dina lån\n" +
-                                "[2] Låna Pengar\n" +
-                                "[3] Gå tillbaka\n");
-                            int loanChoise = 0;
-                            while (!int.TryParse(Console.ReadLine(), out loanChoise) || loanChoise < 1 || loanChoise > 3)
-                            {
-                                Console.WriteLine("Du måste ange ett giltit tal!");
-                            }
-                            if (loanChoise == 1)
-                            {
-                                loans.PrintLoans();
-                            }
-                            else if (loanChoise == 2)
-                            {
-                                Console.Write("Hur mycket vill du låna?: ");
-                                int loan = 0;
-                                while (!int.TryParse(Console.ReadLine(), out loan))
-                                {
-                                    Console.WriteLine("Du måste ange ett giltit antal!");
-                                }
-                                loans.PrintAccounts();
-                                Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                                int accountChoise = 0;
-                                while (!int.TryParse(Console.ReadLine(), out accountChoise))
-                                {
-                                    Console.WriteLine("Du måste ange ett giltit tal!");
-                                }
-                                if (loans.CheckCustomerMoney(loan))
-                                {
-                                    loans.MakeLoan(loan, accountChoise);
-                                }
-                            }
+                            loans.ShowLoanMenu(); // opens loan menu
                             break;
                         case 6:
                             break;

@@ -9,9 +9,9 @@ namespace Grupp4BankApp.System
     internal class Loan
     {
         private decimal _interestRate = 0.08m; // 8% annual interest
-        private Customer? _customer => AuthenticationService.CurrentUser as Customer;
+        private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
-        public decimal LoanAmount { get; set; }
+        public decimal LoanAmount { get; set; } 
         public decimal InterestRate { get; set; }
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
@@ -27,11 +27,50 @@ namespace Grupp4BankApp.System
             TotalLoan = totalLoan;
         }
 
-        public void MakeLoan(decimal loan, int accountChoice)
+        public void ShowLoanMenu()// loan menu
+        {
+            Console.Clear();
+            Console.WriteLine("Vad vill du göra?\n" +
+                "[1] Lista över dina lån\n" +
+                "[2] Låna Pengar\n" +
+                "[3] Gå tillbaka\n");
+            int loanMenuChoice = 0;
+            while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
+            {
+                Console.WriteLine("Du måste ange ett giltit tal!");
+            }
+            if (loanMenuChoice == 1)
+            {
+                PrintLoans();
+            }
+            else if (loanMenuChoice == 2)
+            {
+                Console.Write("Hur mycket vill du låna?: ");
+                int loan = 0;
+                while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
+                {
+                    Console.WriteLine("Du måste ange ett giltit antal!");
+                }
+
+                if (CheckCustomerMoney(loan))
+                {
+                    PrintAccounts();
+                    Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
+                    int accountChoise = 0;
+                    while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                    {
+                        Console.WriteLine("Du måste ange ett giltit tal!");
+                    }
+                    MakeLoan(loan, accountChoise);
+                }
+            }
+        }
+
+        public void MakeLoan(decimal loan, int accountChoice)// makes the loan 
         {
             Console.Write("Ange återbetalningstid i år (1–10): ");
             int loanYears = 0;
-            while(!int.TryParse(Console.ReadLine(), out loanYears))
+            while(!int.TryParse(Console.ReadLine(), out loanYears) || loanYears <1 || loanYears > 10)
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
@@ -78,7 +117,7 @@ namespace Grupp4BankApp.System
         }
         //----------------------------------------------------------------------//
 
-        public bool CheckCustomerMoney(decimal loan)
+        public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
             foreach(BankAccount checkingMoney in _customer.checkingAccounts)
@@ -99,7 +138,7 @@ namespace Grupp4BankApp.System
             return true;
         }
 
-        public decimal CalculateTotalInterest(decimal loan, int years)
+        public decimal CalculateTotalInterest(decimal loan, int years)// calculates how much interest the customer will have on theer loan based on how many years they will pay
         {
             decimal yearlyAmount = loan / years;
             decimal remainingDebt = loan;
@@ -117,7 +156,7 @@ namespace Grupp4BankApp.System
             return loan + totalInterest;
         }
 
-        public void PrintLoans()
+        public void PrintLoans() // prints all the loans
         {
             if (_customer.Loans.Count == 0)
             {
