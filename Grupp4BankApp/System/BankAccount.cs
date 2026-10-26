@@ -25,5 +25,12 @@ namespace Grupp4BankApp.System
             Currency = currency;
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
         }
+
+        public override string ToString()
+        {
+            return $"Bank Account Name: {BankAccountName}\n" +
+                $"Bank Account Number: {BankAccountNumber}\n" +
+                $"Balance: {AccountBalance} {Currency}";
+        }
     }
 }

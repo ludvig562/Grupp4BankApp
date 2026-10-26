@@ -2,6 +2,7 @@
 using Grupp4BankApp.System;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -175,6 +176,22 @@ namespace Grupp4BankApp.Users
                                 $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
+        }
+
+        public void PrintBankAccounts()
+        {
+            Console.WriteLine("CheckingAccounts: \n");
+            foreach (var item in checkingAccounts)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.WriteLine("\nSaveAccounts: \n");
+            foreach (var item in savingsAccounts)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
         }
     }
 }

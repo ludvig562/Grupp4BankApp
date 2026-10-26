@@ -14,13 +14,26 @@ namespace Grupp4BankApp
             Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
             users.Add(bob.Username, bob);
 
-            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "bob account", Enums.CurrencyTypes.SEK);
+            BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "Konto", Enums.CurrencyTypes.SEK);
+            BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.SEK);
+
             bob.checkingAccounts.Add(newCheckingAccount);
-            newCheckingAccount.AccountBalance = 1000000;
+            bob.savingsAccounts.Add(newSavingAcc);
+
+            newCheckingAccount.AccountBalance = 1000;
+            newSavingAcc.AccountBalance = 500;
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
             Customer bobelina = new Customer("bobelina", "bobelina", "test@gmail.com", PasswordHasher.HashPassword("1234"));
             users.Add(bobelina.Username, bobelina);
 
+
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //bob.Username = "bob";
             //bob.Password = PasswordHasher.HashPassword("1234");
             //bob.Role = Enums.UserRole.customer;
