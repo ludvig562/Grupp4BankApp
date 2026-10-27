@@ -11,6 +11,7 @@
     <PackageReference Include="Figgle" Version="0.6.6" />
     <PackageReference Include="Figgle.Fonts" Version="0.6.6" />
     <PackageReference Include="Figgle.Generator" Version="0.6.6" />
+    <PackageReference Include="Spectre.Console" Version="0.57.2" />
   </ItemGroup>
 
 </Project>
