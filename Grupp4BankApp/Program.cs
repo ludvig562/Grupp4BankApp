@@ -10,7 +10,6 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
-            //NÄR VI ÄR KLARA MÅSTE VI FLYTTA ELLER KOPERIA FONTEN SOM LIGGER I DEBUG FOLDER TILL RELEASE FOLDER.
 
             //create a customer
             Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
