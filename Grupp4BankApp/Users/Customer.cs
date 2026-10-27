@@ -30,29 +30,36 @@ namespace Grupp4BankApp.Users
         //method for customer to update their own info
         public void UpdateCustomerInformation()
         {
+            bool informationUpdated = false;
+
             //ask customer which info they wish to update
             Console.WriteLine("Vilken information vill du uppdatera?\n" +
                 "[1] Emailaddress\n" +
                 "[2] Lösenord\n");
 
-            if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
+            while (!informationUpdated)
             {
-                switch (updateInfoMenuChoice)
+                if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
                 {
-                    case 1: //update email address
-                        UpdateEmail();
-                        break;
-                    case 2: //update password
-                        UpdatePassword();
-                        break;
-                    default:
-                        Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
-                        break;
+                    switch (updateInfoMenuChoice)
+                    {
+                        case 1: //update email address
+                            UpdateEmail();
+                            informationUpdated = true;
+                            break;
+                        case 2: //update password
+                            UpdatePassword();
+                            informationUpdated = true;
+                            break;
+                        default:
+                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
+                            break;
+                    }
                 }
-            }
-            else
-            {
-                Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+                else
+                {
+                    Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+                }
             }
         }
 

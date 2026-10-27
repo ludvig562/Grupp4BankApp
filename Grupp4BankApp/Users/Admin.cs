@@ -147,6 +147,7 @@ namespace Grupp4BankApp.Users
         public static string GetPassword()
         {
             string newCustomerPassword;
+            string confirmPassword;
             do
             {
                 Console.WriteLine("Vänligen skriv lösenordet du vill använda:");
@@ -157,8 +158,16 @@ namespace Grupp4BankApp.Users
                 {
                     Console.WriteLine("Lösenordet får inte vara tomt! Vänligen skriv ett giltigt lösenord.");
                 }
+
+                Console.WriteLine("Vänligen bekräfta lösenordet:");
+                confirmPassword = Console.ReadLine();
+
+                if (newCustomerPassword != confirmPassword)
+                {
+                    Console.WriteLine("Lösenorden matchar inte. Försök igen.");
+                }
             }
-            while (string.IsNullOrWhiteSpace(newCustomerPassword));
+            while (string.IsNullOrWhiteSpace(newCustomerPassword) || newCustomerPassword != confirmPassword);
             return newCustomerPassword;
         }
 
