@@ -65,15 +65,15 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
-                        Console.WriteLine("------------------------------------");
+                        Console.WriteLine("------------------------------------\n\n");
                     }
                 }
             }
 
             // Waits for the customer to press Enter before returning to the menu
-            Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
-            Console.ReadLine();
-            Console.Clear();
+            //Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+            //Console.ReadKey();
+            //Console.Clear();
         }
 
         //method to open new bankaccount
@@ -139,57 +139,62 @@ namespace Grupp4BankApp.Users
             //add new bank account to customer's bank account list
             this.SavingsAccounts.Add(newSavingsAccount);
 
-            DepositMoney(newSavingsAccount); //ask if user wishes to deposit money
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
-
         }
 
-        //method for asking if they wish to deposit money directly into their savings account when opening
-        public void DepositMoney(BankAccount account)
+        //method for finding the bank account chosen by the customer
+        private BankAccount FindBankAccount(string accountName)
         {
-            //ask user if they wish to put money into their newly opened account
-            Console.WriteLine("Vill du sätta i pengar i ditt konto?\n" +
-                "[1] Ja\n[2] Nej");
-            bool depositMenuChoice = false;
-            while (!depositMenuChoice)
+            foreach (BankAccount account in CheckingAccounts)
             {
-                if (int.TryParse(Console.ReadLine(), out int depositChoice)) //if input is a number
+                if (account.BankAccountName == accountName)
                 {
-                    switch (depositChoice)
-                    {
-                        case 1: //they wish to deposit money into account
-                            Console.WriteLine("Hur mycket pengar vill du sätta i ditt konto?");
-                            //check if answer if a number and more than zero
-                            if (decimal.TryParse(Console.ReadLine(), out decimal depositMoneyAmount)
-                                && depositMoneyAmount > 0)
-                            {
-                                account.AccountBalance += depositMoneyAmount;
-                                Console.WriteLine($"{depositMoneyAmount} {account.Currency} har satts i ditt nya konto.");
-
-                                if (account.AccountType == Enums.AccountType.savingsAccount)
-                                {
-                                    decimal yearlyInterest = account.CalculateInterest();
-                                    Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
-                                }
-                                depositMenuChoice = true;
-                            }
-                            else //if answer is not a number or is below zero
-                            {
-                                Console.WriteLine("Ogiltigt belopp. Vänligen välj en beloop större än noll.");
-                            }
-                            break;
-                        case 2: //they do not wish to deposit money into account
-                            Console.WriteLine("Inga pengar har satts i ditt konto."); 
-                            depositMenuChoice = true;
-                            break;
-                        default: //if input is a number that is not 1 or 2
-                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 2!\n");
-                            break;
-                    }
+                    return account;
                 }
-                else //if input is not a number
+            }
+            foreach (BankAccount account in SavingsAccounts)
+            {
+                if (account.BankAccountName == accountName)
                 {
-                    Console.WriteLine("Oops. Du måste välja en siffra.");
+                    return account;
+                }
+            }
+            return null;
+        }
+
+        //method for depositing money into account
+        public void DepositMoney()
+        {
+            bool depositCompleted = false;
+            while (!depositCompleted)
+            {
+                ShowBankAccounts(); //show overview of all their accounts
+                Console.WriteLine("På vilket konto vill du sätta in pengar?");
+                string accountChosen = Console.ReadLine();
+                BankAccount account = FindBankAccount(accountChosen); //find the chosen bank account
+                if (account == null)
+                {
+                    Console.WriteLine("Det finns inget konto med det namnet.");
+                    continue;
+                }
+                Console.WriteLine($"Hur mycket pengar vill du sätta i kontot {account.BankAccountName}?");
+                //check if answer if a number and more than zero
+                if (decimal.TryParse(Console.ReadLine(), out decimal depositMoneyAmount)
+                    && depositMoneyAmount > 0)
+                {
+                    account.AccountBalance += depositMoneyAmount;
+                    Console.WriteLine($"\n{depositMoneyAmount} {account.Currency} har satts in på kontot {account.BankAccountName}.\n");
+
+                    if (account.AccountType == Enums.AccountType.savingsAccount)
+                    {
+                        decimal yearlyInterest = account.CalculateInterest();
+                        Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest} {account.Currency}.\n");
+                    }
+                    depositCompleted = true;
+                }
+                else //if answer is not a number or is below zero
+                {
+                    Console.WriteLine("Ogiltigt belopp. Vänligen välj ett belopp större än noll.");
                 }
             }
         }
@@ -269,13 +274,13 @@ namespace Grupp4BankApp.Users
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
 
-            if(account.AccountType == Enums.AccountType.savingsAccount)
+            if (account.AccountType == Enums.AccountType.savingsAccount)
             {
                 decimal yearlyInterest = account.CalculateInterest();
                 Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
             }
         }
 
-    
+
     }
 }

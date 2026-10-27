@@ -72,27 +72,23 @@ namespace Grupp4BankApp.Menus
                     switch (customerMenuChoice)
                     {
                         case 1:
-                            // Gets the logged-in customer and displays their bank accounts
-                            if (AuthenticationService.CurrentUser is Customer customer)
-                            {
-                                customer.ShowBankAccounts();
-                            }
-                            else
-                            {
-                                Console.WriteLine("Ingen kund är inloggad.");
-                            }
-
+                            Console.Clear();
+                            currentUser.ShowBankAccounts();
                             break;
                         case 2:
+                            Console.Clear();
                             currentUser.OpenBankAccount(); //customer opens bank account
                             break;
                         case 3:
+                            Console.Clear();
+                            currentUser.DepositMoney();
                             break;
                         case 4:
                             Console.Clear();
                             transactionSystem.TransferMoney();
                             break;
                         case 5:
+                            Console.Clear();
                             loans.ShowLoanMenu(); // opens loan menu
                             break;
                         case 6:
@@ -115,7 +111,5 @@ namespace Grupp4BankApp.Menus
                 }
             }
         }
- 
-   
     }
 }
