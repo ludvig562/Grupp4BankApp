@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
 using System.Text;
 
 namespace Grupp4BankApp.Users
@@ -11,8 +12,8 @@ namespace Grupp4BankApp.Users
     internal class Customer : User
     {
         //properties: lists for bankaccounts
-        public List<BankAccount> checkingAccounts { get; set; }
-        public List<BankAccount> savingsAccounts { get; set; }
+        public List<BankAccount> CheckingAccounts { get; set; }
+        public List<BankAccount> SavingsAccounts { get; set; }
 
         public List<Loan> Loans { get; set; }
 
@@ -20,10 +21,67 @@ namespace Grupp4BankApp.Users
         public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
             Role = Enums.UserRole.customer; //automatically add the role of customer
-            checkingAccounts = new List<BankAccount>();
-            savingsAccounts = new List<BankAccount>();
+            CheckingAccounts = new List<BankAccount>();
+            SavingsAccounts = new List<BankAccount>();
 
             Loans = new List<Loan>();
+        }
+
+        //method for customer to update their own info
+        public void UpdateInfo()
+        {
+
+        }
+
+
+        // Displays all the customer's bank accounts and their balances
+        public void ShowBankAccounts()
+        {
+            Console.Clear();
+            Console.WriteLine("========== MINA BANKKONTON ==========\n");
+
+            // Checks whether the customer has no bank accounts
+            if (CheckingAccounts.Count == 0 && SavingsAccounts.Count == 0)
+            {
+                Console.WriteLine("Du har inga bankkonton ännu.");
+            }
+            else
+            {
+                // Displays all checking accounts
+                if (CheckingAccounts.Count > 0)
+                {
+                    Console.WriteLine("--- VANLIGA KONTON ---\n");
+
+                    foreach (BankAccount account in CheckingAccounts)
+                    {
+                        Console.WriteLine($"Namn: {account.BankAccountName}");
+                        Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+                        Console.WriteLine(
+                            $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        Console.WriteLine("------------------------------------");
+                    }
+                }
+
+                // Displays all savings accounts
+                if (SavingsAccounts.Count > 0)
+                {
+                    Console.WriteLine("\n--- SPARKONTON ---\n");
+
+                    foreach (BankAccount account in SavingsAccounts)
+                    {
+                        Console.WriteLine($"Namn: {account.BankAccountName}");
+                        Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+                        Console.WriteLine(
+                            $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        Console.WriteLine("------------------------------------\n\n");
+                    }
+                }
+            }
+
+            // Waits for the customer to press Enter before returning to the menu
+            //Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+            //Console.ReadKey();
+            //Console.Clear();
         }
 
         //method to open new bankaccount
@@ -73,16 +131,12 @@ namespace Grupp4BankApp.Users
             //create new bank account
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, bankAccountName, chosenCurrency);
             //add new bank account to customer's bank account list
-            this.checkingAccounts.Add(newCheckingAccount); 
+            this.CheckingAccounts.Add(newCheckingAccount);
 
             WriteConfirmationMessage(newCheckingAccount); //write confirmation message
         }
 
-
-
         //method for opening savings account
-        //add option to put in money directly when opening savings account
-        //add option to calculate interest rate on money in savings account
         public void OpenSavingsAccount()
         {
             Enums.CurrencyTypes chosenCurrency = ChooseCurrency(); //ask for currency
@@ -91,15 +145,66 @@ namespace Grupp4BankApp.Users
             //create new bank account
             BankAccount newSavingsAccount = new BankAccount(Enums.AccountType.savingsAccount, bankAccountName, chosenCurrency);
             //add new bank account to customer's bank account list
-            this.savingsAccounts.Add(newSavingsAccount);
+            this.SavingsAccounts.Add(newSavingsAccount);
 
             WriteConfirmationMessage(newSavingsAccount); //write confirmation message
         }
 
-        //method for asking if they wish to deposit money directly into their savings account when opening
-        public static void DepositMoney()
+        //method for finding the bank account chosen by the customer
+        private BankAccount FindBankAccount(string accountName)
         {
+            foreach (BankAccount account in CheckingAccounts)
+            {
+                if (account.BankAccountName == accountName)
+                {
+                    return account;
+                }
+            }
+            foreach (BankAccount account in SavingsAccounts)
+            {
+                if (account.BankAccountName == accountName)
+                {
+                    return account;
+                }
+            }
+            return null;
+        }
 
+        //method for depositing money into account
+        public void DepositMoney()
+        {
+            bool depositCompleted = false;
+            while (!depositCompleted)
+            {
+                ShowBankAccounts(); //show overview of all their accounts
+                Console.WriteLine("På vilket konto vill du sätta in pengar?");
+                string accountChosen = Console.ReadLine();
+                BankAccount account = FindBankAccount(accountChosen); //find the chosen bank account
+                if (account == null)
+                {
+                    Console.WriteLine("Det finns inget konto med det namnet.");
+                    continue;
+                }
+                Console.WriteLine($"Hur mycket pengar vill du sätta i kontot {account.BankAccountName}?");
+                //check if answer if a number and more than zero
+                if (decimal.TryParse(Console.ReadLine(), out decimal depositMoneyAmount)
+                    && depositMoneyAmount > 0)
+                {
+                    account.AccountBalance += depositMoneyAmount;
+                    Console.WriteLine($"\n{depositMoneyAmount} {account.Currency} har satts in på kontot {account.BankAccountName}.\n");
+
+                    if (account.AccountType == Enums.AccountType.savingsAccount)
+                    {
+                        decimal yearlyInterest = account.CalculateInterest();
+                        Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest} {account.Currency}.\n");
+                    }
+                    depositCompleted = true;
+                }
+                else //if answer is not a number or is below zero
+                {
+                    Console.WriteLine("Ogiltigt belopp. Vänligen välj ett belopp större än noll.");
+                }
+            }
         }
 
 
@@ -176,22 +281,14 @@ namespace Grupp4BankApp.Users
                                 $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
+
+            if (account.AccountType == Enums.AccountType.savingsAccount)
+            {
+                decimal yearlyInterest = account.CalculateInterest();
+                Console.WriteLine($"Din beräknad årsränta är: {yearlyInterest} {account.Currency}.\n");
+            }
         }
 
-        public void PrintBankAccounts()
-        {
-            Console.WriteLine("CheckingAccounts: \n");
-            foreach (var item in checkingAccounts)
-            {
-                Console.WriteLine(item);
-            }
 
-            Console.WriteLine("\nSaveAccounts: \n");
-            foreach (var item in savingsAccounts)
-            {
-                Console.WriteLine(item);
-            }
-            Console.WriteLine();
-        }
     }
 }

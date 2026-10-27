@@ -57,12 +57,12 @@ namespace Grupp4BankApp.System
                 {
                     PrintAccounts();
                     Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                    int accountChoise = 0;
-                    while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                    int accountChoice = 0;
+                    while (!int.TryParse(Console.ReadLine(), out accountChoice))
                     {
                         Console.WriteLine("Du måste ange ett giltit tal!");
                     }
-                    MakeLoan(loan, accountChoise);
+                    MakeLoan(loan, accountChoice);
                 }
                 Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
                 Console.ReadLine();
@@ -80,7 +80,7 @@ namespace Grupp4BankApp.System
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
 
-            if (accountChoice < 1 || accountChoice > _customer.checkingAccounts.Count)
+            if (accountChoice < 1 || accountChoice > _customer.CheckingAccounts.Count)
             {
                 Console.WriteLine("Kontot finns inte.");
                 return;
@@ -106,7 +106,7 @@ namespace Grupp4BankApp.System
         {
             Console.WriteLine("----- Dina konton -----");
             int i = 1;
-            foreach (BankAccount account in _customer.checkingAccounts)
+            foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Namn: {account.BankAccountName}");
@@ -121,12 +121,12 @@ namespace Grupp4BankApp.System
         public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
-            foreach(BankAccount checkingMoney in _customer.checkingAccounts)
+            foreach(BankAccount checkingMoney in _customer.CheckingAccounts)
             {
                 moneyInAccounts += checkingMoney.AccountBalance;
             }
 
-            foreach (BankAccount savingsMoney in _customer.savingsAccounts)
+            foreach (BankAccount savingsMoney in _customer.SavingsAccounts)
             {
                 moneyInAccounts += savingsMoney.AccountBalance;
             }

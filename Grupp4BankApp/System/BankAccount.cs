@@ -1,4 +1,5 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Transaction;
+using Grupp4BankApp.Users;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +17,8 @@ namespace Grupp4BankApp.System
         public decimal SavingsInterestRate { get; set; } = 0.03m; //3% savings interest rate
         public Enums.CurrencyTypes Currency { get; private set; }
         public Enums.AccountType AccountType { get; private set; }
+        public string Owner { get; set; }
+        public List<TransactionLogg> TransactionsLogg { get; set; } = new List<TransactionLogg>();
 
         //constructor
         public BankAccount(Enums.AccountType accountType, string bankAccountName, Enums.CurrencyTypes currency)
@@ -24,6 +27,11 @@ namespace Grupp4BankApp.System
             BankAccountName = bankAccountName;
             Currency = currency;
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
+        }
+
+        public decimal CalculateInterest()
+        {
+            return AccountBalance * SavingsInterestRate;
         }
 
         public override string ToString()
