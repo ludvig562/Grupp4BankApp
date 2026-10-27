@@ -6,6 +6,88 @@ namespace Grupp4BankApp.Transaction
 
     internal class TransactionSystem
     {
+        // Store transactions until their execution time
+        private static readonly Queue<PendingTransaction> pendingTransactions =
+            new Queue<PendingTransaction>();
+
+        // Protect the queue when accessed by the menu and the timer
+        private static readonly object queueLock = new object();
+
+        // Prevent two processing cycles from running at the same time
+        private static readonly object processingLock = new object();
+
+        // Keep the timer available while the application is running
+        private static global::System.Threading.Timer? transactionTimer;
+
+        // Start checking pending transactions when the application starts
+        public static void StartTransactionTimer()
+        {
+            if (transactionTimer != null)
+            {
+                return;
+            }
+
+            // Check the queue every second
+            TimeSpan interval = TimeSpan.FromSeconds(1);
+
+            transactionTimer = new global::System.Threading.Timer(
+                ProcessPendingTransactions,
+                null,
+                interval,
+                interval);
+        }
+
+        // Find and execute transactions whose waiting time has passed
+        private static void ProcessPendingTransactions(object? state)
+        {
+            lock (processingLock)
+            {
+                List<PendingTransaction> readyTransactions = new List<PendingTransaction>();
+
+                lock (queueLock)
+                {
+                    int count = pendingTransactions.Count;
+
+                    // Check the transactions currently in the queue
+                    for (int i = 0; i < count; i++)
+                    {
+                        PendingTransaction transaction =
+                            pendingTransactions.Dequeue();
+
+                        if (transaction.ExecuteAtUtc <= DateTimeOffset.UtcNow)
+                        {
+                            // The waiting time has passed
+                            readyTransactions.Add(transaction);
+                        }
+                        else
+                        {
+                            // The transaction must wait longer
+                            pendingTransactions.Enqueue(transaction);
+                        }
+                    }
+                }
+
+                TransactionSystem transactionSystem = new TransactionSystem();
+
+                foreach (PendingTransaction transaction in readyTransactions)
+                {
+                    try
+                    {
+                        transactionSystem.ExecuteTransfer(
+                            transaction.FromAccount,
+                            transaction.ToAccount,
+                            transaction.Amount);
+                    }
+                    catch (Exception)
+                    {
+                        // Report the error without automatically repeating the transfer
+                        Console.WriteLine("Ett oväntat fel uppstod vid överföringen. " +
+                            "Kontrollera konton och transaktionshistorik.");
+                    }
+                }
+            }
+        }
+
         public void TransferMoney()
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
@@ -75,8 +157,40 @@ namespace Grupp4BankApp.Transaction
                 Console.WriteLine("Nummer tack");
                 return;
             }
-                // Keep the original amount when both accounts use the same currency
-                decimal receivedAmount = belopp;
+
+            // Check the amount before adding the transaction to the queue
+            if (belopp < 1)
+            {
+                Console.WriteLine("Beloppet måste vara minst 1.");
+                return;
+            }
+
+            // Check the current balance before accepting the transaction
+            if (fromAccount.AccountBalance < belopp)
+            {
+                Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+                return;
+            }
+
+            // Create a pending transaction
+            PendingTransaction transaction = new PendingTransaction(fromAccount,toAccount,belopp);
+
+            // Add the transaction to the queue
+            lock (queueLock)
+            {
+                pendingTransactions.Enqueue(transaction);
+            }
+
+            Console.WriteLine("Överföringen har lagts i kö och behandlas om cirka 15 minuter.");
+
+        }
+
+        // Execute a pending transaction when the waiting time has passed
+        private void ExecuteTransfer(BankAccount fromAccount,BankAccount toAccount,decimal belopp)
+        {
+
+            // Keep the original amount when both accounts use the same currency
+            decimal receivedAmount = belopp;
 
                 // Convert the amount when the account currencies are different
                 if (fromAccount.Currency != toAccount.Currency)
@@ -84,8 +198,7 @@ namespace Grupp4BankApp.Transaction
                     // Require the administrator to approve exchange rates today
                     if (!ExchangeRates.UpdatedToday())
                     {
-                        Console.WriteLine(
-                            "En administratör måste uppdatera växelkurserna idag.");
+                        Console.WriteLine("En administratör måste uppdatera växelkurserna idag.");
                         return;
                     }
 
@@ -93,10 +206,7 @@ namespace Grupp4BankApp.Transaction
                     decimal toRate = ExchangeRates.GetRate(toAccount.Currency);
 
                     // Convert through SEK and round to two decimal places
-                    receivedAmount = Math.Round(
-                        belopp * fromRate / toRate,
-                        2,
-                        MidpointRounding.AwayFromZero);
+                    receivedAmount = Math.Round(belopp * fromRate / toRate,2,MidpointRounding.AwayFromZero);
 
                     // Stop the transfer if the converted amount rounds to zero
                     if (receivedAmount <= 0)

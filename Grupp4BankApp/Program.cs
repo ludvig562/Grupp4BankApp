@@ -3,6 +3,7 @@ using Grupp4BankApp.Users;
 using static Grupp4BankApp.Users.User;
 ﻿using Grupp4BankApp.Manager;
 using System.ComponentModel.Design;
+using Grupp4BankApp.Transaction;
 
 namespace Grupp4BankApp
 {
@@ -58,6 +59,10 @@ namespace Grupp4BankApp
             //Bank bank = new();
             //bank.Run();
             MenuManager.Init();
+
+            // Start checking pending transactions
+            TransactionSystem.StartTransactionTimer();
+
             MenuManager.Run();
 
             //MenuManager.SelectMenu(eMenus.eLogInMenu);
