@@ -13,6 +13,13 @@ namespace Grupp4BankApp.Users
             Role = Enums.UserRole.admin; //automatically add the role of admin
         }
 
+        // Download exchange rates and ask the administrator to approve them
+        public static void UpdateExchangeRates()
+        {
+            // Wait for the request because the existing console menu is synchronous
+            ExchangeRates.UpdateFromApiAsync().GetAwaiter().GetResult();
+        }
+
         //method for creating a new user
         public static void CreateCustomer()
         {
