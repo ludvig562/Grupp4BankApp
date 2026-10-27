@@ -31,7 +31,7 @@ namespace Grupp4BankApp.System
             Console.Clear();
             Console.WriteLine("Vad vill du göra?\n" +
                 "[1] Lista över dina lån\n" +
-                "[2] Låna Pengar\n" +
+                "[2] Låna pengar\n" +
                 "[3] Gå tillbaka\n");
             int loanMenuChoice = 0;
             while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
