@@ -14,7 +14,7 @@ namespace Grupp4BankApp.Menus
         public void BankLogo()
         {
 
-            var font = FigletFont.Load("ANSI Regular.flf");
+            var font = FigletFont.Load("Fonts/ANSI Regular.flf");
             var figlet = new FigletText(font, "NET26 Banken")
             {
                 Justification = Justify.Center,

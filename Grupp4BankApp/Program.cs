@@ -1,8 +1,9 @@
-﻿using Grupp4BankApp.System;
+﻿﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
-using static Grupp4BankApp.Users.User;
-﻿using Grupp4BankApp.Manager;
+using Spectre.Console;
 using System.ComponentModel.Design;
+using static Grupp4BankApp.Users.User;
 
 namespace Grupp4BankApp
 {
@@ -58,6 +59,7 @@ namespace Grupp4BankApp
 
             //Bank bank = new();
             //bank.Run();
+    
             MenuManager.Init();
             MenuManager.Run();
 

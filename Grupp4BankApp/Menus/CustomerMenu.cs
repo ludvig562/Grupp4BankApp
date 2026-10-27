@@ -1,8 +1,9 @@
 ﻿using Figgle.Fonts;
 using Grupp4BankApp.System;
-using Grupp4BankApp.Users;
-using System.Security.Cryptography.X509Certificates;
 using Grupp4BankApp.Transaction;
+using Grupp4BankApp.Users;
+using Spectre.Console;
+using System.Security.Cryptography.X509Certificates;
 namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
@@ -59,19 +60,13 @@ namespace Grupp4BankApp.Menus
 
             while (customerMenuRunning)
             {
-                Console.WriteLine("Vad vill du göra?\n" +
-                    "[1] Lista alla konto\n" +
-                    "[2] Öppna nya konto\n" +
-                    "[3] Sätt in pengar\n" +
-                    "[4] Överför pengar\n" +
-                    "[5] Låna Pengar\n" +
-                    "[6] Transaktioner\n" +
-                    "[7] Logga ut\n");
-                if (int.TryParse(Console.ReadLine(), out int customerMenuChoice))
-                {
-                    switch (customerMenuChoice)
+                var picked = AnsiConsole.Prompt(new SelectionPrompt<string>()
+                 .Title("vad vill du [skyblue1]göra[/]?")
+                 .AddChoices("Lista alla konto", "Öppna nya konto", "Sätt in pengar", "Överför pengar", "Låna pengar","Transaktioner","Logga ut"));
+              
+                    switch (picked)
                     {
-                        case 1:
+                        case "Lista alla konto":
                             // Gets the logged-in customer and displays their bank accounts
                             if (AuthenticationService.CurrentUser is Customer customer)
                             {
@@ -83,23 +78,23 @@ namespace Grupp4BankApp.Menus
                             }
 
                             break;
-                        case 2:
+                        case "Öppna nya konto":
                             currentUser.OpenBankAccount(); //customer opens bank account
                             break;
-                        case 3:
+                        case "Sätt in pengar":
                             break;
-                        case 4:
+                        case "Överför pengar":
                             Console.Clear();
                             transactionSystem.TransferMoney();
                             break;
-                        case 5:
+                        case "Låna pengar":
                             loans.ShowLoanMenu(); // opens loan menu
                             break;
-                        case 6:
+                        case "Transaktioner":
                             Console.Clear();
                             transactionSystem.TransactionLog();
                             break;
-                        case 7:
+                        case "Logga ut":
                             Console.Clear();
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
@@ -108,14 +103,10 @@ namespace Grupp4BankApp.Menus
                             Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
                             break;
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Du måste skriva en siffra");
-                }
+             
             }
         }
- 
-   
+
+
     }
 }
