@@ -26,6 +26,55 @@ namespace Grupp4BankApp.Users
 
             Loans = new List<Loan>();
         }
+        // Displays all the customer's bank accounts and their balances
+        public void ShowBankAccounts()
+        {
+            Console.Clear();
+            Console.WriteLine("========== MINA BANKKONTON ==========\n");
+
+            // Checks whether the customer has no bank accounts
+            if (CheckingAccounts.Count == 0 && SavingsAccounts.Count == 0)
+            {
+                Console.WriteLine("Du har inga bankkonton ännu.");
+            }
+            else
+            {
+                // Displays all checking accounts
+                if (CheckingAccounts.Count > 0)
+                {
+                    Console.WriteLine("--- VANLIGA KONTON ---\n");
+
+                    foreach (BankAccount account in CheckingAccounts)
+                    {
+                        Console.WriteLine($"Namn: {account.BankAccountName}");
+                        Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+                        Console.WriteLine(
+                            $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        Console.WriteLine("------------------------------------");
+                    }
+                }
+
+                // Displays all savings accounts
+                if (SavingsAccounts.Count > 0)
+                {
+                    Console.WriteLine("\n--- SPARKONTON ---\n");
+
+                    foreach (BankAccount account in SavingsAccounts)
+                    {
+                        Console.WriteLine($"Namn: {account.BankAccountName}");
+                        Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+                        Console.WriteLine(
+                            $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        Console.WriteLine("------------------------------------");
+                    }
+                }
+            }
+
+            // Waits for the customer to press Enter before returning to the menu
+            Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+            Console.ReadLine();
+            Console.Clear();
+        }
 
         //method to open new bankaccount
         public void OpenBankAccount()
@@ -227,20 +276,6 @@ namespace Grupp4BankApp.Users
             }
         }
 
-        public void PrintBankAccounts()
-        {
-            Console.WriteLine("CheckingAccounts: \n");
-            foreach (var item in CheckingAccounts)
-            {
-                Console.WriteLine(item);
-            }
-
-            Console.WriteLine("\nSaveAccounts: \n");
-            foreach (var item in SavingsAccounts)
-            {
-                Console.WriteLine(item);
-            }
-            Console.WriteLine();
-        }
+    
     }
 }
