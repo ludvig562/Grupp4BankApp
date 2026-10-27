@@ -1,5 +1,6 @@
 ﻿using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
+using Spectre.Console;
 
 namespace Grupp4BankApp.Transaction
 {
@@ -10,10 +11,35 @@ namespace Grupp4BankApp.Transaction
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
-                foreach (var item in currentUser.CheckingAccounts.Concat(currentUser.SavingsAccounts))
+                var table = new Table();
+                var table2 = new Table();
+
+                table.Border(TableBorder.Rounded);
+                table.Title("[bold cyan]Mina bankkonton[/]");
+
+                table.AddColumn("[grey]Kontonamn[/]");
+                table.AddColumn("[grey]Kontotyp[/]");
+                table.AddColumn(new TableColumn("[grey]Saldo[/]").RightAligned());
+
+                foreach (var item in currentUser.CheckingAccounts)
                 {
-                    Console.WriteLine($"{item}\n");
+                    table.AddRow(
+                        item.BankAccountName,
+                        "[green]Lönekonto[/]",
+                        $"{item.AccountBalance:N2} {item.Currency}"
+                    );
                 }
+
+                foreach (var item in currentUser.SavingsAccounts)
+                {
+                    table.AddRow(
+                        item.BankAccountName,
+                        "[blue]Sparkonto[/]",
+                        $"{item.AccountBalance:N2} {item.Currency}"
+                    );
+                }
+                var columns = new Columns(table, table2);
+                AnsiConsole.Write(columns);
 
                 Console.Write("Från: ");
                 string? from = Console.ReadLine() ?? "";
@@ -113,7 +139,8 @@ namespace Grupp4BankApp.Transaction
                 Description = $"Skickad till {toAccount.BankAccountName}",
                 FromCustomerName = sender.Name,
                 ToCustomerName = reciever.Name,
-                FromAccountName = fromAccount.BankAccountName, ToAccountName = toAccount.BankAccountName,
+                FromAccountName = fromAccount.BankAccountName,
+                ToAccountName = toAccount.BankAccountName,
 
             };
 

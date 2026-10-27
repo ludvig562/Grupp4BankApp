@@ -92,19 +92,37 @@ namespace Grupp4BankApp.Menus
             while (customerMenuRunning)
             {
                 var panel = new Panel(
-                 new Markup("[bold cyan]Välkommen till banken![/]\n\n" +
-               "[grey]Välj vad du vill göra i menyn.[/]"))
+     new Markup(
+         "[bold cyan]Välkommen till banken![/]\n\n" +
+         "[grey]Välj vad du vill göra i menyn.[/]"
+     ))
                 {
                     Header = new PanelHeader(" HUVUDMENY "),
                     Border = BoxBorder.Rounded,
                     Padding = new Padding(2, 1),
                 };
 
-                AnsiConsole.Write(panel);
-                var picked = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                 .HighlightStyle(new Style (Color.Black,Color.Cyan))
-                 .AddChoices("Lista alla konto", "Öppna nya konto", "Sätt in pengar", "Överför pengar", "Låna pengar", "Transaktioner", "Logga ut"));
+                AnsiConsole.Write(
+                    new Align(
+                        panel,
+                        HorizontalAlignment.Center
+                    )
+                );
 
+                var picked = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .HighlightStyle(new Style(Color.Black, Color.Cyan))
+                        .WrapAround()
+                        .AddChoices(
+                            "Lista alla konto",
+                            "Öppna nya konto",
+                            "Sätt in pengar",
+                            "Överför pengar",
+                            "Låna pengar",
+                            "Transaktioner",
+                            "Logga ut"
+                        )
+                );
                 switch (picked)
                 {
                     case "Lista alla konto":
@@ -137,7 +155,15 @@ namespace Grupp4BankApp.Menus
                         break;
                     case "Logga ut":
                         Console.Clear();
-                        Console.WriteLine("Du har loggats ut ");
+                        AnsiConsole.Status()
+                       .Spinner(Spinner.Known.Arc)
+                       .SpinnerStyle(Color.Red)
+                       .Start("Loggas ut...", ctx =>
+                        {
+                            Thread.Sleep(2000);
+                          AnsiConsole.MarkupLine("[green]Du har loggats ut[/]");
+                          });
+
                         Auth.Logout();
                         return;
                     default:

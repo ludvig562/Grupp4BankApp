@@ -17,7 +17,7 @@ namespace Grupp4BankApp
             users.Add(bob.Username, bob);
 
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "Konto", Enums.CurrencyTypes.SEK);
-            BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.SEK);
+            BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.USD);
 
             bob.CheckingAccounts.Add(newCheckingAccount);
             bob.SavingsAccounts.Add(newSavingAcc);
@@ -33,7 +33,7 @@ namespace Grupp4BankApp
             users.Add(bobelina.Username, bobelina);
 
             BankAccount newSecondCheckignACcount = new BankAccount(Enums.AccountType.checkingsAccount,"Konto",Enums.CurrencyTypes.SEK);
-            BankAccount newsecondSaveAccount = new BankAccount(Enums.AccountType.savingsAccount, "Konto", Enums.CurrencyTypes.SEK);
+            BankAccount newsecondSaveAccount = new BankAccount(Enums.AccountType.savingsAccount, "Konto", Enums.CurrencyTypes.EUR);
 
             bobelina.CheckingAccounts.Add(newSecondCheckignACcount);
             bobelina.SavingsAccounts.Add(newsecondSaveAccount);
@@ -59,7 +59,8 @@ namespace Grupp4BankApp
 
             //Bank bank = new();
             //bank.Run();
-       
+
+
             MenuManager.Init();
             MenuManager.Run();
 
