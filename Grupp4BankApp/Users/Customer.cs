@@ -27,6 +27,8 @@ namespace Grupp4BankApp.Users
             Loans = new List<Loan>();
         }
 
+        //------ CUSTOMER UPDATES THEIR OWN INFO ------//
+
         //method for customer to update their own info
         public void UpdateCustomerInformation()
         {
@@ -80,6 +82,9 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("Du har nu bytt ditt lösenord.");
         }
 
+
+        //------ DISPLAY ALL CUSTOMER'S BANK ACCOUNTS ------//
+
         // Displays all the customer's bank accounts and their balances
         public void ShowBankAccounts()
         {
@@ -129,6 +134,9 @@ namespace Grupp4BankApp.Users
             //Console.ReadKey();
             //Console.Clear();
         }
+
+
+        //------ CUSTOMER OPENS NEW BANK ACCOUNT ------//
 
         //method to open new bankaccount
         public void OpenBankAccount()
@@ -215,6 +223,9 @@ namespace Grupp4BankApp.Users
             }
             return null;
         }
+
+
+        //------ CUSTOMER DEPOSITS MONEY IN THEIR OWN ACCOUNT ------//
 
         //method for depositing money into account
         public void DepositMoney()
