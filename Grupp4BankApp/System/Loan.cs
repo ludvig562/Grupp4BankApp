@@ -169,10 +169,10 @@ namespace Grupp4BankApp.System
                 return;
             }
 
+            Console.WriteLine("-----Dina lån-----");
             int i = 1;
             foreach (Loan loan in _customer.Loans)
             {
-                Console.WriteLine("-----Dina lån-----");
                 Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Lånebelopp: {loan.LoanAmount} kr");
                 Console.WriteLine($"Årsränta: {loan.InterestRate:P0}");
