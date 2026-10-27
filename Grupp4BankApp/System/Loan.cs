@@ -88,8 +88,6 @@ namespace Grupp4BankApp.System
 
             BankAccount selectedAccount = _customer.checkingAccounts[accountChoice - 1];
 
-            decimal yearlyInterest = loan * _interestRate;
-
             selectedAccount.AccountBalance += loan;
 
             Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
