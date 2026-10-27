@@ -56,12 +56,12 @@ namespace Grupp4BankApp.System
                 {
                     PrintAccounts();
                     Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                    int accountChoise = 0;
-                    while (!int.TryParse(Console.ReadLine(), out accountChoise))
+                    int accountChoice = 0;
+                    while (!int.TryParse(Console.ReadLine(), out accountChoice))
                     {
                         Console.WriteLine("Du måste ange ett giltit tal!");
                     }
-                    MakeLoan(loan, accountChoise);
+                    MakeLoan(loan, accountChoice);
                 }
             }
         }
@@ -82,8 +82,6 @@ namespace Grupp4BankApp.System
             }
 
             BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
-
-            decimal yearlyInterest = loan * _interestRate;
 
             selectedAccount.AccountBalance += loan;
 

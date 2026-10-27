@@ -26,6 +26,14 @@ namespace Grupp4BankApp.Users
 
             Loans = new List<Loan>();
         }
+
+        //method for customer to update their own info
+        public void UpdateInfo()
+        {
+
+        }
+
+
         // Displays all the customer's bank accounts and their balances
         public void ShowBankAccounts()
         {
