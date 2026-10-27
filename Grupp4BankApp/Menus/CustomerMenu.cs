@@ -98,7 +98,7 @@ namespace Grupp4BankApp.Menus
                             break;
                         case 7:
                             Console.Clear();
-
+                            currentUser.UpdateCustomerInformation();
                             break;
                         case 8:
                             Console.Clear();
@@ -106,13 +106,13 @@ namespace Grupp4BankApp.Menus
                             Auth.Logout();
                             return;
                         default:
-                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
+                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7.\n");
                             break;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Du måste skriva en siffra");
+                    Console.WriteLine("Du måste skriva en siffra.\n");
                 }
             }
         }

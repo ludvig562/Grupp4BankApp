@@ -28,9 +28,37 @@ namespace Grupp4BankApp.Users
         }
 
         //method for customer to update their own info
-        public void UpdateInfo()
+        public void UpdateCustomerInformation()
         {
+            //ask customer which info they wish to update
+            Console.WriteLine("Vilken information vill du uppdatera?\n" +
+                $"[1] Emailaddress\n" +
+                "[2] Lösenord\n");
 
+            if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
+            {
+                switch (updateInfoMenuChoice)
+                {
+                    case 1: //update email address
+                        Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n");
+                        string newEmailAddress = Admin.GetMailAddress();
+                        this.Email = newEmailAddress;
+                        Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}");
+                        break;
+                    case 2: //update password
+                        string newPassword = Admin.GetPassword();
+                        this.Password = PasswordHasher.HashPassword(newPassword);
+                        Console.WriteLine("Du har nu bytt ditt lösenord.");
+                        break;
+                    default:
+                        Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+            }
         }
 
 

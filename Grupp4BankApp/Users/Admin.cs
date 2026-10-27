@@ -88,7 +88,7 @@ namespace Grupp4BankApp.Users
                 //check if user input is not null/empty
                 if (string.IsNullOrWhiteSpace(newCustomerUsername))
                 {
-                    Console.WriteLine("Användarnamn får inte vara tomt! Vänligen skriv ett användarnamn.");
+                    Console.WriteLine("Användarnamnet får inte vara tomt! Vänligen skriv ett användarnamn.");
                     continue; //breaking the if loop but not the while loop, so admin can write username
                 }
 
@@ -117,7 +117,7 @@ namespace Grupp4BankApp.Users
                 //check if user input is not null/empty
                 if (string.IsNullOrWhiteSpace(newCustomerName))
                 {
-                    Console.WriteLine("Kundens namn får inte vara tomt! Vänligen skriv ett namn.");
+                    Console.WriteLine("Namnet får inte vara tomt! Vänligen skriv ett namn.");
                 }
             }
             while (string.IsNullOrWhiteSpace(newCustomerName));
@@ -130,13 +130,13 @@ namespace Grupp4BankApp.Users
             string newCustomerMailAddress;
             do
             {
-                Console.WriteLine("Vad är kundens mejladdress?");
+                Console.WriteLine("Vänligen skriv mejladdressen du vill använda:");
                 newCustomerMailAddress = Console.ReadLine();
 
                 //check if user input is not null/empty
                 if (string.IsNullOrWhiteSpace(newCustomerMailAddress))
                 {
-                    Console.WriteLine("Kundens mejladdress får inte vara tomt! Vänligen skriv ett mejladdress.");
+                    Console.WriteLine("Mejladdressen får inte vara tomt! Vänligen skriv en giltig mejladdress.");
                 }
             }
             while (string.IsNullOrWhiteSpace(newCustomerMailAddress));
@@ -149,13 +149,13 @@ namespace Grupp4BankApp.Users
             string newCustomerPassword;
             do
             {
-                Console.WriteLine("Vad blir nya kundens lösenord?");
+                Console.WriteLine("Vänligen skriv lösenordet du vill använda:");
                 newCustomerPassword = Console.ReadLine();
 
                 //check if user input is not null/empty
                 if (string.IsNullOrWhiteSpace(newCustomerPassword))
                 {
-                    Console.WriteLine("Kundens lösenord får inte vara tomt! Vänligen skriv ett lösenord.");
+                    Console.WriteLine("Lösenordet får inte vara tomt! Vänligen skriv ett giltigt lösenord.");
                 }
             }
             while (string.IsNullOrWhiteSpace(newCustomerPassword));
