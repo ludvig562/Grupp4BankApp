@@ -75,6 +75,36 @@ namespace Grupp4BankApp.Transaction
                 Console.WriteLine("Nummer tack");
                 return;
             }
+                // Keep the original amount when both accounts use the same currency
+                decimal receivedAmount = belopp;
+
+                // Convert the amount when the account currencies are different
+                if (fromAccount.Currency != toAccount.Currency)
+                {
+                    // Require the administrator to approve exchange rates today
+                    if (!ExchangeRates.UpdatedToday())
+                    {
+                        Console.WriteLine(
+                            "En administratör måste uppdatera växelkurserna idag.");
+                        return;
+                    }
+
+                    decimal fromRate = ExchangeRates.GetRate(fromAccount.Currency);
+                    decimal toRate = ExchangeRates.GetRate(toAccount.Currency);
+
+                    // Convert through SEK and round to two decimal places
+                    receivedAmount = Math.Round(
+                        belopp * fromRate / toRate,
+                        2,
+                        MidpointRounding.AwayFromZero);
+
+                    // Stop the transfer if the converted amount rounds to zero
+                    if (receivedAmount <= 0)
+                    {
+                        Console.WriteLine("Det växlade beloppet är för litet.");
+                        return;
+                    }
+                }
             if (fromAccount.AccountBalance >= belopp && belopp >= 1)
             {
                 fromAccount.AccountBalance -= belopp;
@@ -93,7 +123,8 @@ namespace Grupp4BankApp.Transaction
                 }
             }
 
-            toAccount.AccountBalance += belopp;
+            // Add the converted amount to the receiving account
+            toAccount.AccountBalance += receivedAmount;
 
             Customer? sender = FindAccountOwner(fromAccount);
             Customer? reciever = FindAccountOwner(toAccount);
@@ -124,7 +155,7 @@ namespace Grupp4BankApp.Transaction
                 Amount = new Amount
                 {
                     PlusMinus = "+",
-                    Value = belopp,
+                    Value = receivedAmount,
                     Currency = toAccount.Currency,
                 },
                 Description = $"Mottagen från {fromAccount.BankAccountName}",
