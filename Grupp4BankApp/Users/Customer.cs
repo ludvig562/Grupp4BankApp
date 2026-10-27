@@ -27,12 +27,63 @@ namespace Grupp4BankApp.Users
             Loans = new List<Loan>();
         }
 
-        //method for customer to update their own info
-        public void UpdateInfo()
-        {
+        //------ CUSTOMER UPDATES THEIR OWN INFO ------//
 
+        //method for customer to update their own info
+        public void UpdateCustomerInformation()
+        {
+            bool informationUpdated = false;
+
+            //ask customer which info they wish to update
+            Console.WriteLine("Vilken information vill du uppdatera?\n" +
+                "[1] Emailaddress\n" +
+                "[2] Lösenord\n");
+
+            while (!informationUpdated)
+            {
+                if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
+                {
+                    switch (updateInfoMenuChoice)
+                    {
+                        case 1: //update email address
+                            UpdateEmail();
+                            informationUpdated = true;
+                            break;
+                        case 2: //update password
+                            UpdatePassword();
+                            informationUpdated = true;
+                            break;
+                        default:
+                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+                }
+            }
         }
 
+        //method for updating customer email address
+        public void UpdateEmail()
+        {
+            Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n");
+            string newEmailAddress = Admin.GetMailAddress();
+            this.Email = newEmailAddress;
+            Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}");
+        }
+
+        //method for updating customer password
+        public void UpdatePassword()
+        {
+            string newPassword = Admin.GetPassword();
+            this.Password = PasswordHasher.HashPassword(newPassword);
+            Console.WriteLine("Du har nu bytt ditt lösenord.");
+        }
+
+
+        //------ DISPLAY ALL CUSTOMER'S BANK ACCOUNTS ------//
 
         // Displays all the customer's bank accounts and their balances
         public void ShowBankAccounts()
@@ -83,6 +134,9 @@ namespace Grupp4BankApp.Users
             //Console.ReadKey();
             //Console.Clear();
         }
+
+
+        //------ CUSTOMER OPENS NEW BANK ACCOUNT ------//
 
         //method to open new bankaccount
         public void OpenBankAccount()
@@ -169,6 +223,9 @@ namespace Grupp4BankApp.Users
             }
             return null;
         }
+
+
+        //------ CUSTOMER DEPOSITS MONEY IN THEIR OWN ACCOUNT ------//
 
         //method for depositing money into account
         public void DepositMoney()
