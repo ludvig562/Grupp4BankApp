@@ -42,6 +42,9 @@ namespace Grupp4BankApp.System
             if (loanMenuChoice == 1)
             {
                 PrintLoans();
+                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+                Console.ReadLine();
+                Console.Clear();
             }
             else if (loanMenuChoice == 2)
             {
@@ -63,7 +66,11 @@ namespace Grupp4BankApp.System
                     }
                     MakeLoan(loan, accountChoise);
                 }
+                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+                Console.ReadLine();
+                Console.Clear();
             }
+            Console.Clear();
         }
 
         public void MakeLoan(decimal loan, int accountChoice)// makes the loan 
