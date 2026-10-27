@@ -12,17 +12,15 @@ namespace Grupp4BankApp.System
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
         public decimal LoanAmount { get; set; } 
-        public decimal InterestRate { get; set; }
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
 
         public Loan()
         {
         }
-        public Loan(decimal loanAmount, decimal interestRate, int loanYears, decimal totalLoan)
+        public Loan(decimal loanAmount, int loanYears, decimal totalLoan)
         {
             LoanAmount = loanAmount;
-            InterestRate = interestRate;
             LoanYears = loanYears;
             TotalLoan = totalLoan;
         }
@@ -94,7 +92,7 @@ namespace Grupp4BankApp.System
 
             selectedAccount.AccountBalance += loan;
 
-            Loan newLoan = new Loan(loan, _interestRate, loanYears, CalculateTotalInterest(loan, loanYears));
+            Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
 
             _customer.Loans.Add(newLoan);
 
@@ -175,7 +173,7 @@ namespace Grupp4BankApp.System
             {
                 Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Lånebelopp: {loan.LoanAmount} kr");
-                Console.WriteLine($"Årsränta: {loan.InterestRate:P0}");
+                Console.WriteLine($"Årsränta: {loan._interestRate:P0}");
                 Console.WriteLine($"Återbetalningstid: {loan.LoanYears} år");
                 Console.WriteLine($"Total skuld: {loan.TotalLoan} kr");
                 Console.WriteLine();
