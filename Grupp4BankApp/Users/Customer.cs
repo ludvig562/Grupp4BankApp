@@ -33,18 +33,18 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("========== MINA BANKKONTON ==========\n");
 
             // Checks whether the customer has no bank accounts
-            if (checkingAccounts.Count == 0 && savingsAccounts.Count == 0)
+            if (CheckingAccounts.Count == 0 && SavingsAccounts.Count == 0)
             {
                 Console.WriteLine("Du har inga bankkonton ännu.");
             }
             else
             {
                 // Displays all checking accounts
-                if (checkingAccounts.Count > 0)
+                if (CheckingAccounts.Count > 0)
                 {
                     Console.WriteLine("--- VANLIGA KONTON ---\n");
 
-                    foreach (BankAccount account in checkingAccounts)
+                    foreach (BankAccount account in CheckingAccounts)
                     {
                         Console.WriteLine($"Namn: {account.BankAccountName}");
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
@@ -55,11 +55,11 @@ namespace Grupp4BankApp.Users
                 }
 
                 // Displays all savings accounts
-                if (savingsAccounts.Count > 0)
+                if (SavingsAccounts.Count > 0)
                 {
                     Console.WriteLine("\n--- SPARKONTON ---\n");
 
-                    foreach (BankAccount account in savingsAccounts)
+                    foreach (BankAccount account in SavingsAccounts)
                     {
                         Console.WriteLine($"Namn: {account.BankAccountName}");
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
