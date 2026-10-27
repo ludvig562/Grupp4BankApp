@@ -66,7 +66,8 @@ namespace Grupp4BankApp.Menus
                     "[4] Överför pengar\n" +
                     "[5] Låna Pengar\n" +
                     "[6] Transaktioner\n" +
-                    "[7] Logga ut\n");
+                    "[7] Uppdatera dina personliga uppgifter\n" +
+                    "[8] Logga ut\n");
                 if (int.TryParse(Console.ReadLine(), out int customerMenuChoice))
                 {
                     switch (customerMenuChoice)
@@ -96,6 +97,10 @@ namespace Grupp4BankApp.Menus
                             transactionSystem.TransactionLog();
                             break;
                         case 7:
+                            Console.Clear();
+
+                            break;
+                        case 8:
                             Console.Clear();
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
