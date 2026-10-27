@@ -1,6 +1,7 @@
 ﻿using Grupp4BankApp.Users;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -86,9 +87,9 @@ namespace Grupp4BankApp.System
                 return;
             }
 
-            BankAccount selectedAccount = _customer.checkingAccounts[accountChoice - 1];
+            BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
 
-            selectedAccount.AccountBalance += loan;
+            selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
             Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
 
@@ -179,21 +180,21 @@ namespace Grupp4BankApp.System
             }
         }
 
-        public void CalculateLoanExchangeRate(Enums.CurrencyTypes currency)
+        public decimal CalculateLoanExchangeRate(Enums.CurrencyTypes currency, decimal loan)
         {
             switch (currency)
             {
-                case Enums.CurrencyTypes.SEK:
-                    // add loan to bank account
-                    break;
 
                 case Enums.CurrencyTypes.EUR:
-                    //convert the loan from SEK to EUR and add to bank acount
-                    break;
+                    decimal eurLoan = loan / ExchangeRates.GetRate(Enums.CurrencyTypes.EUR);
+                    return eurLoan;
 
                 case Enums.CurrencyTypes.USD:
-                    //convert the loan from SEK to USD and add to bank acount
-                    break;
+                    decimal usdLoan = loan / ExchangeRates.GetRate(Enums.CurrencyTypes.USD);
+                    return usdLoan;
+
+                default:
+                    return loan;
             }
         }
 
