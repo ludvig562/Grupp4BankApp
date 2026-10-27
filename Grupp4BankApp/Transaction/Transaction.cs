@@ -44,6 +44,15 @@ namespace Grupp4BankApp.Transaction
                 Console.Write("Från: ");
                 string? from = Console.ReadLine() ?? "";
 
+
+                if(!int.TryParse(from,out int bankNumber2))
+                {
+
+                }
+                else
+                {
+
+                }
                 BankAccount? FromAccount = currentUser.CheckingAccounts.
                     Concat(currentUser.SavingsAccounts).
                     FirstOrDefault(a => a.BankAccountName == from);
