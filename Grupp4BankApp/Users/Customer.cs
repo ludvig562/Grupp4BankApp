@@ -80,7 +80,6 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("Du har nu bytt ditt lösenord.");
         }
 
-
         // Displays all the customer's bank accounts and their balances
         public void ShowBankAccounts()
         {

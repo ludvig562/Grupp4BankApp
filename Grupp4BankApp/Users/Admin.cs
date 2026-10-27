@@ -40,7 +40,7 @@ namespace Grupp4BankApp.Users
                 switch (adminMenuAddCustomer)
                 {
                     case 1: //create a new user account
-                        Customer newCustomer = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, newCustomerPassword);
+                        Customer newCustomer = new Customer(newCustomerUsername, newCustomerName, newCustomerMailAddress, PasswordHasher.HashPassword(newCustomerPassword));
                         User.users.Add(newCustomerUsername, newCustomer);
                         Console.WriteLine($"Ny användare {newCustomerName} har skapats.\n");
                         customerCreated = true;
