@@ -205,7 +205,7 @@ namespace Grupp4BankApp.Users
         }
 
 
-        //------ CUSTOMER DEPOSITS MONEY IN THEIR OWN ACCOUNT ------//
+        //------ CUSTOMER DEPOSITS/WITHDRAWS MONEY IN/FROM THEIR OWN ACCOUNT ------//
 
         //method for depositing money into account
         public void DepositMoney()
