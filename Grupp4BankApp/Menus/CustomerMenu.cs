@@ -62,7 +62,7 @@ namespace Grupp4BankApp.Menus
                 Console.WriteLine("Vad vill du göra?\n" +
                     "[1] Lista alla konto\n" +
                     "[2] Öppna nya konto\n" +
-                    "[3] Sätt in pengar\n" +
+                    "[3] Sätt in/ta ut pengar\n" +
                     "[4] Överför pengar\n" +
                     "[5] Låna pengar\n" +
                     "[6] Transaktioner\n" +
