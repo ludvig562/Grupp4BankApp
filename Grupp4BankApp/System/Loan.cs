@@ -58,12 +58,10 @@ namespace Grupp4BankApp.System
                 {
                     PrintAccounts();
                     Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                    int accountChoice = 0;
-                    while (!int.TryParse(Console.ReadLine(), out accountChoice))
-                    {
-                        Console.WriteLine("Du måste ange ett giltit tal!");
-                    }
-                    MakeLoan(loan, accountChoice);
+                    Console.Write("Ange kontonummer: ");
+                    string accountNumber = Console.ReadLine() ?? "";
+
+                    MakeLoan(loan, accountNumber);
                 }
                 Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
                 Console.ReadLine();
@@ -72,22 +70,32 @@ namespace Grupp4BankApp.System
             Console.Clear();
         }
 
-        public void MakeLoan(decimal loan, int accountChoice)// makes the loan 
+        public void MakeLoan(decimal loan, string accountNumber)
         {
-            Console.Write("Ange återbetalningstid i år (1–10): ");
-            int loanYears = 0;
-            while(!int.TryParse(Console.ReadLine(), out loanYears) || loanYears <1 || loanYears > 10)
+            BankAccount? selectedAccount = null;
+
+            foreach (BankAccount account in _customer.CheckingAccounts)
             {
-                Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
+                if (account.BankAccountNumber.ToString() == accountNumber)
+                {
+                    selectedAccount = account;
+                    break;
+                }
             }
 
-            if (accountChoice < 1 || accountChoice > _customer.CheckingAccounts.Count)
+            if (selectedAccount == null)
             {
                 Console.WriteLine("Kontot finns inte.");
                 return;
             }
 
-            BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
+            Console.Write("Ange återbetalningstid i år (1–10): ");
+            int loanYears = 0;
+
+            while (!int.TryParse(Console.ReadLine(), out loanYears) || loanYears < 1 || loanYears > 10)
+            {
+                Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
+            }
 
             selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
@@ -98,24 +106,20 @@ namespace Grupp4BankApp.System
             Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
             Console.WriteLine($"Lånebelopp: {loan} kr");
             Console.WriteLine($"Årsränta: {_interestRate:P0}");
-            Console.WriteLine($"Återbetalningstid: {loanYears} år" );
+            Console.WriteLine($"Återbetalningstid: {loanYears} år");
             Console.WriteLine($"Total Räntekostnad: {CalculateTotalInterest(loan, loanYears) - loan} kr");
-            Console.WriteLine();
         }
 
         public void PrintAccounts()
         {
             Console.WriteLine("----- Dina konton -----");
-            int i = 1;
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
-                Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Namn: {account.BankAccountName}");
                 Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                 Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
                 Console.WriteLine($"Valuta: {account.Currency}");
                 Console.WriteLine();
-                i++;
             }
         }
         
