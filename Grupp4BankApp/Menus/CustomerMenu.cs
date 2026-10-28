@@ -91,11 +91,9 @@ namespace Grupp4BankApp.Menus
 
             while (customerMenuRunning)
             {
-                var panel = new Panel(
-     new Markup(
-         "[bold cyan]Välkommen till banken![/]\n\n" +
-         "[grey]Välj vad du vill göra i menyn.[/]"
-     ))
+                var panel = new Panel( new Markup(
+                    "[bold cyan]Välkommen till banken![/]\n\n" +
+                    "[grey]Välj vad du vill göra i menyn.[/]" ))
                 {
                     Header = new PanelHeader(" HUVUDMENY "),
                     Border = BoxBorder.Rounded,
@@ -111,7 +109,7 @@ namespace Grupp4BankApp.Menus
 
                 var picked = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
-                        .HighlightStyle(new Style(Color.Black, Color.Cyan))
+                        .HighlightStyle(new Style(Color.White, Color.Black))
                         .WrapAround()
                         .AddChoices(
                             "Lista alla konto",

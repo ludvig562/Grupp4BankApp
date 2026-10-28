@@ -12,48 +12,46 @@ namespace Grupp4BankApp.Transaction
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
 
-                BankAccount? FromAccount = SelectBankAccount(currentUser.CheckingAccounts,currentUser.SavingsAccounts,"Välj konto att överföra från");
+                BankAccount? fromAccount = SelectBankAccount(currentUser.CheckingAccounts,currentUser.SavingsAccounts,"Välj konto att överföra från");
 
-                if (FromAccount == null)
+                if (fromAccount == null)
                 {
                     AnsiConsole.MarkupLine("[yellow]Överföringen avbröts.[/]");
                     return;
                 }
 
-                Console.Write("Till: ");
+                AnsiConsole.WriteLine();
+                BankAccount? toAccount = null;
 
-                string? to = Console.ReadLine() ?? "";
-
-                if (!int.TryParse(to, out int bankNumber))
+                while (toAccount == null)
                 {
+                    int bankNumber = AnsiConsole.Prompt(
+                        new TextPrompt<int>("[bold white]Ange mottagarens banknummer:[/]")
+                            .ValidationErrorMessage("[red]Banknumret måste innehålla minst 4 siffror.[/]")
+                            .Validate(number => number >= 1000 ? ValidationResult.Success() : ValidationResult.Error("[red]Banknumret måste innehålla minst 4 siffror.[/]")
+                            )
+                    );
 
-                    BankAccount? toAccount = currentUser.CheckingAccounts.
-                        Concat(currentUser.SavingsAccounts).
-                        FirstOrDefault(a => a.BankAccountName == to);
+                    AnsiConsole.WriteLine();
+                    toAccount = User.users.Values
+                        .OfType<Customer>()
+                        .SelectMany(c => c.CheckingAccounts.Concat(c.SavingsAccounts))
+                        .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
 
-
-                    if (toAccount == null || FromAccount == toAccount)
+                    if (toAccount == null)
                     {
-                        Console.WriteLine("Konto finns inte!");
-                        return;
-                    }
-                    TransferFunds(FromAccount, toAccount);
-                }
-                else
-                {
-                    BankAccount? toAccount = User.users.Values
-                         .OfType<Customer>()
-                         .SelectMany(c => c.CheckingAccounts.Concat(c.SavingsAccounts))
-                         .FirstOrDefault(a => a.BankAccountNumber == bankNumber);
-
-                    if (toAccount == null || FromAccount == toAccount)
-                    {
-                        Console.WriteLine("Konto finns inte! eller samma kotno");
-                        return;
+                        AnsiConsole.MarkupLine("[red]Inget konto hittades med det banknumret i vårt system.[/]");
+                        continue;
                     }
 
-                    TransferFunds(FromAccount, toAccount);
+                    if (fromAccount == toAccount)
+                    {
+                        AnsiConsole.MarkupLine("[red]Du kan inte överföra till samma konto.[/]");
+                        continue;
+
+                    }
                 }
+                TransferFunds(fromAccount, toAccount);
 
             }
 
@@ -61,32 +59,34 @@ namespace Grupp4BankApp.Transaction
         public void TransferFunds(BankAccount fromAccount, BankAccount toAccount)
         {
 
-            Console.Write("Belopp: ");
+            AnsiConsole.MarkupLine($"[bold white]Tillgängligt saldo:[/] [green1]{fromAccount.AccountBalance:N2}[/][bold white] {fromAccount.Currency}[/]");
+            AnsiConsole.WriteLine();
+            decimal amount = AnsiConsole.Prompt(
+                new TextPrompt<decimal>("[bold white]Ange belopp att  överföra:[/]")
+                    .ValidationErrorMessage("[red]Ange ett giltigt belopp.[/]")
+                    .Validate(value =>
+                    {
+                        if (value < 1)
+                        {
+                            return ValidationResult.Error(
+                                "[red]Beloppet måste vara minst 1.[/]"
+                            );
+                        }
 
-            if (!decimal.TryParse(Console.ReadLine(), out decimal belopp))
-            {
-                Console.WriteLine("Nummer tack");
-                return;
-            }
-            if (fromAccount.AccountBalance >= belopp && belopp >= 1)
-            {
-                fromAccount.AccountBalance -= belopp;
-            }
-            else
-            {
-                if (belopp < 1)
-                {
-                    Console.WriteLine("Det är under 1, skärp dig");
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
-                    return;
-                }
-            }
+                        if (value > fromAccount.AccountBalance)
+                        {
+                            return ValidationResult.Error(
+                                "[red]Du har inte tillräckligt med pengar på kontot.[/]"
+                            );
+                        }
 
-            toAccount.AccountBalance += belopp;
+                        return ValidationResult.Success();
+                    })
+            );
+
+            // Genomför överföringen
+            fromAccount.AccountBalance -= amount;
+            toAccount.AccountBalance += amount;
 
             Customer? sender = FindAccountOwner(fromAccount);
             Customer? reciever = FindAccountOwner(toAccount);
@@ -99,7 +99,7 @@ namespace Grupp4BankApp.Transaction
                 Amount = new Amount
                 {
                     PlusMinus = "-",
-                    Value = belopp,
+                    Value = amount,
                     Currency = fromAccount.Currency,
 
                 },
@@ -118,7 +118,7 @@ namespace Grupp4BankApp.Transaction
                 Amount = new Amount
                 {
                     PlusMinus = "+",
-                    Value = belopp,
+                    Value = amount,
                     Currency = toAccount.Currency,
                 },
                 Description = $"Mottagen från {fromAccount.BankAccountName}",
@@ -131,6 +131,10 @@ namespace Grupp4BankApp.Transaction
             fromAccount.TransactionsLogg.Add(SenderLogg);
             toAccount.TransactionsLogg.Add(ReciverLogg);
 
+      
+
+
+
         }
 
 
@@ -139,31 +143,62 @@ namespace Grupp4BankApp.Transaction
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
 
-                foreach (var item in currentUser.CheckingAccounts.Concat(currentUser.SavingsAccounts))
-                {
-                    Console.WriteLine($"{item}\n");
-                }
-
-                Console.Write("Skriv in vilken Konto: ");
-                string? temp = Console.ReadLine() ?? "";
-                Console.WriteLine();
-                BankAccount? pickedAccount = currentUser.CheckingAccounts.
-                    Concat(currentUser.SavingsAccounts).
-                    FirstOrDefault(a => a.BankAccountName == temp);
+                BankAccount? pickedAccount = SelectBankAccount(currentUser.CheckingAccounts, currentUser.SavingsAccounts, "Välj konto att öppna tranasktioner");
 
                 if (pickedAccount == null)
                 {
-                    Console.WriteLine("Konto finns inte!");
+                    AnsiConsole.MarkupLine("[yellow]Överföringen avbröts.[/]");
                     return;
                 }
 
-                Console.WriteLine("========== TRANSAKTIONSHISTORIK ==========\n\n");
+                AnsiConsole.WriteLine();
+               
+
+
+                AnsiConsole.Write(
+        new Rule("[bold cyan]TRANSAKTIONSHISTORIK[/]")
+            .RuleStyle("cyan")
+    );
+
+                if (pickedAccount.TransactionsLogg.Count == 0)
+                {
+                    AnsiConsole.MarkupLine(
+                        "[yellow]Det finns inga transaktioner för detta konto.[/]"
+                    );
+                    return;
+                }
+
+                var table = new Table()
+                    .Border(TableBorder.Rounded)
+                    .BorderColor(Color.Grey)
+                    .Title("[bold cyan]Kontots transaktioner[/]")
+                    .Expand();
+
+                table.AddColumn("[grey]Datum[/]");
+                table.AddColumn("[grey]Beskrivning[/]");
+                table.AddColumn("[grey]Från[/]");
+                table.AddColumn("[grey]Till[/]");
+                table.AddColumn("[grey]Belopp[/]");
+
                 foreach (var item in pickedAccount.TransactionsLogg)
                 {
-                    Console.WriteLine(item);
-                    Console.WriteLine("----------------------------------------\n");
+                    string amountColor = item.Amount.PlusMinus == "+"
+                        ? "green"
+                        : "red";
 
+                    string amount =
+                        $"{item.Amount.PlusMinus}{item.Amount.Value:N2} {item.Amount.Currency}";
+
+                    table.AddRow(
+                        Markup.Escape(item.Date.ToString("yyyy-MM-dd HH:mm")),
+                        Markup.Escape(item.Description),
+                        Markup.Escape($"{item.FromAccountName} ({item.FromCustomerName})"),
+                        Markup.Escape($"{item.ToAccountName} ({item.ToCustomerName})"),
+                        $"[{amountColor}]{Markup.Escape(amount)}[/]"
+                    );
                 }
+
+                AnsiConsole.Write(table);
 
             }
         }
