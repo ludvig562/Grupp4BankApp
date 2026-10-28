@@ -71,11 +71,22 @@ namespace Grupp4BankApp.System
             Console.Clear();
         }
 
-        public void MakeLoan(decimal loan, string accountChoice)
+        public void MakeLoan(decimal loan, string accountNumber)
         {
-            if (_customer == null)
+            BankAccount? selectedAccount = null;
+
+            foreach (BankAccount account in _customer.CheckingAccounts)
             {
-                Console.WriteLine("Ingen kund är inloggad.");
+                if (account.BankAccountNumber.ToString() == accountNumber)
+                {
+                    selectedAccount = account;
+                    break;
+                }
+            }
+
+            if (selectedAccount == null)
+            {
+                Console.WriteLine("Kontot finns inte.");
                 return;
             }
 
@@ -88,16 +99,6 @@ namespace Grupp4BankApp.System
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
-
-            if (accountChoice < 1 ||
-                accountChoice > _customer.CheckingAccounts.Count)
-            {
-                Console.WriteLine("Kontot finns inte.");
-                return;
-            }
-
-            BankAccount selectedAccount =
-                _customer.CheckingAccounts[accountChoice - 1];
 
             // Get interest rate using both factors
             decimal interestRate =
