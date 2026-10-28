@@ -117,7 +117,7 @@ namespace Grupp4BankApp.System
 
             _customer.Loans.Add(newLoan);
 
-            Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
+            Console.WriteLine($"\nDu valde kontot: {selectedAccount.BankAccountName}");
             Console.WriteLine($"Lånebelopp: {loan:N2} kr");
             Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
             Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");

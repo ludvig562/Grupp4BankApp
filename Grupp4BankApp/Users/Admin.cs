@@ -223,18 +223,18 @@ namespace Grupp4BankApp.Users
                 "[1] Ändra grundräntor\n" +
                 "[2] Ändra ränta baserat på lånetid\n" +
                 "[3] Gå tillbaka");
-            int choise = 0;
-            while (!int.TryParse(Console.ReadLine(), out choise) || choise < 1 || choise > 3)
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
             {
                 Console.WriteLine("Du måste ange ett tall mellan 1-3");
             }
-            if (choise == 1)
+            if (choice == 1)
             {
-
+                UpdateLoanBaseInterest();
             }
-            else if(choise == 2)
+            else if(choice == 2)
             {
-
+                UpdateLoanTermInterest();
             }
         }
 
@@ -258,13 +258,44 @@ namespace Grupp4BankApp.Users
 
             while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
             {
-                Console.WriteLine("Välj ett nummer mellan 1 och 3!");
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
             }
 
             customer.CreditRating = (Enums.CreditRating)(choice - 1);
 
-            Console.WriteLine(
-                $"Kundens kreditvärdighet är nu {customer.CreditRating}");
+            Console.WriteLine($"Kundens kreditvärdighet är nu {customer.CreditRating}");
+        }
+
+        public static void UpdateLoanBaseInterest()
+        {
+            Console.WriteLine("----- AKTIV GRUNDRÄNTA -----");
+            Console.WriteLine($"[1] Hög kreditvärdighet: {LoanInterestRules.HighRate:P2}");
+            Console.WriteLine($"[2] Medel kreditvärdighet: {LoanInterestRules.MediumRate:P2}");
+            Console.WriteLine($"[3] Låg kreditvärdighet: {LoanInterestRules.LowRate:P2}\n");
+            Console.WriteLine("Vilken vill du ändra?");
+
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+
+            Enums.CreditRating rating = (Enums.CreditRating)(choice - 1);
+        }
+
+        public static void UpdateLoanTermInterest()
+        {
+            Console.WriteLine("----- AKTIV LÅNETIDSRÄNTA -----");
+            Console.WriteLine($"[1] 1-3 år: {LoanInterestRules.ShortTerm:P2}");
+            Console.WriteLine($"[2] 4-7 år: {LoanInterestRules.MediumTerm:P2}");
+            Console.WriteLine($"[3] 8-10 år: {LoanInterestRules.LongTerm:P2}\n");
+            Console.WriteLine("Vilken vill du ändra?");
+
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
         }
     }
 }
