@@ -63,11 +63,12 @@ namespace Grupp4BankApp.Menus
                     "[1] Lista alla konto\n" +
                     "[2] Öppna nya konto\n" +
                     "[3] Sätt in pengar\n" +
-                    "[4] Överför pengar\n" +
-                    "[5] Låna Pengar\n" +
-                    "[6] Transaktioner\n" +
-                    "[7] Uppdatera dina personliga uppgifter\n" +
-                    "[8] Logga ut\n");
+                    "[4] Ta ut pengar\n" +
+                    "[5] Överför pengar\n" +
+                    "[6] Låna pengar\n" +
+                    "[7] Transaktioner\n" +
+                    "[8] Uppdatera dina personliga uppgifter\n" +
+                    "[9] Logga ut\n");
                 if (int.TryParse(Console.ReadLine(), out int customerMenuChoice))
                 {
                     switch (customerMenuChoice)
@@ -86,33 +87,37 @@ namespace Grupp4BankApp.Menus
                             break;
                         case 4:
                             Console.Clear();
-                            transactionSystem.TransferMoney();
+                            currentUser.WithDrawMoney();
                             break;
                         case 5:
                             Console.Clear();
-                            loans.ShowLoanMenu(); // opens loan menu
+                            transactionSystem.TransferMoney();
                             break;
                         case 6:
                             Console.Clear();
-                            transactionSystem.TransactionLog();
+                            loans.ShowLoanMenu(); // opens loan menu
                             break;
                         case 7:
                             Console.Clear();
-
+                            transactionSystem.TransactionLog();
                             break;
                         case 8:
+                            Console.Clear();
+                            currentUser.UpdateCustomerInformation();
+                            break;
+                        case 9:
                             Console.Clear();
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
                             return;
                         default:
-                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
+                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7.\n");
                             break;
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Du måste skriva en siffra");
+                    Console.WriteLine("Du måste skriva en siffra.\n");
                 }
             }
         }
