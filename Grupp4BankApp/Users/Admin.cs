@@ -216,6 +216,56 @@ namespace Grupp4BankApp.Users
                 return newCustomerUpdateInfoChoice;
             }
         }
+
+        public static void UppdateLoanInterest()
+        {
+            Console.WriteLine("Vad vill du göra?\n" +
+                "[1] Ändra grundräntor\n" +
+                "[2] Ändra ränta baserat på lånetid\n" +
+                "[3] Gå tillbaka");
+            int choise = 0;
+            while (!int.TryParse(Console.ReadLine(), out choise) || choise < 1 || choise > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+            if (choise == 1)
+            {
+
+            }
+            else if(choise == 2)
+            {
+
+            }
+        }
+
+        public static void UpdateCustomerCreditRating()
+        {
+            Console.Write("Ange kundens användarnamn: ");
+            string username = Console.ReadLine() ?? "";
+
+            if (!User.users.TryGetValue(username, out User? user) || user is not Customer customer)
+            {
+                Console.WriteLine("Kunden hittades inte!");
+                return;
+            }
+
+            Console.WriteLine("Välj kreditvärdighet:");
+            Console.WriteLine("[1] Hög");
+            Console.WriteLine("[2] Medel");
+            Console.WriteLine("[3] Låg");
+
+            int choice;
+
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Välj ett nummer mellan 1 och 3!");
+            }
+
+            customer.CreditRating = (Enums.CreditRating)(choice - 1);
+
+            Console.WriteLine(
+                $"Kundens kreditvärdighet är nu {customer.CreditRating}");
+        }
     }
 }
 

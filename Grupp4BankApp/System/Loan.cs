@@ -94,28 +94,20 @@ namespace Grupp4BankApp.System
 
             int loanYears;
 
-            while (!int.TryParse(Console.ReadLine(), out loanYears)
-                   || loanYears < 1 || loanYears > 10)
+            while (!int.TryParse(Console.ReadLine(), out loanYears) || loanYears < 1 || loanYears > 10)
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
 
             // Get interest rate using both factors
-            decimal interestRate =
-                LoanInterestRules.CalculateInterestRate(
-                    _customer.CreditRating,
-                    loanYears
-                );
+            decimal interestRate = LoanInterestRules.CalculateInterestRate(_customer.CreditRating, loanYears);
 
             // Calculate total loan cost
-            decimal totalLoan =
-                CalculateTotalInterest(loan, loanYears, interestRate);
+            decimal totalLoan = CalculateTotalInterest(loan, loanYears, interestRate);
 
             // Deposit money into selected account
-            selectedAccount.AccountBalance +=
-                CalculateLoanExchangeRate(selectedAccount.Currency, loan);
+            selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
-            // Create new loan with its own interest rate
             Loan newLoan = new Loan(
                 loan,
                 loanYears,
