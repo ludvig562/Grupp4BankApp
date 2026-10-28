@@ -18,13 +18,14 @@ namespace Grupp4BankApp
 
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "Konto", Enums.CurrencyTypes.SEK);
             BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.USD);
+            BankAccount newSavingAcccc = new BankAccount(Enums.AccountType.savingsAccount, "Invensteringkonto", Enums.CurrencyTypes.EUR);
 
             bob.CheckingAccounts.Add(newCheckingAccount);
             bob.SavingsAccounts.Add(newSavingAcc);
-
+            bob.CheckingAccounts.Add(newSavingAcccc);
             newCheckingAccount.AccountBalance = 1000;
             newSavingAcc.AccountBalance = 500;
-
+            newSavingAcccc.AccountBalance = 5000;
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

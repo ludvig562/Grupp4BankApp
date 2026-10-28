@@ -11,59 +11,17 @@ namespace Grupp4BankApp.Transaction
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
-                var table = new Table();
-                var table2 = new Table();
 
-                table.Border(TableBorder.Rounded);
-                table.Title("[bold cyan]Mina bankkonton[/]");
-
-                table.AddColumn("[grey]Kontonamn[/]");
-                table.AddColumn("[grey]Kontotyp[/]");
-                table.AddColumn(new TableColumn("[grey]Saldo[/]").RightAligned());
-
-                foreach (var item in currentUser.CheckingAccounts)
-                {
-                    table.AddRow(
-                        item.BankAccountName,
-                        "[green]Lönekonto[/]",
-                        $"{item.AccountBalance:N2} {item.Currency}"
-                    );
-                }
-
-                foreach (var item in currentUser.SavingsAccounts)
-                {
-                    table.AddRow(
-                        item.BankAccountName,
-                        "[blue]Sparkonto[/]",
-                        $"{item.AccountBalance:N2} {item.Currency}"
-                    );
-                }
-                var columns = new Columns(table, table2);
-                AnsiConsole.Write(columns);
-
-                Console.Write("Från: ");
-                string? from = Console.ReadLine() ?? "";
-
-
-                if(!int.TryParse(from,out int bankNumber2))
-                {
-
-                }
-                else
-                {
-
-                }
-                BankAccount? FromAccount = currentUser.CheckingAccounts.
-                    Concat(currentUser.SavingsAccounts).
-                    FirstOrDefault(a => a.BankAccountName == from);
+                BankAccount? FromAccount = SelectBankAccount(currentUser.CheckingAccounts,currentUser.SavingsAccounts,"Välj konto att överföra från");
 
                 if (FromAccount == null)
                 {
-                    Console.WriteLine("Konto finns inte!");
+                    AnsiConsole.MarkupLine("[yellow]Överföringen avbröts.[/]");
                     return;
                 }
 
                 Console.Write("Till: ");
+
                 string? to = Console.ReadLine() ?? "";
 
                 if (!int.TryParse(to, out int bankNumber))
@@ -220,5 +178,112 @@ namespace Grupp4BankApp.Transaction
                         .Any(b => b.BankAccountNumber == account.BankAccountNumber));
         }
 
+        private BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
+        {
+
+            AnsiConsole.MarkupLine("[grey]Esc - Avbryt[/]");
+            var accounts = checkingAccounts
+                .Select(a => (Account: a, Type: "Checkkonto"))
+                .Concat(savingsAccounts.Select(a => (Account: a, Type: "Sparkonto")))
+                .ToList();
+
+            if (accounts.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[red]Du har inga bankkonton![/]");
+                return null;
+            }
+
+            int selectedIndex = 0;
+            BankAccount? selectedAccount = null;
+
+            Table CreateTable()
+            {
+                var table = new Table()
+                    .Border(TableBorder.Rounded)
+                    .Title($"[bold cyan]{Markup.Escape(title)}[/]")
+                    .AddColumn(" ")
+                    .AddColumn("[bold white]Banknamn[/]")
+                    .AddColumn("[bold white]Banknummer[/]")
+                    .AddColumn("[bold white]Kontotyp[/]")
+                    .AddColumn("[bold white]Saldo[/]");
+
+                for (int i = 0; i < accounts.Count; i++)
+                {
+                    var account = accounts[i].Account;
+                    bool selected = i == selectedIndex;
+
+                    string name = Markup.Escape(account.BankAccountName);
+                    string number = account.BankAccountNumber.ToString();
+                    string type = accounts[i].Type;
+                    string balance = $"{account.AccountBalance:N2} {account.Currency}";
+                    if (selected)
+                    {
+                        table.AddRow(
+                            "[bold yellow]>[/]",
+                            $"[bold white on black]{name}[/]",
+                            $"[bold white on black]{Markup.Escape(number)}[/]",
+                            $"[bold white on black]{type}[/]",
+                            $"[bold white on black]{Markup.Escape(balance)}[/]"
+                        );
+                    }
+                    else
+                    {
+                        table.AddRow(
+                            "",
+                            $"[gray]{name}[/]",
+                            $"[gray]{Markup.Escape(number)}[/]",
+                            $"[gray]{type}[/]",
+                            $"[gray]{Markup.Escape(balance)}[/]"
+                        );
+                    }
+                }
+
+                return table;
+            }
+
+            AnsiConsole.Live(CreateTable())
+                .Start(ctx => 
+                {
+                    ctx.UpdateTarget(CreateTable());
+                    ctx.Refresh();
+                    while (true)
+                    {
+                        var key = Console.ReadKey(true).Key;
+
+                        if (key == ConsoleKey.UpArrow)
+                        {
+                            selectedIndex--;
+
+                            if (selectedIndex < 0)
+                                selectedIndex = accounts.Count - 1;
+                        }
+                        else if (key == ConsoleKey.DownArrow)
+                        {
+                            selectedIndex++;
+
+                            if (selectedIndex >= accounts.Count)
+                                selectedIndex = 0;
+                        }
+                        else if (key == ConsoleKey.Enter)
+                        {
+                            selectedAccount = accounts[selectedIndex].Account;
+                            break;
+                        }
+                        else if (key == ConsoleKey.Escape)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        ctx.UpdateTarget(CreateTable());
+                        ctx.Refresh();
+                    }
+                });
+
+            return selectedAccount;
+        }
     }
 }

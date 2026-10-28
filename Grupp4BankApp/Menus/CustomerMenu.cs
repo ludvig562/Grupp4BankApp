@@ -20,31 +20,31 @@ namespace Grupp4BankApp.Menus
         public void LogInEvent()
         {
             AnsiConsole.Live(new Text("Initializing..."))
-.Start(ctx =>
-{
-    Thread.Sleep(1000);
+            .Start(ctx =>
+            {
+                Thread.Sleep(1000);
 
-    // Replace with a panel
-    var panel = new Panel("Loading configuration...")
-    .Header("Step 1")
-    .BorderColor(Color.Blue);
-    ctx.UpdateTarget(panel);
-    Thread.Sleep(1000);
+                // Replace with a panel
+                var panel = new Panel("Loading configuration...")
+                .Header("Step 1")
+                .BorderColor(Color.Blue);
+                ctx.UpdateTarget(panel);
+                Thread.Sleep(1000);
 
-    // Replace with a different panel
-    var panel2 = new Panel("Connecting to database...")
-    .Header("Step 2")
-    .BorderColor(Color.Yellow);
-    ctx.UpdateTarget(panel2);
-    Thread.Sleep(1000);
+                // Replace with a different panel
+                var panel2 = new Panel("Connecting to database...")
+                .Header("Step 2")
+                .BorderColor(Color.Yellow);
+                ctx.UpdateTarget(panel2);
+                Thread.Sleep(1000);
 
-    // Replace with final panel
-    var panel3 = new Panel("[green]Ready![/]")
-    .Header("Complete")
-    .BorderColor(Color.Green);
-    ctx.UpdateTarget(panel3);
-    Thread.Sleep(1000);
-});
+                // Replace with final panel
+                var panel3 = new Panel("[green]Ready![/]")
+                .Header("Complete")
+                .BorderColor(Color.Green);
+                ctx.UpdateTarget(panel3);
+                Thread.Sleep(1000);
+            });
             string loadingIn = "Logging in";
             string dots = ". . .";
 
