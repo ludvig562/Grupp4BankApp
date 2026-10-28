@@ -9,7 +9,7 @@ namespace Grupp4BankApp.System
 {
     internal class Loan
     {
-        private decimal _interestRate = 0.08m; // 8% annual interest
+        private decimal _interestRate;
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
         public decimal LoanAmount { get; set; } 
@@ -19,11 +19,12 @@ namespace Grupp4BankApp.System
         public Loan()
         {
         }
-        public Loan(decimal loanAmount, int loanYears, decimal totalLoan)
+        public Loan(decimal loanAmount, int loanYears, decimal totalLoan, decimal interestRate)
         {
             LoanAmount = loanAmount;
             LoanYears = loanYears;
             TotalLoan = totalLoan;
+            _interestRate = interestRate;
         }
 
         public void ShowLoanMenu()// loan menu
@@ -72,35 +73,68 @@ namespace Grupp4BankApp.System
             Console.Clear();
         }
 
-        public void MakeLoan(decimal loan, int accountChoice)// makes the loan 
+        public void MakeLoan(decimal loan, int accountChoice)
         {
-            Console.Write("Ange återbetalningstid i år (1–10): ");
-            int loanYears = 0;
-            while(!int.TryParse(Console.ReadLine(), out loanYears) || loanYears <1 || loanYears > 10)
+            if (_customer == null)
+            {
+                Console.WriteLine("Ingen kund är inloggad.");
+                return;
+            }
+
+            Console.Write("Ange återbetalningstid i år (1-10): ");
+
+            int loanYears;
+
+            while (!int.TryParse(Console.ReadLine(), out loanYears)
+                   || loanYears < 1 || loanYears > 10)
             {
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
 
-            if (accountChoice < 1 || accountChoice > _customer.CheckingAccounts.Count)
+            if (accountChoice < 1 ||
+                accountChoice > _customer.CheckingAccounts.Count)
             {
                 Console.WriteLine("Kontot finns inte.");
                 return;
             }
 
-            BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
+            BankAccount selectedAccount =
+                _customer.CheckingAccounts[accountChoice - 1];
 
-            selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
+            // Get interest rate using both factors
+            decimal interestRate =
+                LoanInterestRules.CalculateInterestRate(
+                    _customer.CreditRating,
+                    loanYears
+                );
 
-            Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
+            // Calculate total loan cost
+            decimal totalLoan =
+                CalculateTotalInterest(loan, loanYears, interestRate);
+
+            // Deposit money into selected account
+            selectedAccount.AccountBalance +=
+                CalculateLoanExchangeRate(selectedAccount.Currency, loan);
+
+            // Create new loan with its own interest rate
+            Loan newLoan = new Loan(
+                loan,
+                loanYears,
+                totalLoan,
+                interestRate
+            );
 
             _customer.Loans.Add(newLoan);
 
             Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
-            Console.WriteLine($"Lånebelopp: {loan} kr");
-            Console.WriteLine($"Årsränta: {_interestRate:P0}");
-            Console.WriteLine($"Återbetalningstid: {loanYears} år" );
-            Console.WriteLine($"Total Räntekostnad: {CalculateTotalInterest(loan, loanYears) - loan} kr");
-            Console.WriteLine();
+            Console.WriteLine($"Lånebelopp: {loan:N2} kr");
+            Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
+            Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");
+            Console.WriteLine($"Ränta justering för lånetid: {LoanInterestRules.GetTermInterest(loanYears):P2}");
+            Console.WriteLine($"Slutlig årsränta: {interestRate:P2}");
+            Console.WriteLine($"Återbetalningstid: {loanYears} år");
+            Console.WriteLine($"Total räntekostnad: {totalLoan - loan:N2} kr");
+            Console.WriteLine($"Total återbetalning: {totalLoan:N2} kr");
         }
 
         public void PrintAccounts()
@@ -140,7 +174,7 @@ namespace Grupp4BankApp.System
             return true;
         }
 
-        public decimal CalculateTotalInterest(decimal loan, int years)// calculates how much interest the customer will have on theer loan based on how many years they will pay
+        public decimal CalculateTotalInterest(decimal loan, int years, decimal interestRate)
         {
             decimal yearlyAmount = loan / years;
             decimal remainingDebt = loan;
@@ -148,7 +182,7 @@ namespace Grupp4BankApp.System
 
             for (int year = 1; year <= years; year++)
             {
-                decimal yearlyInterest = remainingDebt * _interestRate;
+                decimal yearlyInterest = remainingDebt * interestRate;
 
                 totalInterest += yearlyInterest;
 

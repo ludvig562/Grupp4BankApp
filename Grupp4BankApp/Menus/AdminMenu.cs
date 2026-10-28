@@ -27,7 +27,8 @@ namespace Grupp4BankApp.Menus
                 Console.WriteLine("Vad vill du göra?\n" +
                     "[1] Skapa ett nytt användarekonto\n" +
                     "[2] Uppdatera växelkurs\n" +
-                    "[3] Avsluta meny/logga ut");
+                    "[3] Ändra ränta regler eller kreditvärdighet" +
+                    "[4] Avsluta meny/logga ut");
 
                 //check if user input is a number
                 if (int.TryParse(Console.ReadLine(), out int adminMenuChoice)) //if user input is a number
@@ -42,8 +43,10 @@ namespace Grupp4BankApp.Menus
                         case 2: // Download and approve exchange rates
                             Admin.UpdateExchangeRates();
                             break;
+                        case 3:
 
-                        case 3: //end admin menu
+                            break;
+                        case 4: //end admin menu
                             Console.Clear();
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
