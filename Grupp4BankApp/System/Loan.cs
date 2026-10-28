@@ -59,12 +59,10 @@ namespace Grupp4BankApp.System
                 {
                     PrintAccounts();
                     Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                    int accountChoice = 0;
-                    while (!int.TryParse(Console.ReadLine(), out accountChoice))
-                    {
-                        Console.WriteLine("Du måste ange ett giltit tal!");
-                    }
-                    MakeLoan(loan, accountChoice);
+                    Console.Write("Ange kontonummer: ");
+                    string accountNumber = Console.ReadLine() ?? "";
+
+                    MakeLoan(loan, accountNumber);
                 }
                 Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
                 Console.ReadLine();
@@ -73,7 +71,7 @@ namespace Grupp4BankApp.System
             Console.Clear();
         }
 
-        public void MakeLoan(decimal loan, int accountChoice)
+        public void MakeLoan(decimal loan, string accountChoice)
         {
             if (_customer == null)
             {
