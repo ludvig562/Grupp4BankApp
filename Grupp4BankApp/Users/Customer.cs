@@ -309,7 +309,7 @@ namespace Grupp4BankApp.Users
                 {
                     Console.WriteLine($"Ogiltigt belopp. " +
                         $"Vänligen välj ett belopp större än noll " +
-                        $"och mindre än {account.AccountBalance} {account.Currency}.");
+                        $"och mindre än din balans på kontot: {account.AccountBalance} {account.Currency}.");
                 }
             }
             while (!validWithdrawalAmount);
