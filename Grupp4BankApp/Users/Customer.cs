@@ -260,6 +260,62 @@ namespace Grupp4BankApp.Users
         }
 
 
+        //method for depositing money into account
+        public void WithDrawMoney()
+        {
+            bool withdrawalCompleted = false;
+            while (!withdrawalCompleted)
+            {
+                ShowBankAccounts(); //show overview of all their accounts
+                Console.WriteLine("Från vilket konto vill du ta ut pengar? Fyll i ditt bankkontonummer.");
+                if (int.TryParse(Console.ReadLine(), out int bankNumber))
+                {
+                    BankAccount account = FindBankAccount(bankNumber); //find the chosen bank account
+                    if (account == null) //if account number does not exist
+                    {
+                        Console.WriteLine("Det finns inget konto med det kontonumret.");
+                        continue;
+                    }
+
+                    decimal withdrawalAmountMoney = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
+                    account.Withdraw(withdrawalAmountMoney); //method for depositing money (in bankaccount class)
+                    WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
+                    withdrawalCompleted = true;
+                }
+                else
+                {
+                    Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+
+        //method for getting the withdrawal amount
+        public static decimal GetWithdrawalAmount(BankAccount account)
+        {
+            bool validWithdrawalAmount = false;
+            decimal withDrawalAmount = 0;
+            do
+            {
+                Console.WriteLine("Hur mycket vill du ta ut?");
+
+                if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount) && withDrawalAmount > 0 
+                    && withDrawalAmount <= account.AccountBalance) //amount should be less than what is in their account
+                {
+                    validWithdrawalAmount = true;
+                }
+                else
+                {
+                    Console.WriteLine($"Ogiltigt belopp. " +
+                        $"Vänligen välj ett belopp större än noll " +
+                        $"och mindre än din balans på kontot: {account.AccountBalance} {account.Currency}.");
+                }
+            }
+            while (!validWithdrawalAmount);
+            return withDrawalAmount;
+        }
+
         //method for finding the bank account chosen by the customer
         private BankAccount FindBankAccount(int bankNumber)
         {
