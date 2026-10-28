@@ -45,7 +45,7 @@ namespace Grupp4BankApp.Menus
                             Admin.UpdateExchangeRates();
                             break;
                         case 3:
-                            Admin.UppdateLoanInterest();
+                            Admin.UpdateLoanInterest();
                             break;
                         case 4:
                             Admin.UpdateCustomerCreditRating();

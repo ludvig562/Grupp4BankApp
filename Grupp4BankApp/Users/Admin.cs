@@ -217,7 +217,7 @@ namespace Grupp4BankApp.Users
             }
         }
 
-        public static void UppdateLoanInterest()
+        public static void UpdateLoanInterest()
         {
             Console.WriteLine("Vad vill du göra?\n" +
                 "[1] Ändra grundräntor\n" +
@@ -254,7 +254,7 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("[2] Medel");
             Console.WriteLine("[3] Låg");
 
-            int choice;
+            int choice = 0;
 
             while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
             {
@@ -281,6 +281,19 @@ namespace Grupp4BankApp.Users
             }
 
             Enums.CreditRating rating = (Enums.CreditRating)(choice - 1);
+
+            Console.Write("Ange ny ränta i procent: ");
+
+            decimal newInterest = 0;
+
+            while (!decimal.TryParse(Console.ReadLine(), out newInterest) || newInterest < 0 || newInterest > 100)
+            {
+                Console.WriteLine("Ange en ränta mellan 0 och 100!");
+            }
+
+            LoanInterestRules.UpdateBaseInterest(rating, newInterest / 100);
+
+            Console.WriteLine("Grundräntan har uppdaterats!");
         }
 
         public static void UpdateLoanTermInterest()
@@ -296,6 +309,19 @@ namespace Grupp4BankApp.Users
             {
                 Console.WriteLine("Du måste ange ett tall mellan 1-3");
             }
+
+            Console.Write("Ange en ränta i procent (t.ex. -1 eller 2): ");
+
+            decimal adjustment;
+
+            while (!decimal.TryParse(Console.ReadLine(), out adjustment) || adjustment < -100 || adjustment > 100)
+            {
+                Console.WriteLine("Ange ett värde mellan -100 och 100!");
+            }
+
+            LoanInterestRules.UpdateTermInterest(choice, adjustment / 100);
+
+            Console.WriteLine("Lånetidens ränta har uppdaterats!");
         }
     }
 }

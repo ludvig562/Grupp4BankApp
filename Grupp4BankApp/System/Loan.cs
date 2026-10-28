@@ -131,16 +131,13 @@ namespace Grupp4BankApp.System
         public void PrintAccounts()
         {
             Console.WriteLine("----- Dina konton -----");
-            int i = 1;
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
-                Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Namn: {account.BankAccountName}");
                 Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                 Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
                 Console.WriteLine($"Valuta: {account.Currency}");
                 Console.WriteLine();
-                i++;
             }
         }
         

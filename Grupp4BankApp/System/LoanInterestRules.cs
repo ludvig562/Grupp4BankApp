@@ -54,7 +54,7 @@ namespace Grupp4BankApp.System
             return Math.Max(0m, baseInterest + termInterest);
         }
 
-        public static void UppdateBaseInterest(Enums.CreditRating rating, decimal uppdate)
+        public static void UpdateBaseInterest(Enums.CreditRating rating, decimal uppdate)
         {
             switch (rating)
             {
@@ -70,7 +70,7 @@ namespace Grupp4BankApp.System
             }
         }
 
-        public static void UppdateTermInterest(int choise, decimal uppdate)
+        public static void UpdateTermInterest(int choise, decimal uppdate)
         {
             switch (choise)
             {
