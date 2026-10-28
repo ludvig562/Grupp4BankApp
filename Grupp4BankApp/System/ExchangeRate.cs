@@ -22,16 +22,13 @@ namespace Grupp4BankApp.System
 
         public static bool UpdatedToday()
         {
-            return lastUpdated.HasValue &&
-                   lastUpdated.Value.Date == DateTime.Today;
+            return lastUpdated.HasValue && lastUpdated.Value.Date == DateTime.Today;
         }
 
         // Download one exchange rate and its publication date
-        private static async Task<(decimal Rate, DateTime Date)> FetchRateAsync(
-            string currency)
+        private static async Task<(decimal Rate, DateTime Date)> FetchRateAsync(string currency)
         {
-            string url =
-                $"https://api.frankfurter.dev/v2/rate/{currency}/SEK";
+            string url = $"https://api.frankfurter.dev/v2/rate/{currency}/SEK";
 
             string json = await client.GetStringAsync(url);
 
@@ -59,12 +56,10 @@ namespace Grupp4BankApp.System
                 var eur = await FetchRateAsync("EUR");
                 var usd = await FetchRateAsync("USD");
 
-                Console.WriteLine(
-                    $"1 EUR = {eur.Rate} SEK " +
+                Console.WriteLine($"1 EUR = {eur.Rate} SEK " +
                     $"(kursdatum: {eur.Date:yyyy-MM-dd})");
 
-                Console.WriteLine(
-                    $"1 USD = {usd.Rate} SEK " +
+                Console.WriteLine($"1 USD = {usd.Rate} SEK " +
                     $"(kursdatum: {usd.Date:yyyy-MM-dd})");
 
                 Console.WriteLine("\nVill du spara dessa kurser?");
@@ -89,8 +84,7 @@ namespace Grupp4BankApp.System
             }
             catch (HttpRequestException)
             {
-                Console.WriteLine(
-                    "Kunde inte hämta växelkurser. Kontrollera internetanslutningen.");
+                Console.WriteLine("Kunde inte hämta växelkurser. Kontrollera internetanslutningen.");
             }
             catch (TaskCanceledException)
             {
