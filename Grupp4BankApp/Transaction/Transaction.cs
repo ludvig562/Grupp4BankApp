@@ -27,6 +27,7 @@ namespace Grupp4BankApp.Transaction
                 {
                     int bankNumber = AnsiConsole.Prompt(
                         new TextPrompt<int>("[bold white]Ange mottagarens banknummer:[/]")
+                        .PromptStyle(Color.White)
                             .ValidationErrorMessage("[red]Banknumret måste innehålla minst 4 siffror.[/]")
                             .Validate(number => number >= 1000 ? ValidationResult.Success() : ValidationResult.Error("[red]Banknumret måste innehålla minst 4 siffror.[/]")
                             )
@@ -63,6 +64,7 @@ namespace Grupp4BankApp.Transaction
             AnsiConsole.WriteLine();
             decimal amount = AnsiConsole.Prompt(
                 new TextPrompt<decimal>("[bold white]Ange belopp att  överföra:[/]")
+                .PromptStyle(Color.White)
                     .ValidationErrorMessage("[red]Ange ett giltigt belopp.[/]")
                     .Validate(value =>
                     {
@@ -155,10 +157,7 @@ namespace Grupp4BankApp.Transaction
                
 
 
-                AnsiConsole.Write(
-        new Rule("[bold cyan]TRANSAKTIONSHISTORIK[/]")
-            .RuleStyle("cyan")
-    );
+                AnsiConsole.Write(new Rule("[bold cyan]TRANSAKTIONSHISTORIK[/]").RuleStyle("cyan"));
 
                 if (pickedAccount.TransactionsLogg.Count == 0)
                 {
