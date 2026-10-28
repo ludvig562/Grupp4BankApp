@@ -30,6 +30,8 @@ namespace Grupp4BankApp.System
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
         }
 
+
+        //method that deposits money in account
         public void Deposit(decimal amount)
         {
             if(amount > 0)
@@ -42,12 +44,30 @@ namespace Grupp4BankApp.System
             {
                 Console.WriteLine("Ogiltigt belopp.");
             }
-            
         }
+
+        //method that withdraws money from account
+        public void Withdraw(decimal amount)
+        {
+            if (amount > 0 && amount <= AccountBalance)
+            {
+                AccountBalance -= amount;
+                Console.WriteLine($"\n{amount} {Currency} har satts in på kontot {BankAccountName}.\n" +
+                    $"Din balans är nu: {AccountBalance} {Currency}\n");
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt belopp.");
+            }
+        }
+
+
+        //method that calculates the savings account interest
         public decimal CalculateInterest()
         {
             return AccountBalance * SavingsInterestRate;
         }
+
 
         public override string ToString()
         {
