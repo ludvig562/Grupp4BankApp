@@ -64,7 +64,7 @@ namespace Grupp4BankApp.Menus
                     "[2] Öppna nya konto\n" +
                     "[3] Sätt in pengar\n" +
                     "[4] Överför pengar\n" +
-                    "[5] Låna Pengar\n" +
+                    "[5] Låna pengar\n" +
                     "[6] Transaktioner\n" +
                     "[7] Uppdatera dina personliga uppgifter\n" +
                     "[8] Logga ut\n");
