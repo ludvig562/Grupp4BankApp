@@ -298,7 +298,7 @@ namespace Grupp4BankApp.Users
             decimal withDrawalAmount = 0;
             do
             {
-                Console.WriteLine("Hur mycket vill du sätta in?");
+                Console.WriteLine("Hur mycket vill du ta ut?");
 
                 if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount) && withDrawalAmount > 0 
                     && withDrawalAmount <= account.AccountBalance) //amount should be less than what is in their account

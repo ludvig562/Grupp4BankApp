@@ -52,7 +52,7 @@ namespace Grupp4BankApp.System
             if (amount > 0 && amount <= AccountBalance)
             {
                 AccountBalance -= amount;
-                Console.WriteLine($"\n{amount} {Currency} har satts in på kontot {BankAccountName}.\n" +
+                Console.WriteLine($"\n{amount} {Currency} har tagits ur kontot {BankAccountName}.\n" +
                     $"Din balans är nu: {AccountBalance} {Currency}\n");
             }
             else
