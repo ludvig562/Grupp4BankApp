@@ -44,10 +44,10 @@ namespace Grupp4BankApp.Menus
                         case 2: // Download and approve exchange rates
                             Admin.UpdateExchangeRates();
                             break;
-                        case 3:
+                        case 3:// update interest on loan 
                             Admin.UpdateLoanInterest();
                             break;
-                        case 4:
+                        case 4:// update customers kredit rating
                             Admin.UpdateCustomerCreditRating();
                             break;
                         case 5: //end admin menu

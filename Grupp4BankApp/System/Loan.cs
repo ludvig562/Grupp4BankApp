@@ -9,9 +9,9 @@ namespace Grupp4BankApp.System
 {
     internal class Loan
     {
-        private decimal _interestRate;
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
+        private decimal _interestRate;
         public decimal LoanAmount { get; set; } 
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
@@ -118,9 +118,9 @@ namespace Grupp4BankApp.System
             _customer.Loans.Add(newLoan);
 
             Console.WriteLine($"\nDu valde kontot: {selectedAccount.BankAccountName}");
-            Console.WriteLine($"Lånebelopp: {loan:N2} kr");
+            Console.WriteLine($"Lånebelopp: {loan:N2} kr");// skriver ut loan med 2 decimaler
             Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
-            Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");
+            Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");// skriver ut med procent tecken 
             Console.WriteLine($"Ränta justering för lånetid: {LoanInterestRules.GetTermInterest(loanYears):P2}");
             Console.WriteLine($"Slutlig årsränta: {interestRate:P2}");
             Console.WriteLine($"Återbetalningstid: {loanYears} år");
@@ -162,6 +162,7 @@ namespace Grupp4BankApp.System
             return true;
         }
 
+        //calcultes the total intrest for all the years
         public decimal CalculateTotalInterest(decimal loan, int years, decimal interestRate)
         {
             decimal yearlyAmount = loan / years;
@@ -202,6 +203,7 @@ namespace Grupp4BankApp.System
             }
         }
 
+        //calculates how much money gets put in to a account if the account is in another curency
         public decimal CalculateLoanExchangeRate(Enums.CurrencyTypes currency, decimal loan)
         {
             switch (currency)

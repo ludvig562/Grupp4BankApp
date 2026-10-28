@@ -217,6 +217,7 @@ namespace Grupp4BankApp.Users
             }
         }
 
+        //runs the menu to either update the base interest or update intrest based on years
         public static void UpdateLoanInterest()
         {
             Console.WriteLine("Vad vill du göra?\n" +
@@ -238,6 +239,7 @@ namespace Grupp4BankApp.Users
             }
         }
 
+        // method to make admins able to update a users credit rating
         public static void UpdateCustomerCreditRating()
         {
             Console.Write("Ange kundens användarnamn: ");
@@ -266,6 +268,7 @@ namespace Grupp4BankApp.Users
             Console.WriteLine($"Kundens kreditvärdighet är nu {customer.CreditRating}");
         }
 
+        // method that displays the menu to let admins update base Interest
         public static void UpdateLoanBaseInterest()
         {
             Console.WriteLine("----- AKTIV GRUNDRÄNTA -----");
@@ -296,6 +299,7 @@ namespace Grupp4BankApp.Users
             Console.WriteLine("Grundräntan har uppdaterats!");
         }
 
+        // method that displays the menu to let admins update year Interest
         public static void UpdateLoanTermInterest()
         {
             Console.WriteLine("----- AKTIV LÅNETIDSRÄNTA -----");
