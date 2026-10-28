@@ -1,6 +1,7 @@
 ﻿using Grupp4BankApp.Users;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Net.WebSockets;
 using System.Text;
 
@@ -12,17 +13,15 @@ namespace Grupp4BankApp.System
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
         public decimal LoanAmount { get; set; } 
-        public decimal InterestRate { get; set; }
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
 
         public Loan()
         {
         }
-        public Loan(decimal loanAmount, decimal interestRate, int loanYears, decimal totalLoan)
+        public Loan(decimal loanAmount, int loanYears, decimal totalLoan)
         {
             LoanAmount = loanAmount;
-            InterestRate = interestRate;
             LoanYears = loanYears;
             TotalLoan = totalLoan;
         }
@@ -42,10 +41,13 @@ namespace Grupp4BankApp.System
             if (loanMenuChoice == 1)
             {
                 PrintLoans();
+                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+                Console.ReadLine();
+                Console.Clear();
             }
             else if (loanMenuChoice == 2)
             {
-                Console.Write("Hur mycket vill du låna?: ");
+                Console.Write("Hur mycket vill du låna i SEK?: ");
                 int loan = 0;
                 while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
                 {
@@ -63,7 +65,11 @@ namespace Grupp4BankApp.System
                     }
                     MakeLoan(loan, accountChoice);
                 }
+                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
+                Console.ReadLine();
+                Console.Clear();
             }
+            Console.Clear();
         }
 
         public void MakeLoan(decimal loan, int accountChoice)// makes the loan 
@@ -83,9 +89,9 @@ namespace Grupp4BankApp.System
 
             BankAccount selectedAccount = _customer.CheckingAccounts[accountChoice - 1];
 
-            selectedAccount.AccountBalance += loan;
+            selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
-            Loan newLoan = new Loan(loan, _interestRate, loanYears, CalculateTotalInterest(loan, loanYears));
+            Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
 
             _customer.Loans.Add(newLoan);
 
@@ -97,7 +103,6 @@ namespace Grupp4BankApp.System
             Console.WriteLine();
         }
 
-        //------illfällig prin metod tills att yevgeniy fixar print konto------// 
         public void PrintAccounts()
         {
             Console.WriteLine("----- Dina konton -----");
@@ -113,8 +118,7 @@ namespace Grupp4BankApp.System
                 i++;
             }
         }
-        //----------------------------------------------------------------------//
-
+        
         public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
@@ -162,18 +166,37 @@ namespace Grupp4BankApp.System
                 return;
             }
 
+            Console.WriteLine("-----Dina lån-----");
             int i = 1;
             foreach (Loan loan in _customer.Loans)
             {
-                Console.WriteLine("-----Dina lån-----");
                 Console.WriteLine($"[{i}].");
                 Console.WriteLine($"Lånebelopp: {loan.LoanAmount} kr");
-                Console.WriteLine($"Årsränta: {loan.InterestRate:P0}");
+                Console.WriteLine($"Årsränta: {loan._interestRate:P0}");
                 Console.WriteLine($"Återbetalningstid: {loan.LoanYears} år");
                 Console.WriteLine($"Total skuld: {loan.TotalLoan} kr");
                 Console.WriteLine();
                 i++;
             }
         }
+
+        public decimal CalculateLoanExchangeRate(Enums.CurrencyTypes currency, decimal loan)
+        {
+            switch (currency)
+            {
+
+                case Enums.CurrencyTypes.EUR:
+                    decimal eurLoan = loan / ExchangeRates.GetRate(Enums.CurrencyTypes.EUR);
+                    return eurLoan;
+
+                case Enums.CurrencyTypes.USD:
+                    decimal usdLoan = loan / ExchangeRates.GetRate(Enums.CurrencyTypes.USD);
+                    return usdLoan;
+
+                default:
+                    return loan;
+            }
+        }
+
     }
 }
