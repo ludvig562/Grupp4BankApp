@@ -36,7 +36,7 @@ namespace Grupp4BankApp.System
             {
                 AccountBalance += amount;
                 Console.WriteLine($"\n{amount} {Currency} har satts in på kontot {BankAccountName}.\n" +
-                    $"Din balans är nu: {AccountBalance} {Currency}");
+                    $"Din balans är nu: {AccountBalance} {Currency}\n");
             }
             else
             {
