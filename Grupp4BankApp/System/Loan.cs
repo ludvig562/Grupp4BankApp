@@ -51,15 +51,16 @@ namespace Grupp4BankApp.System
                 else if (loanMenuChoice == 2)
                 {
                     int loan = 0;
-
-                    Console.WriteLine("Hur mycket vill du låna i SEK?");
-                    Console.Write("Ange 0 för att gå tillbaka: ");
+                    Console.Clear();
+                    Console.WriteLine("Hur mycket vill du låna i SEK?\n" +
+                        "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
 
                     while (!int.TryParse(Console.ReadLine(), out loan) ||
                            (loan != 0 && (loan < 0 || !CheckCustomerMoney(loan))))
                     {
-                        Console.Write("Ange ett nytt lånebelopp (0 för att gå tillbaka): ");
-                    }
+                        Console.WriteLine("Ange ett nytt lånebelopp\n" +
+                            "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
+                    }                  
 
                     if (loan == 0)
                     {
@@ -68,9 +69,8 @@ namespace Grupp4BankApp.System
 
                     PrintAccounts();
 
-                    Console.WriteLine("Vilket konto ska pengarna sättas in i?");
-                    Console.Write("Ange kontonummer (0 för att gå tillbaka): ");
-
+                    Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
+                        "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
                     string accountNumber = Console.ReadLine() ?? "";
 
                     if (accountNumber == "0")
