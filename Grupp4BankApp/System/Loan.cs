@@ -50,22 +50,36 @@ namespace Grupp4BankApp.System
                 }
                 else if (loanMenuChoice == 2)
                 {
-                    Console.Clear();
-                    Console.Write("Hur mycket vill du låna i SEK?: ");
                     int loan = 0;
-                    while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
+
+                    Console.WriteLine("Hur mycket vill du låna i SEK?");
+                    Console.Write("Ange 0 för att gå tillbaka: ");
+
+                    while (!int.TryParse(Console.ReadLine(), out loan) ||
+                           (loan != 0 && (loan < 0 || !CheckCustomerMoney(loan))))
                     {
-                        Console.WriteLine("Du måste ange ett giltit nummer!");
+                        Console.Write("Ange ett nytt lånebelopp (0 för att gå tillbaka): ");
                     }
 
-                    if (CheckCustomerMoney(loan))
+                    if (loan == 0)
                     {
-                        PrintAccounts();
-                        Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
-                            "Ange kontonummer:  ");
-                        string accountNumber = Console.ReadLine() ?? "";
-                        MakeLoan(loan, accountNumber);
+                        continue;
                     }
+
+                    PrintAccounts();
+
+                    Console.WriteLine("Vilket konto ska pengarna sättas in i?");
+                    Console.Write("Ange kontonummer (0 för att gå tillbaka): ");
+
+                    string accountNumber = Console.ReadLine() ?? "";
+
+                    if (accountNumber == "0")
+                    {
+                        continue;
+                    }
+
+                    MakeLoan(loan, accountNumber);
+
                     Console.ReadKey();
                     Console.Clear();
                 }
@@ -226,6 +240,5 @@ namespace Grupp4BankApp.System
                     return loan;
             }
         }
-
     }
 }
