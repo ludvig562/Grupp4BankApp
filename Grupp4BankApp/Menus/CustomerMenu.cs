@@ -153,6 +153,7 @@ namespace Grupp4BankApp.Menus
                         break;
                     case "Logga ut":
                         Console.Clear();
+#if RELEASE
                         AnsiConsole.Status()
                        .Spinner(Spinner.Known.Arc)
                        .SpinnerStyle(Color.Red)
@@ -163,6 +164,7 @@ namespace Grupp4BankApp.Menus
                           });
 
                         Auth.Logout();
+#endif
                         return;
                     default:
                         Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
