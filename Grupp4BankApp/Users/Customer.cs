@@ -124,15 +124,11 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        WriteMessageInterestSavingsAccount(account);
                         Console.WriteLine("------------------------------------\n");
                     }
                 }
             }
-
-            // Waits for the customer to press Enter before returning to the menu
-            //Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
-            //Console.ReadKey();
-            //Console.Clear();
         }
 
 
