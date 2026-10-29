@@ -76,6 +76,8 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             Console.Clear();
                             currentUser.ShowBankAccounts();
+                            Console.ReadKey();
+                            Console.Clear();
                             break;
                         case 2:
                             Console.Clear();
