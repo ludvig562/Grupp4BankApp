@@ -1,6 +1,7 @@
 ﻿using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
 using Spectre.Console;
+using System.Security.Principal;
 
 namespace Grupp4BankApp.Transaction
 {
@@ -44,7 +45,7 @@ namespace Grupp4BankApp.Transaction
             lock (processingLock)
             {
                 List<PendingTransaction> readyTransactions = new List<PendingTransaction>();
-
+                
                 lock (queueLock)
                 {
                     int count = pendingTransactions.Count;
@@ -105,7 +106,7 @@ namespace Grupp4BankApp.Transaction
                 AnsiConsole.WriteLine();
                 BankAccount? toAccount = null;
 
-                while (toAccount == null)
+                while (toAccount == null || fromAccount == toAccount)
                 {
                     int bankNumber = AnsiConsole.Prompt(
                         new TextPrompt<int>("[bold white]Ange mottagarens banknummer:[/]")
@@ -168,152 +169,96 @@ namespace Grupp4BankApp.Transaction
                     })
             );
 
-            // Genomför överföringen
-            fromAccount.AccountBalance -= amount;
-            toAccount.AccountBalance += amount;
-        //     if (!decimal.TryParse(Console.ReadLine(), out decimal belopp))
-        //     {
-        //         Console.WriteLine("Nummer tack");
-        //         return;
-        //     }
+            //fromAccount.AccountBalance -= amount;
+            //toAccount.AccountBalance += amount;
 
-        //     // Check the amount before adding the transaction to the queue
-        //     if (belopp < 1)
-        //     {
-        //         Console.WriteLine("Beloppet måste vara minst 1.");
-        //         return;
-        //     }
+            // Create a pending transaction
+            PendingTransaction transaction = new PendingTransaction(fromAccount, toAccount, amount);
 
-        //     // Check the current balance before accepting the transaction
-        //     if (fromAccount.AccountBalance < belopp)
-        //     {
-        //         Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
-        //         return;
-        //     }
-
-        //     // Create a pending transaction
-        //     PendingTransaction transaction = new PendingTransaction(fromAccount,toAccount,belopp);
-
-        //     // Add the transaction to the queue
-        //     lock (queueLock)
-        //     {
-        //         pendingTransactions.Enqueue(transaction);
-        //     }
-
-        //     Console.WriteLine("Överföringen har lagts i kö och behandlas om cirka 15 minuter.");
-
-        // }
-
-        // // Execute a pending transaction when the waiting time has passed
-        // private void ExecuteTransfer(BankAccount fromAccount,BankAccount toAccount,decimal belopp)
-        // {
-
-        //     // Keep the original amount when both accounts use the same currency
-        //     decimal receivedAmount = belopp;
-
-        //         // Convert the amount when the account currencies are different
-        //         if (fromAccount.Currency != toAccount.Currency)
-        //         {
-        //             // Require the administrator to approve exchange rates today
-        //             if (!ExchangeRates.UpdatedToday())
-        //             {
-        //                 Console.WriteLine("En administratör måste uppdatera växelkurserna idag.");
-        //                 return;
-        //             }
-
-        //             decimal fromRate = ExchangeRates.GetRate(fromAccount.Currency);
-        //             decimal toRate = ExchangeRates.GetRate(toAccount.Currency);
-
-        //             // Convert through SEK and round to two decimal places
-        //             receivedAmount = Math.Round(belopp * fromRate / toRate,2,MidpointRounding.AwayFromZero);
-
-        //             // Stop the transfer if the converted amount rounds to zero
-        //             if (receivedAmount <= 0)
-        //             {
-        //                 Console.WriteLine("Det växlade beloppet är för litet.");
-        //                 return;
-        //             }
-        //         }
-        //     if (fromAccount.AccountBalance >= belopp && belopp >= 1)
-        //     {
-        //         fromAccount.AccountBalance -= belopp;
-        //     }
-        //     else
-        //     {
-        //         if (belopp < 1)
-        //         {
-        //             Console.WriteLine("Det är under 1, skärp dig");
-        //             return;
-        //         }
-        //         else
-        //         {
-        //             Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
-        //             return;
-        //         }
-        //     }
-
-        //     // Add the converted amount to the receiving account
-        //     toAccount.AccountBalance += receivedAmount;
-
-            Customer? sender = FindAccountOwner(fromAccount);
-            Customer? reciever = FindAccountOwner(toAccount);
-
-
-            //Sender
-            TransactionLogg SenderLogg = new TransactionLogg
+            // Add the transaction to the queue
+            lock (queueLock)
             {
-                Date = DateTime.Now,
-                Amount = new Amount
-                {
-                    PlusMinus = "-",
-                    Value = amount,
-                    Currency = fromAccount.Currency,
+                pendingTransactions.Enqueue(transaction);
+            }
 
-                },
-                Description = $"Skickad till {toAccount.BankAccountName}",
-                FromCustomerName = sender.Name,
-                ToCustomerName = reciever.Name,
-                FromAccountName = fromAccount.BankAccountName,
-                ToAccountName = toAccount.BankAccountName,
-
-            };
-
-            //Reciever
-            TransactionLogg ReciverLogg = new TransactionLogg
-            {
-                Date = DateTime.Now,
-                Amount = new Amount
-                {
-                    PlusMinus = "+",
-                    Value = receivedAmount,
-                    Currency = toAccount.Currency,
-                },
-                Description = $"Mottagen från {fromAccount.BankAccountName}",
-                FromCustomerName = sender.Name,
-                ToCustomerName = reciever.Name,
-                FromAccountName = fromAccount.BankAccountName,
-                ToAccountName = toAccount.BankAccountName,
-
-            };
-            fromAccount.TransactionsLogg.Add(SenderLogg);
-            toAccount.TransactionsLogg.Add(ReciverLogg);
-
+            AddTransactionToLogg(toAccount,fromAccount,amount);
+#if RELEASE
             AnsiConsole.Progress()
-             .AutoClear(true)
-             .Start(ctx =>
-             {
-                 var task = ctx.AddTask("Processing transaction");
+          .AutoClear(true)
+          .Start(ctx =>
+          {
+              var task = ctx.AddTask("Processing transaction");
 
-                 while (!ctx.IsFinished)
-                 {
-                     task.Increment(2);
-                     Thread.Sleep(50);
-                 }
-             });
+              while (!ctx.IsFinished)
+              {
+                  task.Increment(4);
+                  Thread.Sleep(50);
+              }
+          });
 
             Console.Clear();
-            AnsiConsole.MarkupLine("[green]Transaction complete![/]");
+            AnsiConsole.MarkupLine("[green]Transaction complete! Avaliable in 15 Minutes.[/]");
+#elif DEBUG
 
+            Console.WriteLine("Överföringen har lagts i kö och behandlas om cirka 15 minuter.");
+#endif
+
+        }
+        
+            // // Execute a pending transaction when the waiting time has passed
+         private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal belopp)
+        {
+
+            // Keep the original amount when both accounts use the same currency
+            decimal receivedAmount = belopp;
+
+            // Convert the amount when the account currencies are different
+            if (fromAccount.Currency != toAccount.Currency)
+            {
+                // Require the administrator to approve exchange rates today
+                if (!ExchangeRates.UpdatedToday())
+                {
+                    Console.WriteLine("En administratör måste uppdatera växelkurserna idag.");
+                    return;
+                }
+
+                decimal fromRate = ExchangeRates.GetRate(fromAccount.Currency);
+                decimal toRate = ExchangeRates.GetRate(toAccount.Currency);
+
+                // Convert through SEK and round to two decimal places
+                receivedAmount = Math.Round(belopp * fromRate / toRate, 2, MidpointRounding.AwayFromZero);
+
+                // Stop the transfer if the converted amount rounds to zero
+                if (receivedAmount <= 0)
+                {
+                    Console.WriteLine("Det växlade beloppet är för litet.");
+                    return;
+                }
+            }
+            if (fromAccount.AccountBalance >= belopp && belopp >= 1)
+            {
+                fromAccount.AccountBalance -= belopp;
+            }
+            else
+            {
+                if (belopp < 1)
+                {
+                    Console.WriteLine("Det är under 1, skärp dig");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot.");
+                    return;
+                }
+            }
+
+                 // Add the converted amount to the receiving account
+                 toAccount.AccountBalance += receivedAmount;
+
+
+
+         
 
 
         }
@@ -499,6 +444,53 @@ namespace Grupp4BankApp.Transaction
                 });
 
             return selectedAccount;
+        }
+
+        public void AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount,decimal amount)
+        {
+
+
+            Customer? sender = FindAccountOwner(fromAccount);
+            Customer? reciever = FindAccountOwner(toAccount);
+
+            //Sender
+            TransactionLogg SenderLogg = new TransactionLogg
+            {
+                Date = DateTime.Now,
+                Amount = new Amount
+                {
+                    PlusMinus = "-",
+                    Value = amount,
+                    Currency = fromAccount.Currency,
+
+                },
+                Description = $"Skickad till {toAccount.BankAccountName}",
+                FromCustomerName = sender.Name,
+                ToCustomerName = reciever.Name,
+                FromAccountName = fromAccount.BankAccountName,
+                ToAccountName = toAccount.BankAccountName,
+
+            };
+
+            //Reciever
+            TransactionLogg ReciverLogg = new TransactionLogg
+            {
+                Date = DateTime.Now,
+                Amount = new Amount
+                {
+                    PlusMinus = "+",
+                    Value = amount,
+                    Currency = toAccount.Currency,
+                },
+                Description = $"Mottagen från {fromAccount.BankAccountName}",
+                FromCustomerName = sender.Name,
+                ToCustomerName = reciever.Name,
+                FromAccountName = fromAccount.BankAccountName,
+                ToAccountName = toAccount.BankAccountName,
+
+            };
+            fromAccount.TransactionsLogg.Add(SenderLogg);
+            toAccount.TransactionsLogg.Add(ReciverLogg);
         }
     }
 }

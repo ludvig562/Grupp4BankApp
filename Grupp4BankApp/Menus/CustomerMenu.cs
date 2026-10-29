@@ -115,6 +115,7 @@ namespace Grupp4BankApp.Menus
                             "Lista alla konto",
                             "Öppna nya konto",
                             "Sätt in pengar",
+                            "Ta ut pengar",
                             "Överför pengar",
                             "Låna pengar",
                             "Transaktioner",
@@ -125,26 +126,26 @@ namespace Grupp4BankApp.Menus
                 {
                     case "Lista alla konto":
                         // Gets the logged-in customer and displays their bank accounts
-                        if (AuthenticationService.CurrentUser is Customer customer)
-                        {
-                            customer.ShowBankAccounts();
-                        }
-                        else
-                        {
-                            Console.WriteLine("Ingen kund är inloggad.");
-                        }
-
+                        Console.Clear();
+                        currentUser.ShowBankAccounts();
                         break;
                     case "Öppna nya konto":
                         currentUser.OpenBankAccount(); //customer opens bank account
                         break;
                     case "Sätt in pengar":
+                        Console.Clear();
+                        currentUser.DepositMoney();
                         break;
                     case "Överför pengar":
                         Console.Clear();
                         transactionSystem.TransferMoney();
                         break;
+                    case "Ta ut pengar":
+                        Console.Clear();
+                        currentUser.WithDrawMoney();
+                        break;
                     case "Låna pengar":
+                        Console.Clear();
                         loans.ShowLoanMenu(); // opens loan menu
                         break;
                     case "Transaktioner":
@@ -163,8 +164,8 @@ namespace Grupp4BankApp.Menus
                           AnsiConsole.MarkupLine("[green]Du har loggats ut[/]");
                           });
 
-                        Auth.Logout();
 #endif
+                        Auth.Logout();
                         return;
                     default:
                         Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
