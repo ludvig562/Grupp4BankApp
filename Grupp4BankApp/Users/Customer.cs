@@ -217,6 +217,7 @@ namespace Grupp4BankApp.Users
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
+                        Console.ReadKey();
                         continue;
                     }
 
@@ -272,11 +273,20 @@ namespace Grupp4BankApp.Users
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
+                        Console.ReadKey();
                         continue;
                     }
-
+                    if (account.AccountBalance <= 0) //if the account balance is zero or less
+                    {
+                        Console.WriteLine(
+                            $"Du har inga pengar på kontot {account.BankAccountNumber}, " +
+                            $"så du kan inte ta ut pengar från detta konto. " +
+                            "Välj ett annat konto.");
+                        Console.ReadKey();
+                        continue;
+                    }
                     decimal withdrawalAmountMoney = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
-                    account.Withdraw(withdrawalAmountMoney); //method for depositing money (in bankaccount class)
+                    account.Withdraw(withdrawalAmountMoney); //method for withdrawing money (in bankaccount class)
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     withdrawalCompleted = true;
                     Console.ReadKey();
@@ -300,8 +310,8 @@ namespace Grupp4BankApp.Users
             {
                 Console.WriteLine("Hur mycket vill du ta ut?");
 
-                if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount) && withDrawalAmount > 0 
-                    && withDrawalAmount <= account.AccountBalance) //amount should be less than what is in their account
+                if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount) && withDrawalAmount > 0
+                    && withDrawalAmount <= account.AccountBalance && account.AccountBalance > 0)
                 {
                     validWithdrawalAmount = true;
                 }
