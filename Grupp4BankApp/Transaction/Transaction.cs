@@ -136,6 +136,8 @@ namespace Grupp4BankApp.Transaction
                     }
                 }
                 TransferFunds(fromAccount, toAccount);
+                Console.ReadKey();
+                Console.Clear();
 
             }
 
