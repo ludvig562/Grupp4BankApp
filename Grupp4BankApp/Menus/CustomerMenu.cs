@@ -76,6 +76,8 @@ namespace Grupp4BankApp.Menus
                         case 1:
                             Console.Clear();
                             currentUser.ShowBankAccounts();
+                            Console.ReadKey();
+                            Console.Clear();
                             break;
                         case 2:
                             Console.Clear();
@@ -111,7 +113,7 @@ namespace Grupp4BankApp.Menus
                             Auth.Logout();
                             return;
                         default:
-                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 7.\n");
+                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 9.\n");
                             break;
                     }
                 }

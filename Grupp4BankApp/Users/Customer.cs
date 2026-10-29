@@ -124,7 +124,7 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
-                        Console.WriteLine("------------------------------------\n\n");
+                        Console.WriteLine("------------------------------------\n");
                     }
                 }
             }
