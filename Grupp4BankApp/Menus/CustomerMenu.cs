@@ -132,6 +132,7 @@ namespace Grupp4BankApp.Menus
                         Console.Clear();
                         break;
                     case "Öppna nya konto":
+                        Console.Clear();
                         currentUser.OpenBankAccount(); //customer opens bank account
                         break;
                     case "Sätt in pengar":
