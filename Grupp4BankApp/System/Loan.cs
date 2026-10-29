@@ -50,11 +50,12 @@ namespace Grupp4BankApp.System
                 }
                 else if (loanMenuChoice == 2)
                 {
+                    Console.Clear();
                     Console.Write("Hur mycket vill du låna i SEK?: ");
                     int loan = 0;
                     while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
                     {
-                        Console.WriteLine("Du måste ange ett giltit antal!");
+                        Console.WriteLine("Du måste ange ett giltit nummer!");
                     }
 
                     if (CheckCustomerMoney(loan))
@@ -63,7 +64,6 @@ namespace Grupp4BankApp.System
                         Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
                             "Ange kontonummer:  ");
                         string accountNumber = Console.ReadLine() ?? "";
-
                         MakeLoan(loan, accountNumber);
                     }
                     Console.ReadKey();
@@ -122,7 +122,8 @@ namespace Grupp4BankApp.System
 
             _customer.Loans.Add(newLoan);
 
-            Console.WriteLine($"\nDu valde kontot: {selectedAccount.BankAccountName}");
+            Console.Clear();
+            Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
             Console.WriteLine($"Lånebelopp: {loan:N2} kr");// skriver ut loan med 2 decimaler
             Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
             Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");// skriver ut med procent tecken 
@@ -135,14 +136,13 @@ namespace Grupp4BankApp.System
 
         public void PrintAccounts()
         {
-            Console.WriteLine("----- Dina konton -----");
+            Console.WriteLine("\n----- Dina konton -----\n");
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 Console.WriteLine($"Namn: {account.BankAccountName}");
                 Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                 Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
-                Console.WriteLine($"Valuta: {account.Currency}");
-                Console.WriteLine();
+                Console.WriteLine($"Valuta: {account.Currency}\n");
             }
         }
 
