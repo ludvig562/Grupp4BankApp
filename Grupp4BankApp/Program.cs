@@ -60,7 +60,7 @@ namespace Grupp4BankApp
 
             //Bank bank = new();
             //bank.Run();
-
+        
 
             MenuManager.Init();
             MenuManager.Run();

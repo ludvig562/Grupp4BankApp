@@ -133,7 +133,21 @@ namespace Grupp4BankApp.Transaction
             fromAccount.TransactionsLogg.Add(SenderLogg);
             toAccount.TransactionsLogg.Add(ReciverLogg);
 
-      
+            AnsiConsole.Progress()
+             .AutoClear(true)
+             .Start(ctx =>
+             {
+                 var task = ctx.AddTask("Processing transaction");
+
+                 while (!ctx.IsFinished)
+                 {
+                     task.Increment(2);
+                     Thread.Sleep(50);
+                 }
+             });
+
+            Console.Clear();
+            AnsiConsole.MarkupLine("[green]Transaction complete![/]");
 
 
 
@@ -198,7 +212,9 @@ namespace Grupp4BankApp.Transaction
                 }
 
                 AnsiConsole.Write(table);
-
+                AnsiConsole.MarkupLine("[grey]Any key to continue[/]");
+                Console.ReadLine();
+                Console.Clear();
             }
         }
 
