@@ -410,7 +410,7 @@ namespace Grupp4BankApp.Users
 
         public static void WriteMessageInterestSavingsAccount(BankAccount account)
         {
-            if (account.AccountType == Enums.AccountType.savingsAccount)
+            if (account.AccountType == Enums.AccountType.savingsAccount && account.AccountBalance > 0)
             {
                 decimal yearlyInterest = account.CalculateInterest();
                 Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest} {account.Currency}.\n");
