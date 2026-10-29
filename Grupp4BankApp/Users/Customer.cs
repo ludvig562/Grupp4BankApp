@@ -125,7 +125,7 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
                         WriteMessageInterestSavingsAccount(account);
-                        Console.WriteLine("------------------------------------\n");
+                        Console.WriteLine("------------------------------------");
                     }
                 }
             }
