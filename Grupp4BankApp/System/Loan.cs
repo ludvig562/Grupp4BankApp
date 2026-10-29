@@ -12,7 +12,7 @@ namespace Grupp4BankApp.System
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
         private decimal _interestRate;
-        public decimal LoanAmount { get; set; } 
+        public decimal LoanAmount { get; set; }
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
 
@@ -29,46 +29,52 @@ namespace Grupp4BankApp.System
 
         public void ShowLoanMenu()// loan menu
         {
-            Console.Clear();
-            Console.WriteLine("Vad vill du göra?\n" +
-                "[1] Lista över dina lån\n" +
-                "[2] Låna pengar\n" +
-                "[3] Gå tillbaka");
-            int loanMenuChoice = 0;
-            while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
+            bool showLoanMenu = true;
+            while (showLoanMenu)
             {
-                Console.WriteLine("Du måste ange ett nummer mellan 1 och 3!");
-            }
-            if (loanMenuChoice == 1)
-            {
-                PrintLoans();
-                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
-                Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("Vad vill du göra?\n" +
+                    "[1] Lista över dina lån\n" +
+                    "[2] Låna pengar\n" +
+                    "[3] Gå tillbaka till huvudmenyn");
+                int loanMenuChoice = 0;
+                while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
+                {
+                    Console.WriteLine("Du måste ange ett nummer mellan 1 och 3!");
+                }
+                if (loanMenuChoice == 1)
+                {
+                    PrintLoans();
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else if (loanMenuChoice == 2)
+                {
+                    Console.Write("Hur mycket vill du låna i SEK?: ");
+                    int loan = 0;
+                    while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
+                    {
+                        Console.WriteLine("Du måste ange ett giltit antal!");
+                    }
+
+                    if (CheckCustomerMoney(loan))
+                    {
+                        PrintAccounts();
+                        Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
+                            "Ange kontonummer:  ");
+                        string accountNumber = Console.ReadLine() ?? "";
+
+                        MakeLoan(loan, accountNumber);
+                    }
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                else
+                {
+                    showLoanMenu = false;
+                }
                 Console.Clear();
             }
-            else if (loanMenuChoice == 2)
-            {
-                Console.Write("Hur mycket vill du låna i SEK?: ");
-                int loan = 0;
-                while (!int.TryParse(Console.ReadLine(), out loan) || loan <= 0)
-                {
-                    Console.WriteLine("Du måste ange ett giltit antal!");
-                }
-
-                if (CheckCustomerMoney(loan))
-                {
-                    PrintAccounts();
-                    Console.WriteLine("Vilket konto ska pengarna sättas in i?: ");
-                    Console.Write("Ange kontonummer: ");
-                    string accountNumber = Console.ReadLine() ?? "";
-
-                    MakeLoan(loan, accountNumber);
-                }
-                Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
-                Console.ReadLine();
-                Console.Clear();
-            }
-            Console.Clear();
         }
 
         public void MakeLoan(decimal loan, string accountNumber)
@@ -139,11 +145,11 @@ namespace Grupp4BankApp.System
                 Console.WriteLine();
             }
         }
-        
+
         public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
         {
             decimal moneyInAccounts = 0;
-            foreach(BankAccount checkingMoney in _customer.CheckingAccounts)
+            foreach (BankAccount checkingMoney in _customer.CheckingAccounts)
             {
                 moneyInAccounts += checkingMoney.AccountBalance;
             }
@@ -153,7 +159,7 @@ namespace Grupp4BankApp.System
                 moneyInAccounts += savingsMoney.AccountBalance;
             }
 
-            if(loan > moneyInAccounts * 5)
+            if (loan > moneyInAccounts * 5)
             {
                 Console.WriteLine($"Du kan inte låna så mycket max 5 gånger det du har i våran bank\nDu har totalt: {moneyInAccounts} kr");
                 return false;
