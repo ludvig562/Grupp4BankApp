@@ -39,7 +39,8 @@ namespace Grupp4BankApp.Menus
                             Admin.CreateCustomer();
                             break;
 
-                        case 2: //update currency exchange
+                        case 2: // Download and approve exchange rates
+                            Admin.UpdateExchangeRates();
                             break;
 
                         case 3: //end admin menu

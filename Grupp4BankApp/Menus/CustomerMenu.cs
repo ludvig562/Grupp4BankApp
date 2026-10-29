@@ -173,7 +173,5 @@ namespace Grupp4BankApp.Menus
 
             }
         }
-
-
     }
 }

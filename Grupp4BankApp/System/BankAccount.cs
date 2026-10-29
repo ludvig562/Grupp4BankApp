@@ -2,6 +2,7 @@
 using Grupp4BankApp.Users;
 using System;
 using System.Collections.Generic;
+using System.Security.Principal;
 using System.Text;
 
 namespace Grupp4BankApp.System
@@ -14,7 +15,7 @@ namespace Grupp4BankApp.System
         public int BankAccountNumber { get; private set; }
         public string BankAccountName { get; set; } 
         public decimal AccountBalance { get; set; }
-        public decimal SavingsInterestRate { get; set; } = 0.03m; //3% savings interest rate
+        public decimal SavingsInterestRate { get; private set; } = 0.03m; //3% savings interest rate
         public Enums.CurrencyTypes Currency { get; private set; }
         public Enums.AccountType AccountType { get; private set; }
         public string Owner { get; set; }
@@ -29,10 +30,44 @@ namespace Grupp4BankApp.System
             BankAccountNumber = _nextBankAccountNumber++; //ensuring that each bank account number is automatically different
         }
 
+
+        //method that deposits money in account
+        public void Deposit(decimal amount)
+        {
+            if(amount > 0)
+            {
+                AccountBalance += amount;
+                Console.WriteLine($"\n{amount} {Currency} har satts in på kontot {BankAccountName}.\n" +
+                    $"Din balans är nu: {AccountBalance} {Currency}\n");
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt belopp.");
+            }
+        }
+
+        //method that withdraws money from account
+        public void Withdraw(decimal amount)
+        {
+            if (amount > 0 && amount <= AccountBalance)
+            {
+                AccountBalance -= amount;
+                Console.WriteLine($"\n{amount} {Currency} har tagits ur kontot {BankAccountName}.\n" +
+                    $"Din balans är nu: {AccountBalance} {Currency}\n");
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt belopp.");
+            }
+        }
+
+
+        //method that calculates the savings account interest
         public decimal CalculateInterest()
         {
             return AccountBalance * SavingsInterestRate;
         }
+
 
         public override string ToString()
         {

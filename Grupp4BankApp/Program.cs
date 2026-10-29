@@ -4,6 +4,7 @@ using Grupp4BankApp.Users;
 using Spectre.Console;
 using System.ComponentModel.Design;
 using static Grupp4BankApp.Users.User;
+using Grupp4BankApp.Transaction;
 
 namespace Grupp4BankApp
 {
@@ -63,6 +64,10 @@ namespace Grupp4BankApp
         
 
             MenuManager.Init();
+
+            // Start checking pending transactions
+            TransactionSystem.StartTransactionTimer();
+
             MenuManager.Run();
 
             //MenuManager.SelectMenu(eMenus.eLogInMenu);
