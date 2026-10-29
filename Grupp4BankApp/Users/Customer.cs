@@ -224,6 +224,8 @@ namespace Grupp4BankApp.Users
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     depositCompleted = true;
+                    Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
@@ -277,6 +279,8 @@ namespace Grupp4BankApp.Users
                     account.Withdraw(withdrawalAmountMoney); //method for depositing money (in bankaccount class)
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     withdrawalCompleted = true;
+                    Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
@@ -406,6 +410,8 @@ namespace Grupp4BankApp.Users
                                 $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         public static void WriteMessageInterestSavingsAccount(BankAccount account)
