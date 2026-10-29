@@ -51,15 +51,16 @@ namespace Grupp4BankApp.System
                 else if (loanMenuChoice == 2)
                 {
                     int loan = 0;
-
-                    Console.WriteLine("Hur mycket vill du låna i SEK?");
-                    Console.Write("Ange 0 för att gå tillbaka: ");
+                    Console.Clear();
+                    Console.WriteLine("Hur mycket vill du låna i SEK?\n" +
+                        "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
 
                     while (!int.TryParse(Console.ReadLine(), out loan) ||
                            (loan != 0 && (loan < 0 || !CheckCustomerMoney(loan))))
                     {
-                        Console.Write("Ange ett nytt lånebelopp (0 för att gå tillbaka): ");
-                    }
+                        Console.WriteLine("Ange ett nytt lånebelopp\n" +
+                            "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
+                    }                  
 
                     if (loan == 0)
                     {
@@ -68,9 +69,8 @@ namespace Grupp4BankApp.System
 
                     PrintAccounts();
 
-                    Console.WriteLine("Vilket konto ska pengarna sättas in i?");
-                    Console.Write("Ange kontonummer (0 för att gå tillbaka): ");
-
+                    Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
+                        "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
                     string accountNumber = Console.ReadLine() ?? "";
 
                     if (accountNumber == "0")
@@ -136,7 +136,8 @@ namespace Grupp4BankApp.System
 
             _customer.Loans.Add(newLoan);
 
-            Console.WriteLine($"\nDu valde kontot: {selectedAccount.BankAccountName}");
+            Console.Clear();
+            Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
             Console.WriteLine($"Lånebelopp: {loan:N2} kr");// skriver ut loan med 2 decimaler
             Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
             Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");// skriver ut med procent tecken 
@@ -149,14 +150,13 @@ namespace Grupp4BankApp.System
 
         public void PrintAccounts()
         {
-            Console.WriteLine("----- Dina konton -----");
+            Console.WriteLine("\n----- Dina konton -----\n");
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 Console.WriteLine($"Namn: {account.BankAccountName}");
                 Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                 Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
-                Console.WriteLine($"Valuta: {account.Currency}");
-                Console.WriteLine();
+                Console.WriteLine($"Valuta: {account.Currency}\n");
             }
         }
 
