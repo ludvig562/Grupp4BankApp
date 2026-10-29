@@ -1,8 +1,9 @@
 ﻿using Figgle.Fonts;
 using Grupp4BankApp.System;
-using Grupp4BankApp.Users;
-using System.Security.Cryptography.X509Certificates;
 using Grupp4BankApp.Transaction;
+using Grupp4BankApp.Users;
+using Spectre.Console;
+using System.Security.Cryptography.X509Certificates;
 namespace Grupp4BankApp.Menus
 {
     internal class CustomerMenu
@@ -18,6 +19,32 @@ namespace Grupp4BankApp.Menus
         }
         public void LogInEvent()
         {
+            AnsiConsole.Live(new Text("Initializing..."))
+            .Start(ctx =>
+            {
+                Thread.Sleep(1000);
+
+                // Replace with a panel
+                var panel = new Panel("Loading configuration...")
+                .Header("Step 1")
+                .BorderColor(Color.Blue);
+                ctx.UpdateTarget(panel);
+                Thread.Sleep(1000);
+
+                // Replace with a different panel
+                var panel2 = new Panel("Connecting to database...")
+                .Header("Step 2")
+                .BorderColor(Color.Yellow);
+                ctx.UpdateTarget(panel2);
+                Thread.Sleep(1000);
+
+                // Replace with final panel
+                var panel3 = new Panel("[green]Ready![/]")
+                .Header("Complete")
+                .BorderColor(Color.Green);
+                ctx.UpdateTarget(panel3);
+                Thread.Sleep(1000);
+            });
             string loadingIn = "Logging in";
             string dots = ". . .";
 
@@ -45,7 +72,12 @@ namespace Grupp4BankApp.Menus
         }
         public void Display()
         {
-            // LogInEvent();
+
+#if RELEASE
+
+            LogInEvent();
+#endif
+
             Console.Clear();
 
             RunCustomerMenu();
@@ -59,68 +91,87 @@ namespace Grupp4BankApp.Menus
 
             while (customerMenuRunning)
             {
-                Console.WriteLine("Vad vill du göra?\n" +
-                    "[1] Lista alla konto\n" +
-                    "[2] Öppna nya konto\n" +
-                    "[3] Sätt in pengar\n" +
-                    "[4] Ta ut pengar\n" +
-                    "[5] Överför pengar\n" +
-                    "[6] Låna pengar\n" +
-                    "[7] Transaktioner\n" +
-                    "[8] Uppdatera dina personliga uppgifter\n" +
-                    "[9] Logga ut\n");
-                if (int.TryParse(Console.ReadLine(), out int customerMenuChoice))
+                var panel = new Panel( new Markup(
+                    "[bold cyan]Välkommen till banken![/]\n\n" +
+                    "[grey]Välj vad du vill göra i menyn.[/]" ))
                 {
-                    switch (customerMenuChoice)
-                    {
-                        case 1:
-                            Console.Clear();
-                            currentUser.ShowBankAccounts();
-                            Console.ReadKey();
-                            Console.Clear();
-                            break;
-                        case 2:
-                            Console.Clear();
-                            currentUser.OpenBankAccount(); //customer opens bank account
-                            break;
-                        case 3:
-                            Console.Clear();
-                            currentUser.DepositMoney();
-                            break;
-                        case 4:
-                            Console.Clear();
-                            currentUser.WithDrawMoney();
-                            break;
-                        case 5:
-                            Console.Clear();
-                            transactionSystem.TransferMoney();
-                            break;
-                        case 6:
-                            Console.Clear();
-                            loans.ShowLoanMenu(); // opens loan menu
-                            break;
-                        case 7:
-                            Console.Clear();
-                            transactionSystem.TransactionLog();
-                            break;
-                        case 8:
-                            Console.Clear();
-                            currentUser.UpdateCustomerInformation();
-                            break;
-                        case 9:
-                            Console.Clear();
-                            Console.WriteLine("Du har loggats ut ");
-                            Auth.Logout();
-                            return;
-                        default:
-                            Console.WriteLine("Du måste skriva en siffra mellan 1 - 9.\n");
-                            break;
-                    }
-                }
-                else
+                    Header = new PanelHeader(" HUVUDMENY "),
+                    Border = BoxBorder.Rounded,
+                    Padding = new Padding(2, 1),
+                };
+
+                AnsiConsole.Write(
+                    new Align(
+                        panel,
+                        HorizontalAlignment.Center
+                    )
+                );
+
+                var picked = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .HighlightStyle(new Style(Color.White, Color.Black))
+                        .WrapAround()
+                        .AddChoices(
+                            "Lista alla konto",
+                            "Öppna nya konto",
+                            "Sätt in pengar",
+                            "Ta ut pengar",
+                            "Överför pengar",
+                            "Låna pengar",
+                            "Transaktioner",
+                            "Logga ut"
+                        )
+                );
+                switch (picked)
                 {
-                    Console.WriteLine("Du måste skriva en siffra.\n");
+                    case "Lista alla konto":
+                        // Gets the logged-in customer and displays their bank accounts
+                        Console.Clear();
+                        currentUser.ShowBankAccounts();
+                        break;
+                    case "Öppna nya konto":
+                        currentUser.OpenBankAccount(); //customer opens bank account
+                        break;
+                    case "Sätt in pengar":
+                        Console.Clear();
+                        currentUser.DepositMoney();
+                        break;
+                    case "Överför pengar":
+                        Console.Clear();
+                        transactionSystem.TransferMoney();
+                        break;
+                    case "Ta ut pengar":
+                        Console.Clear();
+                        currentUser.WithDrawMoney();
+                        break;
+                    case "Låna pengar":
+                        Console.Clear();
+                        loans.ShowLoanMenu(); // opens loan menu
+                        break;
+                    case "Transaktioner":
+                        Console.Clear();
+                        transactionSystem.TransactionLog();
+                        break;
+                    case "Logga ut":
+                        Console.Clear();
+#if RELEASE
+                        AnsiConsole.Status()
+                       .Spinner(Spinner.Known.Arc)
+                       .SpinnerStyle(Color.Red)
+                       .Start("Loggas ut...", ctx =>
+                        {
+                            Thread.Sleep(2000);
+                          AnsiConsole.MarkupLine("[green]Du har loggats ut[/]");
+                          });
+
+#endif
+                        Auth.Logout();
+                        return;
+                    default:
+                        Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
+                        break;
                 }
+
             }
         }
     }
