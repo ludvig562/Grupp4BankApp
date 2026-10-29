@@ -1,8 +1,9 @@
-﻿using Grupp4BankApp.System;
+﻿﻿using Grupp4BankApp.Manager;
+using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
-using static Grupp4BankApp.Users.User;
-﻿using Grupp4BankApp.Manager;
+using Spectre.Console;
 using System.ComponentModel.Design;
+using static Grupp4BankApp.Users.User;
 using Grupp4BankApp.Transaction;
 
 namespace Grupp4BankApp
@@ -11,19 +12,21 @@ namespace Grupp4BankApp
     {
         static void Main(string[] args)
         {
+
             //create a customer
             Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
             users.Add(bob.Username, bob);
 
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "Konto", Enums.CurrencyTypes.SEK);
-            BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.SEK);
+            BankAccount newSavingAcc = new BankAccount(Enums.AccountType.savingsAccount, "Sparkonto", Enums.CurrencyTypes.USD);
+            BankAccount newSavingAcccc = new BankAccount(Enums.AccountType.savingsAccount, "Invensteringkonto", Enums.CurrencyTypes.EUR);
 
             bob.CheckingAccounts.Add(newCheckingAccount);
             bob.SavingsAccounts.Add(newSavingAcc);
-
+            bob.CheckingAccounts.Add(newSavingAcccc);
             newCheckingAccount.AccountBalance = 1000;
             newSavingAcc.AccountBalance = 500;
-
+            newSavingAcccc.AccountBalance = 5000;
 
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +35,7 @@ namespace Grupp4BankApp
             users.Add(bobelina.Username, bobelina);
 
             BankAccount newSecondCheckignACcount = new BankAccount(Enums.AccountType.checkingsAccount,"Konto",Enums.CurrencyTypes.SEK);
-            BankAccount newsecondSaveAccount = new BankAccount(Enums.AccountType.savingsAccount, "Konto", Enums.CurrencyTypes.SEK);
+            BankAccount newsecondSaveAccount = new BankAccount(Enums.AccountType.savingsAccount, "Konto", Enums.CurrencyTypes.EUR);
 
             bobelina.CheckingAccounts.Add(newSecondCheckignACcount);
             bobelina.SavingsAccounts.Add(newsecondSaveAccount);
@@ -58,6 +61,8 @@ namespace Grupp4BankApp
 
             //Bank bank = new();
             //bank.Run();
+        
+
             MenuManager.Init();
 
             // Start checking pending transactions
