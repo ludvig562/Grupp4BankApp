@@ -33,11 +33,11 @@ namespace Grupp4BankApp.System
             Console.WriteLine("Vad vill du göra?\n" +
                 "[1] Lista över dina lån\n" +
                 "[2] Låna pengar\n" +
-                "[3] Gå tillbaka\n");
+                "[3] Gå tillbaka");
             int loanMenuChoice = 0;
             while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
             {
-                Console.WriteLine("Du måste ange ett giltit tal!");
+                Console.WriteLine("Du måste ange ett nummer mellan 1 och 3!");
             }
             if (loanMenuChoice == 1)
             {
