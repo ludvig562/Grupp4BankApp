@@ -15,7 +15,7 @@ namespace Grupp4BankApp.Users
         //properties: lists for bankaccounts
         public List<BankAccount> CheckingAccounts { get; set; }
         public List<BankAccount> SavingsAccounts { get; set; }
-
+        public Enums.CreditRating CreditRating { get; set; }
         public List<Loan> Loans { get; set; }
 
         //constructor, child from User class
@@ -24,7 +24,7 @@ namespace Grupp4BankApp.Users
             Role = Enums.UserRole.customer; //automatically add the role of customer
             CheckingAccounts = new List<BankAccount>();
             SavingsAccounts = new List<BankAccount>();
-
+            CreditRating = Enums.CreditRating.medium;
             Loans = new List<Loan>();
         }
 

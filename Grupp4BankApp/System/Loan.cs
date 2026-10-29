@@ -9,9 +9,9 @@ namespace Grupp4BankApp.System
 {
     internal class Loan
     {
-        private decimal _interestRate = 0.08m; // 8% annual interest
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
 
+        private decimal _interestRate;
         public decimal LoanAmount { get; set; } 
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
@@ -19,11 +19,12 @@ namespace Grupp4BankApp.System
         public Loan()
         {
         }
-        public Loan(decimal loanAmount, int loanYears, decimal totalLoan)
+        public Loan(decimal loanAmount, int loanYears, decimal totalLoan, decimal interestRate)
         {
             LoanAmount = loanAmount;
             LoanYears = loanYears;
             TotalLoan = totalLoan;
+            _interestRate = interestRate;
         }
 
         public void ShowLoanMenu()// loan menu
@@ -97,17 +98,33 @@ namespace Grupp4BankApp.System
                 Console.WriteLine("Du måste ange ett nummer mellan 1-10!");
             }
 
+            // Get interest rate using both factors
+            decimal interestRate = LoanInterestRules.CalculateInterestRate(_customer.CreditRating, loanYears);
+
+            // Calculate total loan cost
+            decimal totalLoan = CalculateTotalInterest(loan, loanYears, interestRate);
+
+            // Deposit money into selected account
             selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
-            Loan newLoan = new Loan(loan, loanYears, CalculateTotalInterest(loan, loanYears));
+            Loan newLoan = new Loan(
+                loan,
+                loanYears,
+                totalLoan,
+                interestRate
+            );
 
             _customer.Loans.Add(newLoan);
 
-            Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
-            Console.WriteLine($"Lånebelopp: {loan} kr");
-            Console.WriteLine($"Årsränta: {_interestRate:P0}");
+            Console.WriteLine($"\nDu valde kontot: {selectedAccount.BankAccountName}");
+            Console.WriteLine($"Lånebelopp: {loan:N2} kr");// skriver ut loan med 2 decimaler
+            Console.WriteLine($"Kreditvärdighet: {_customer.CreditRating}");
+            Console.WriteLine($"Grundränta: {LoanInterestRules.GetBaseInterest(_customer.CreditRating):P2}");// skriver ut med procent tecken 
+            Console.WriteLine($"Ränta justering för lånetid: {LoanInterestRules.GetTermInterest(loanYears):P2}");
+            Console.WriteLine($"Slutlig årsränta: {interestRate:P2}");
             Console.WriteLine($"Återbetalningstid: {loanYears} år");
-            Console.WriteLine($"Total Räntekostnad: {CalculateTotalInterest(loan, loanYears) - loan} kr");
+            Console.WriteLine($"Total räntekostnad: {totalLoan - loan:N2} kr");
+            Console.WriteLine($"Total återbetalning: {totalLoan:N2} kr");
         }
 
         public void PrintAccounts()
@@ -144,7 +161,8 @@ namespace Grupp4BankApp.System
             return true;
         }
 
-        public decimal CalculateTotalInterest(decimal loan, int years)// calculates how much interest the customer will have on theer loan based on how many years they will pay
+        //calcultes the total intrest for all the years
+        public decimal CalculateTotalInterest(decimal loan, int years, decimal interestRate)
         {
             decimal yearlyAmount = loan / years;
             decimal remainingDebt = loan;
@@ -152,7 +170,7 @@ namespace Grupp4BankApp.System
 
             for (int year = 1; year <= years; year++)
             {
-                decimal yearlyInterest = remainingDebt * _interestRate;
+                decimal yearlyInterest = remainingDebt * interestRate;
 
                 totalInterest += yearlyInterest;
 
@@ -184,6 +202,7 @@ namespace Grupp4BankApp.System
             }
         }
 
+        //calculates how much money gets put in to a account if the account is in another curency
         public decimal CalculateLoanExchangeRate(Enums.CurrencyTypes currency, decimal loan)
         {
             switch (currency)

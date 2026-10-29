@@ -1,4 +1,5 @@
 ﻿using Grupp4BankApp.Users;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -49,7 +50,13 @@ namespace Grupp4BankApp.System
             }
             _failedAttempts.Remove(username);// remove 
             CurrentUser = user;
-            Console.WriteLine("Inloggningen lyckades!\n");
+
+            var inloggComplete = new Text("Inloggningen lyckades!", new Style(Color.Green1))
+            {
+                Justification = Justify.Center,
+            };
+            AnsiConsole.Write(inloggComplete);
+            //Console.WriteLine("Inloggningen lyckades!\n");
             return user;
         }
 

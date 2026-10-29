@@ -225,6 +225,117 @@ namespace Grupp4BankApp.Users
                 return newCustomerUpdateInfoChoice;
             }
         }
+
+        //runs the menu to either update the base interest or update intrest based on years
+        public static void UpdateLoanInterest()
+        {
+            Console.WriteLine("Vad vill du göra?\n" +
+                "[1] Ändra grundräntor\n" +
+                "[2] Ändra ränta baserat på lånetid\n" +
+                "[3] Gå tillbaka");
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+            if (choice == 1)
+            {
+                UpdateLoanBaseInterest();
+            }
+            else if(choice == 2)
+            {
+                UpdateLoanTermInterest();
+            }
+        }
+
+        // method to make admins able to update a users credit rating
+        public static void UpdateCustomerCreditRating()
+        {
+            Console.Write("Ange kundens användarnamn: ");
+            string username = Console.ReadLine() ?? "";
+
+            if (!User.users.TryGetValue(username, out User? user) || user is not Customer customer)
+            {
+                Console.WriteLine("Kunden hittades inte!");
+                return;
+            }
+
+            Console.WriteLine("Välj kreditvärdighet:");
+            Console.WriteLine("[1] Hög");
+            Console.WriteLine("[2] Medel");
+            Console.WriteLine("[3] Låg");
+
+            int choice = 0;
+
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+
+            customer.CreditRating = (Enums.CreditRating)(choice - 1);
+
+            Console.WriteLine($"Kundens kreditvärdighet är nu {customer.CreditRating}");
+        }
+
+        // method that displays the menu to let admins update base Interest
+        public static void UpdateLoanBaseInterest()
+        {
+            Console.WriteLine("----- AKTIV GRUNDRÄNTA -----");
+            Console.WriteLine($"[1] Hög kreditvärdighet: {LoanInterestRules.HighRate:P2}");
+            Console.WriteLine($"[2] Medel kreditvärdighet: {LoanInterestRules.MediumRate:P2}");
+            Console.WriteLine($"[3] Låg kreditvärdighet: {LoanInterestRules.LowRate:P2}\n");
+            Console.WriteLine("Vilken vill du ändra?");
+
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+
+            Enums.CreditRating rating = (Enums.CreditRating)(choice - 1);
+
+            Console.Write("Ange ny ränta i procent: ");
+
+            decimal newInterest = 0;
+
+            while (!decimal.TryParse(Console.ReadLine(), out newInterest) || newInterest < 0 || newInterest > 100)
+            {
+                Console.WriteLine("Ange en ränta mellan 0 och 100!");
+            }
+
+            LoanInterestRules.UpdateBaseInterest(rating, newInterest / 100);
+
+            Console.WriteLine("Grundräntan har uppdaterats!");
+        }
+
+        // method that displays the menu to let admins update year Interest
+        public static void UpdateLoanTermInterest()
+        {
+            Console.WriteLine("----- AKTIV LÅNETIDSRÄNTA -----");
+            Console.WriteLine($"[1] 1-3 år: {LoanInterestRules.ShortTerm:P2}");
+            Console.WriteLine($"[2] 4-7 år: {LoanInterestRules.MediumTerm:P2}");
+            Console.WriteLine($"[3] 8-10 år: {LoanInterestRules.LongTerm:P2}\n");
+            Console.WriteLine("Vilken vill du ändra?");
+
+            int choice = 0;
+            while (!int.TryParse(Console.ReadLine(), out choice) || choice < 1 || choice > 3)
+            {
+                Console.WriteLine("Du måste ange ett tall mellan 1-3");
+            }
+
+            Console.Write("Ange en ränta i procent (t.ex. -1 eller 2): ");
+
+            decimal adjustment;
+
+            while (!decimal.TryParse(Console.ReadLine(), out adjustment) || adjustment < -100 || adjustment > 100)
+            {
+                Console.WriteLine("Ange ett värde mellan -100 och 100!");
+            }
+
+            LoanInterestRules.UpdateTermInterest(choice, adjustment / 100);
+
+            Console.WriteLine("Lånetidens ränta har uppdaterats!");
+        }
     }
 }
 

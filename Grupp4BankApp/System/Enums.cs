@@ -33,6 +33,12 @@ namespace Grupp4BankApp.System
             customer,
             admin
         }
+        public enum CreditRating
+        {
+            high,
+            medium,
+            low
+        }
 
     }
 }
