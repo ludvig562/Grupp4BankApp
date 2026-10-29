@@ -124,15 +124,11 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
-                        Console.WriteLine("------------------------------------\n\n");
+                        WriteMessageInterestSavingsAccount(account);
+                        Console.WriteLine("------------------------------------");
                     }
                 }
             }
-
-            // Waits for the customer to press Enter before returning to the menu
-            //Console.WriteLine("\nTryck på Enter för att återgå till menyn.");
-            //Console.ReadKey();
-            //Console.Clear();
         }
 
 
@@ -205,7 +201,7 @@ namespace Grupp4BankApp.Users
         }
 
 
-        //------ CUSTOMER DEPOSITS MONEY IN THEIR OWN ACCOUNT ------//
+        //------ CUSTOMER DEPOSITS/WITHDRAWS MONEY IN/FROM THEIR OWN ACCOUNT ------//
 
         //method for depositing money into account
         public void DepositMoney()
@@ -228,6 +224,8 @@ namespace Grupp4BankApp.Users
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     depositCompleted = true;
+                    Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
@@ -281,6 +279,8 @@ namespace Grupp4BankApp.Users
                     account.Withdraw(withdrawalAmountMoney); //method for depositing money (in bankaccount class)
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     withdrawalCompleted = true;
+                    Console.ReadKey();
+                    Console.Clear();
                 }
                 else
                 {
@@ -410,11 +410,13 @@ namespace Grupp4BankApp.Users
                                 $"Valuta: {account.Currency}\n" +
                                 $"Bankkontonummer: {account.BankAccountNumber}\n" +
                                 $"Konto saldo: {account.AccountBalance}\n");
+            Console.ReadKey();
+            Console.Clear();
         }
 
         public static void WriteMessageInterestSavingsAccount(BankAccount account)
         {
-            if (account.AccountType == Enums.AccountType.savingsAccount)
+            if (account.AccountType == Enums.AccountType.savingsAccount && account.AccountBalance > 0)
             {
                 decimal yearlyInterest = account.CalculateInterest();
                 Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest} {account.Currency}.\n");

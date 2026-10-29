@@ -128,6 +128,8 @@ namespace Grupp4BankApp.Menus
                         // Gets the logged-in customer and displays their bank accounts
                         Console.Clear();
                         currentUser.ShowBankAccounts();
+                        Console.ReadKey();
+                        Console.Clear();
                         break;
                     case "Öppna nya konto":
                         currentUser.OpenBankAccount(); //customer opens bank account

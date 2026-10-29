@@ -136,6 +136,8 @@ namespace Grupp4BankApp.Transaction
                     }
                 }
                 TransferFunds(fromAccount, toAccount);
+                Console.ReadKey();
+                Console.Clear();
 
             }
 
@@ -146,7 +148,7 @@ namespace Grupp4BankApp.Transaction
             AnsiConsole.MarkupLine($"[bold white]Tillgängligt saldo:[/] [green1]{fromAccount.AccountBalance:N2}[/][bold white] {fromAccount.Currency}[/]");
             AnsiConsole.WriteLine();
             decimal amount = AnsiConsole.Prompt(
-                new TextPrompt<decimal>("[bold white]Ange belopp att  överföra:[/]")
+                new TextPrompt<decimal>("[bold white]Ange belopp att överföra:[/]")
                 .PromptStyle(Color.White)
                     .ValidationErrorMessage("[red]Ange ett giltigt belopp.[/]")
                     .Validate(value =>
