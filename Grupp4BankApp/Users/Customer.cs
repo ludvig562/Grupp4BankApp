@@ -13,16 +13,16 @@ namespace Grupp4BankApp.Users
 {
     internal class Customer : User
     {
-        //properties: lists for bankaccounts
-        public List<BankAccount> CheckingAccounts { get; set; }
-        public List<BankAccount> SavingsAccounts { get; set; }
-        public Enums.CreditRating CreditRating { get; set; }
-        public List<Loan> Loans { get; set; }
+        public List<BankAccount> CheckingAccounts { get; set; } //list for checking accounts
+        public List<BankAccount> SavingsAccounts { get; set; } //list for savings accounts
+        public Enums.CreditRating CreditRating { get; set; } //property for credit rating (related to loans)
+        public List<Loan> Loans { get; set; } //list for loans
+
 
         //constructor, child from User class
         public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
-            Role = Enums.UserRole.customer; //automatically add the role of customer
+            Role = Enums.UserRole.customer; //automatically add the role of customer when creating a customer
             CheckingAccounts = new List<BankAccount>();
             SavingsAccounts = new List<BankAccount>();
             CreditRating = Enums.CreditRating.medium;
@@ -40,7 +40,8 @@ namespace Grupp4BankApp.Users
                 //ask customer which info they wish to update
                 Console.WriteLine("Vilken information vill du uppdatera?\n" +
                 "[1] Emailaddress\n" +
-                "[2] Lösenord\n");
+                "[2] Lösenord\n" +
+                "[3] Gå tillbaka till huvudmeny");
 
                 if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
                 {
@@ -50,18 +51,25 @@ namespace Grupp4BankApp.Users
                             UpdateEmail();
                             informationUpdated = true;
                             break;
+
                         case 2: //update password
                             UpdatePassword();
                             informationUpdated = true;
                             break;
-                        default:
-                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
+
+                        case 3: //return back to main menu
+                            informationUpdated = true;
+                            Console.Clear();
+                            break;
+
+                        default: //if user input is not 1 or 2
+                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 3.");
                             break;
                     }
                 }
-                else
+                else //if user input is not a number
                 {
-                    Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+                    Console.WriteLine("Du måste ange en siffra! (Mellan 1 och 3).");
                 }
             }
         }
@@ -69,18 +77,18 @@ namespace Grupp4BankApp.Users
         //method for updating customer email address
         public void UpdateEmail()
         {
-            Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n");
-            string newEmailAddress = Admin.GetMailAddress();
-            this.Email = newEmailAddress;
-            Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}");
+            Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n"); //show current mailaddress
+            string newEmailAddress = Admin.GetMailAddress(); //get new mailaddress
+            this.Email = newEmailAddress; //update mailaddress to new one
+            Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}"); //confirmation message
         }
 
         //method for updating customer password
         public void UpdatePassword()
         {
-            string newPassword = Admin.GetPassword();
-            this.Password = PasswordHasher.HashPassword(newPassword);
-            Console.WriteLine("Du har nu bytt ditt lösenord.");
+            string newPassword = Admin.GetPassword(); //get new password
+            this.Password = PasswordHasher.HashPassword(newPassword); //update password to new one
+            Console.WriteLine("Du har nu bytt ditt lösenord."); //confirmation message (not showing pw here due to security)
         }
 
 
@@ -138,14 +146,16 @@ namespace Grupp4BankApp.Users
         //method to open new bankaccount
         public void OpenBankAccount()
         {
-            // Which type of bankaccount do they want (check or savings)
-            Console.WriteLine("Vilken typ av konto vill du öppna?");
-            Console.WriteLine("[1] Vanligt konto");
-            Console.WriteLine("[2] Sparkonto");
             bool accountTypeChosen = false;
 
             while (!accountTypeChosen)
             {
+                // Which type of bankaccount do they want (check or savings)
+                Console.WriteLine("Vilken typ av konto vill du öppna?\n" +
+                    "[1] Vanligt konto\n" +
+                    "[2] Sparkonto\n" +
+                    "[3] Gå tillbaka till huvudmeny");
+
                 if (int.TryParse(Console.ReadLine(), out int accountType))
                 {
                     // Create a BankAccount object of the correct type
@@ -161,8 +171,13 @@ namespace Grupp4BankApp.Users
                             accountTypeChosen = true; //end while loop
                             break;
 
-                        default: //if user input is a number but not 1 or 2
-                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 2!\n");
+                        case 3: //return to main menu
+                            accountTypeChosen = true;
+                            Console.Clear();
+                            break;
+
+                        default: //if user input is a number but not 1, 2 or 3
+                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 3!\n");
                             break;
                     }
                 }
@@ -215,6 +230,7 @@ namespace Grupp4BankApp.Users
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
                 {
                     BankAccount account = FindBankAccount(bankNumber); //find the chosen bank account
+
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
@@ -224,6 +240,7 @@ namespace Grupp4BankApp.Users
 
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
+                    //add deposit to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
@@ -231,7 +248,7 @@ namespace Grupp4BankApp.Users
                     Console.ReadKey();
                     Console.Clear();
                 }
-                else
+                else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
                     Console.ReadKey();
@@ -290,6 +307,7 @@ namespace Grupp4BankApp.Users
                     }
                     decimal withdrawalMoneyAmount = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
                     account.Withdraw(withdrawalMoneyAmount); //method for withdrawing money (in bankaccount class)
+                    //add withdrawal to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, withdrawalMoneyAmount, false);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
@@ -297,7 +315,7 @@ namespace Grupp4BankApp.Users
                     Console.ReadKey();
                     Console.Clear();
                 }
-                else
+                else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
                     Console.ReadKey();
@@ -429,8 +447,10 @@ namespace Grupp4BankApp.Users
             Console.Clear();
         }
 
+        //method for writing out a message about the interest on savings accounts
         public static void WriteMessageInterestSavingsAccount(BankAccount account)
         {
+            //check if account is savings account and if there is money on the account
             if (account.AccountType == Enums.AccountType.savingsAccount && account.AccountBalance > 0)
             {
                 decimal yearlyInterest = account.CalculateInterest();
