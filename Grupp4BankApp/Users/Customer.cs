@@ -73,18 +73,18 @@ namespace Grupp4BankApp.Users
         //method for updating customer email address
         public void UpdateEmail()
         {
-            Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n");
-            string newEmailAddress = Admin.GetMailAddress();
-            this.Email = newEmailAddress;
-            Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}");
+            Console.WriteLine($"Ditt nuvarande mejladdress är: {this.Email}\n"); //show current mailaddress
+            string newEmailAddress = Admin.GetMailAddress(); //get new mailaddress
+            this.Email = newEmailAddress; //update mailaddress to new one
+            Console.WriteLine($"Du har nu bytt till följande mejladdress: {this.Email}"); //confirmation message
         }
 
         //method for updating customer password
         public void UpdatePassword()
         {
-            string newPassword = Admin.GetPassword();
-            this.Password = PasswordHasher.HashPassword(newPassword);
-            Console.WriteLine("Du har nu bytt ditt lösenord.");
+            string newPassword = Admin.GetPassword(); //get new password
+            this.Password = PasswordHasher.HashPassword(newPassword); //update password to new one
+            Console.WriteLine("Du har nu bytt ditt lösenord."); //confirmation message (not showing pw here due to security)
         }
 
 
