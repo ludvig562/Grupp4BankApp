@@ -1,10 +1,20 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Grupp4BankApp.System
 {
+    // Data stored in the exchange rates file
+    internal class ExchangeRateData
+    {
+        public decimal EurRate { get; set; }
+
+        public decimal UsdRate { get; set; }
+
+        public DateTime LastUpdated { get; set; }
+    }
     internal static class ExchangeRates
     {
         // Reuse the same HTTP client for all requests
@@ -19,6 +29,55 @@ namespace Grupp4BankApp.System
 
         // Store the date when the administrator approved the rates
         private static DateTime? lastUpdated;
+
+        // Store the file next to the application
+        private static readonly string ratesFilePath = Path.Combine(AppContext.BaseDirectory, "exchangeRates.json");
+
+        // Load saved rates when this class is first used
+        static ExchangeRates()
+        {
+            LoadRates();
+        }
+
+        // Read saved rates from the JSON file
+        private static void LoadRates()
+        {
+            if (!File.Exists(ratesFilePath))
+            {
+                return;
+            }
+
+            try
+            {
+                string json = File.ReadAllText(ratesFilePath);
+
+                ExchangeRateData? savedRates = JsonSerializer.Deserialize<ExchangeRateData>(json);
+
+                // Only load valid rates
+                if (savedRates == null ||
+                    savedRates.EurRate <= 0 ||
+                    savedRates.UsdRate <= 0)
+                {
+                    return;
+                }
+
+                eurRate = savedRates.EurRate;
+                usdRate = savedRates.UsdRate;
+                lastUpdated = savedRates.LastUpdated;
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Kunde inte läsa sparade växelkurser.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Saknar behörighet att läsa sparade växelkurser.");
+            }
+            catch (JsonException)
+            {
+                Console.WriteLine("Filen med växelkurser har ett ogiltigt format.");
+            }
+        }
 
         public static bool UpdatedToday()
         {
@@ -79,11 +138,23 @@ namespace Grupp4BankApp.System
                     return;
                 }
 
-                // Replace existing rates only after both requests succeed
-                // and the administrator approves the new values
-                eurRate = eur.Rate;
-                usdRate = usd.Rate;
-                lastUpdated = DateTime.Today;
+                // Create the data that will be saved to the file
+                ExchangeRateData ratesToSave = new ExchangeRateData
+                {
+                    EurRate = eur.Rate,
+                    UsdRate = usd.Rate,
+                    LastUpdated = DateTime.Today
+                };
+
+                // Convert the rates to JSON and save them to a file
+                string json = JsonSerializer.Serialize(ratesToSave,new JsonSerializerOptions { WriteIndented = true });
+
+                File.WriteAllText(ratesFilePath, json);
+
+                // Update the rates in memory after the file has been saved
+                eurRate = ratesToSave.EurRate;
+                usdRate = ratesToSave.UsdRate;
+                lastUpdated = ratesToSave.LastUpdated;
 
                 Console.WriteLine("Växelkurserna har sparats.\n");
             }
@@ -111,6 +182,14 @@ namespace Grupp4BankApp.System
             catch (global::System.Collections.Generic.KeyNotFoundException)
             {
                 Console.WriteLine("Valutatjänstens svar saknar uppgifter.");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Kunde inte spara växelkurserna till fil.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Saknar behörighet att spara växelkurserna.");
             }
         }
 
