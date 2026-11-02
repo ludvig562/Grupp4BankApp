@@ -1,5 +1,6 @@
 ﻿using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
+using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 using System.Security.Principal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -185,6 +186,8 @@ namespace Grupp4BankApp.Transaction
                 pendingTransactions.Enqueue(transaction);
             }
 
+       
+
             AddTransactionToLogg(fromAccount, toAccount, amount);
 #if RELEASE
             AnsiConsole.Progress()
@@ -204,7 +207,10 @@ namespace Grupp4BankApp.Transaction
             AnsiConsole.MarkupLine("[green]Transaction complete! Avaliable in 15 Minutes.[/]");
 #elif DEBUG
 
-            Console.WriteLine("Överföringen har lagts i kö och behandlas om cirka 15 minuter.");
+            AnsiConsole.MarkupLine("[green]Transaction complete! Avaliable in 15 Minutes.[/]");
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[grey]Any key to continue[/]");
+
 #endif
 
         }
@@ -280,9 +286,11 @@ namespace Grupp4BankApp.Transaction
 
                 if (pickedAccount.TransactionsLogg.Count == 0)
                 {
-                    AnsiConsole.MarkupLine(
-                        "[yellow]Det finns inga transaktioner för detta konto.[/]"
-                    );
+                    AnsiConsole.MarkupLine("[yellow]Det finns inga transaktioner för detta konto.[/]"  );
+                    AnsiConsole.WriteLine();
+                    AnsiConsole.MarkupLine("[grey]Any key to continue[/]");
+                    Console.ReadLine();
+                    Console.Clear();
                     return;
                 }
 
@@ -317,6 +325,7 @@ namespace Grupp4BankApp.Transaction
                 }
 
                 AnsiConsole.Write(table);
+                AnsiConsole.WriteLine();
                 AnsiConsole.MarkupLine("[grey]Any key to continue[/]");
                 Console.ReadLine();
                 Console.Clear();
@@ -444,11 +453,33 @@ namespace Grupp4BankApp.Transaction
         }
 
 
-        public void AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount, decimal amount)
+        public async Task AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
             Customer? sender = FindAccountOwner(fromAccount);
             Customer? reciever = FindAccountOwner(toAccount);
 
+            var configuration = AppConfig.AppConfig.Configuration;
+            var notificationService = new NotificationService(configuration);
+#if RELEASE
+            if (amount >= 800)
+            {
+                var senderMail = sender.Email;
+                var reciverMail = reciever.Email;
+                try
+                {
+                    await notificationService.SendTransactionEmailAsync(
+                        senderMail,
+                        amount,
+                        "Överföring med STOR SUMMA!!!!!!"
+                    );
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Kunde inte skicka e-post: {ex.Message}");
+                }
+            }
+#endif
             //Sender
             TransactionLogg SenderLogg = new TransactionLogg
             {

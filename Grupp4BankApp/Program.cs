@@ -1,20 +1,24 @@
 ﻿﻿using Grupp4BankApp.Manager;
 using Grupp4BankApp.System;
+using Grupp4BankApp.Transaction;
 using Grupp4BankApp.Users;
+using Grupp4BankApp.AppConfig;
+using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 using System.ComponentModel.Design;
 using static Grupp4BankApp.Users.User;
-using Grupp4BankApp.Transaction;
-
+using System.Runtime.CompilerServices;
 namespace Grupp4BankApp
 {
     internal class Program
     {
+
         static void Main(string[] args)
         {
 
             //create a customer
-            Customer bob = new Customer("bob", "bob", "test@gmail.com", PasswordHasher.HashPassword("1234"));
+            Customer bob = new Customer("bob", "bob", "mathias.perez@student.chasacademy.se", PasswordHasher.HashPassword("1234"));
             users.Add(bob.Username, bob);
 
             BankAccount newCheckingAccount = new BankAccount(Enums.AccountType.checkingsAccount, "Konto", Enums.CurrencyTypes.SEK);
@@ -61,7 +65,9 @@ namespace Grupp4BankApp
 
             //Bank bank = new();
             //bank.Run();
-        
+
+            AppConfig.AppConfig.Configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+
 
             MenuManager.Init();
 
