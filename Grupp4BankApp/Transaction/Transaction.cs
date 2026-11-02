@@ -507,12 +507,13 @@ namespace Grupp4BankApp.Transaction
                     Currency = account.Currency
                 },
                 Description = isDeposit
-                    ? $"Insättning till {account.BankAccountName}"
-                    : $"Uttag från {account.BankAccountName}",
+                ? $"Insättning till {account.BankAccountName}"
+                : $"Uttag från {account.BankAccountName}",
 
                 FromCustomerName = owner?.Name,
                 ToCustomerName = owner?.Name,
-                FromAccountName = account.BankAccountName
+                FromAccountName = account.BankAccountName,
+                ToAccountName = account.BankAccountName
             };
             account.TransactionsLogg.Add(logg);
         }
