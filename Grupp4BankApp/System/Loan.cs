@@ -9,16 +9,20 @@ namespace Grupp4BankApp.System
 {
     internal class Loan
     {
-        private Customer? _customer => AuthenticationService.CurrentUser as Customer; //gets the curent logged in user
+        private Customer? _customer => AuthenticationService.CurrentUser as Customer; // Gets the currently logged-in user as a Customer
 
-        private decimal _interestRate;
+        private decimal _interestRate; // Stores the interest rate for this loan
+
+        // Properties that store information about the loan
         public decimal LoanAmount { get; set; }
         public int LoanYears { get; set; }
         public decimal TotalLoan { get; set; }
 
+        
         public Loan()
         {
         }
+        // Constructor that sets the loan information
         public Loan(decimal loanAmount, int loanYears, decimal totalLoan, decimal interestRate)
         {
             LoanAmount = loanAmount;
@@ -27,7 +31,8 @@ namespace Grupp4BankApp.System
             _interestRate = interestRate;
         }
 
-        public void ShowLoanMenu()// loan menu
+        // Displays the loan menu and handles the user's choices
+        public void ShowLoanMenu()
         {
             bool showLoanMenu = true;
             while (showLoanMenu)
@@ -38,12 +43,14 @@ namespace Grupp4BankApp.System
                     "[2] Låna pengar\n" +
                     "[3] Gå tillbaka till huvudmenyn");
                 int loanMenuChoice = 0;
+                // Makes sure the user enters a number between 1 and 3
                 while (!int.TryParse(Console.ReadLine(), out loanMenuChoice) || loanMenuChoice < 1 || loanMenuChoice > 3)
                 {
                     Console.WriteLine("Du måste ange ett nummer mellan 1 och 3!");
                 }
                 if (loanMenuChoice == 1)
                 {
+                    // Displays all loans belonging to the customer
                     PrintLoans();
                     Console.ReadKey();
                     Console.Clear();
@@ -55,29 +62,34 @@ namespace Grupp4BankApp.System
                     Console.WriteLine("Hur mycket vill du låna i SEK?\n" +
                         "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
 
+                    // Validates the amount and checks if the customer is allowed to borrow it
                     while (!int.TryParse(Console.ReadLine(), out loan) ||
                            (loan != 0 && (loan < 0 || !CheckCustomerMoney(loan))))
                     {
                         Console.WriteLine("Ange ett nytt lånebelopp\n" +
                             "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
-                    }                  
+                    }
 
+                    // Returns to the loan menu if the user enters 0
                     if (loan == 0)
                     {
                         continue;
                     }
 
+                    // Shows the customer's checking accounts
                     PrintAccounts();
 
                     Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
                         "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
                     string accountNumber = Console.ReadLine() ?? "";
 
+                    // Cancels the loan request if the user enters 0
                     if (accountNumber == "0")
                     {
                         continue;
                     }
 
+                    // Starts the process of creating the loan
                     MakeLoan(loan, accountNumber);
 
                     Console.ReadKey();
@@ -85,16 +97,19 @@ namespace Grupp4BankApp.System
                 }
                 else
                 {
+                    // Closes the loan menu and returns to the main menu
                     showLoanMenu = false;
                 }
                 Console.Clear();
             }
         }
 
+        // Creates a loan and deposits the money into the selected account
         public void MakeLoan(decimal loan, string accountNumber)
         {
             BankAccount? selectedAccount = null;
 
+            // Searches for the account matching the entered account number
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 if (account.BankAccountNumber.ToString() == accountNumber)
@@ -104,6 +119,7 @@ namespace Grupp4BankApp.System
                 }
             }
 
+            // Stops if the account number does not exist
             if (selectedAccount == null)
             {
                 Console.WriteLine("Kontot finns inte.");
@@ -127,6 +143,7 @@ namespace Grupp4BankApp.System
             // Deposit money into selected account
             selectedAccount.AccountBalance += CalculateLoanExchangeRate(selectedAccount.Currency, loan);
 
+            // Creates a new loan object containing all loan information
             Loan newLoan = new Loan(
                 loan,
                 loanYears,
@@ -134,8 +151,10 @@ namespace Grupp4BankApp.System
                 interestRate
             );
 
+            // Adds the new loan to the customer's list of loans
             _customer.Loans.Add(newLoan);
 
+            // Displays information about the approved loan
             Console.Clear();
             Console.WriteLine($"Du valde kontot: {selectedAccount.BankAccountName}");
             Console.WriteLine($"Lånebelopp: {loan:N2} kr");// skriver ut loan med 2 decimaler
@@ -148,6 +167,7 @@ namespace Grupp4BankApp.System
             Console.WriteLine($"Total återbetalning: {totalLoan:N2} kr");
         }
 
+        // Displays all checking accounts belonging to the customer
         public void PrintAccounts()
         {
             Console.WriteLine("\n----- Dina konton -----\n");
@@ -160,11 +180,12 @@ namespace Grupp4BankApp.System
             }
         }
 
-
+        // Checks if the customer can borrow up to five times their total balance
         public bool CheckCustomerMoney(decimal loan)
         {
             decimal moneyInAccounts = 0;
 
+            // Adds all checking account balances after converting them to SEK
             foreach (BankAccount account in _customer.CheckingAccounts)
             {
                 decimal exchangeRate = ExchangeRates.GetRate(account.Currency);
@@ -177,6 +198,7 @@ namespace Grupp4BankApp.System
                 moneyInAccounts += account.AccountBalance * exchangeRate;
             }
 
+            // Rejects the loan if it exceeds five times the customer's total money
             if (loan > moneyInAccounts * 5)
             {
                 Console.WriteLine(
@@ -190,7 +212,7 @@ namespace Grupp4BankApp.System
         }
 
 
-        //calcultes the total intrest for all the years
+        // Calculates the total repayment amount including interest for all years
         public decimal CalculateTotalInterest(decimal loan, int years, decimal interestRate)
         {
             decimal yearlyAmount = loan / years;
@@ -209,7 +231,8 @@ namespace Grupp4BankApp.System
             return loan + totalInterest;
         }
 
-        public void PrintLoans() // prints all the loans
+        // Displays all loans belonging to the currently logged-in customer
+        public void PrintLoans() 
         {
             if (_customer.Loans.Count == 0)
             {
@@ -219,6 +242,7 @@ namespace Grupp4BankApp.System
 
             Console.WriteLine("-----Dina lån-----");
             int i = 1;
+            // Goes through the customer's loans and displays their information
             foreach (Loan loan in _customer.Loans)
             {
                 Console.WriteLine($"[{i}].");
@@ -231,7 +255,7 @@ namespace Grupp4BankApp.System
             }
         }
 
-        //calculates how much money gets put in to a account if the account is in another curency
+        // Converts a loan amount from SEK to the selected account's currency
         public decimal CalculateLoanExchangeRate(Enums.CurrencyTypes currency, decimal loan)
         {
             switch (currency)
