@@ -62,7 +62,7 @@ namespace Grupp4BankApp.Users
                             Console.Clear();
                             break;
 
-                        default: //if user input is not 1 or 2
+                        default: //if user input is not 1, 2 or 3
                             Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 3.");
                             break;
                     }
