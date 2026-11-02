@@ -20,6 +20,8 @@ namespace Grupp4BankApp.Users
             ExchangeRates.UpdateFromApiAsync().GetAwaiter().GetResult();
         }
 
+        // ------CREATE NEW USER------ //
+
         //method for creating a new user
         public static void CreateCustomer()
         {
@@ -225,6 +227,9 @@ namespace Grupp4BankApp.Users
                 return newCustomerUpdateInfoChoice;
             }
         }
+
+
+        //------ LOAN INTEREST ------//
 
         //runs the menu to either update the base interest or update intrest based on years
         public static void UpdateLoanInterest()
