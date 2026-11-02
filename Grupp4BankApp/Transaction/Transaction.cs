@@ -276,9 +276,6 @@ namespace Grupp4BankApp.Transaction
                 }
 
                 AnsiConsole.WriteLine();
-
-
-
                 AnsiConsole.Write(new Rule("[bold cyan]TRANSAKTIONSHISTORIK[/]").RuleStyle("cyan"));
 
                 if (pickedAccount.TransactionsLogg.Count == 0)
@@ -326,6 +323,7 @@ namespace Grupp4BankApp.Transaction
             }
         }
 
+
         private Customer? FindAccountOwner(BankAccount account)
         {
             return User.users.Values
@@ -335,6 +333,7 @@ namespace Grupp4BankApp.Transaction
                         .Concat(c.SavingsAccounts)
                         .Any(b => b.BankAccountNumber == account.BankAccountNumber));
         }
+
 
         private BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
         {
@@ -444,10 +443,9 @@ namespace Grupp4BankApp.Transaction
             return selectedAccount;
         }
 
+
         public void AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
-
-
             Customer? sender = FindAccountOwner(fromAccount);
             Customer? reciever = FindAccountOwner(toAccount);
 
@@ -490,6 +488,7 @@ namespace Grupp4BankApp.Transaction
             fromAccount.TransactionsLogg.Add(SenderLogg);
             toAccount.TransactionsLogg.Add(ReciverLogg);
         }
+
 
         //add deposits/withdrawalls to transaction log
         public void AddTransactionToLogg(BankAccount account, decimal amount, bool isDeposit)
