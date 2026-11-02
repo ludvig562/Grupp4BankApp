@@ -185,7 +185,7 @@ namespace Grupp4BankApp.Transaction
                 pendingTransactions.Enqueue(transaction);
             }
 
-            AddTransactionToLogg(toAccount, fromAccount, amount);
+            AddTransactionToLogg(fromAccount, toAccount, amount);
 #if RELEASE
             AnsiConsole.Progress()
           .AutoClear(true)
