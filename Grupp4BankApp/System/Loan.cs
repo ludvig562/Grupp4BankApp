@@ -160,26 +160,35 @@ namespace Grupp4BankApp.System
             }
         }
 
-        public bool CheckCustomerMoney(decimal loan)// Checks how much money the customer has in total
+
+        public bool CheckCustomerMoney(decimal loan)
         {
             decimal moneyInAccounts = 0;
-            foreach (BankAccount checkingMoney in _customer.CheckingAccounts)
+
+            foreach (BankAccount account in _customer.CheckingAccounts)
             {
-                moneyInAccounts += checkingMoney.AccountBalance;
+                decimal exchangeRate = ExchangeRates.GetRate(account.Currency);
+                moneyInAccounts += account.AccountBalance * exchangeRate;
             }
 
-            foreach (BankAccount savingsMoney in _customer.SavingsAccounts)
+            foreach (BankAccount account in _customer.SavingsAccounts)
             {
-                moneyInAccounts += savingsMoney.AccountBalance;
+                decimal exchangeRate = ExchangeRates.GetRate(account.Currency);
+                moneyInAccounts += account.AccountBalance * exchangeRate;
             }
 
             if (loan > moneyInAccounts * 5)
             {
-                Console.WriteLine($"Du kan inte låna så mycket max 5 gånger det du har i våran bank\nDu har totalt: {moneyInAccounts} kr");
+                Console.WriteLine(
+                    $"Du kan inte låna så mycket, max 5 gånger det du har i vår bank.\n" +
+                    $"Du har totalt: {moneyInAccounts:N2} SEK");
+
                 return false;
             }
+
             return true;
         }
+
 
         //calcultes the total intrest for all the years
         public decimal CalculateTotalInterest(decimal loan, int years, decimal interestRate)
