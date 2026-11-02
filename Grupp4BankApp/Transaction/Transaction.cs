@@ -2,6 +2,7 @@
 using Grupp4BankApp.Users;
 using Spectre.Console;
 using System.Security.Principal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Grupp4BankApp.Transaction
 {
@@ -39,13 +40,14 @@ namespace Grupp4BankApp.Transaction
                 interval);
         }
 
+
         // Find and execute transactions whose waiting time has passed
         private static void ProcessPendingTransactions(object? state)
         {
             lock (processingLock)
             {
                 List<PendingTransaction> readyTransactions = new List<PendingTransaction>();
-                
+
                 lock (queueLock)
                 {
                     int count = pendingTransactions.Count;
@@ -90,12 +92,13 @@ namespace Grupp4BankApp.Transaction
             }
         }
 
+
         public void TransferMoney()
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
 
-                BankAccount? fromAccount = SelectBankAccount(currentUser.CheckingAccounts,currentUser.SavingsAccounts,"Välj konto att överföra från");
+                BankAccount? fromAccount = SelectBankAccount(currentUser.CheckingAccounts, currentUser.SavingsAccounts, "Välj konto att överföra från");
 
                 if (fromAccount == null)
                 {
@@ -138,10 +141,9 @@ namespace Grupp4BankApp.Transaction
                 TransferFunds(fromAccount, toAccount);
                 Console.ReadKey();
                 Console.Clear();
-
             }
-
         }
+
         public void TransferFunds(BankAccount fromAccount, BankAccount toAccount)
         {
 
@@ -183,7 +185,7 @@ namespace Grupp4BankApp.Transaction
                 pendingTransactions.Enqueue(transaction);
             }
 
-            AddTransactionToLogg(toAccount,fromAccount,amount);
+            AddTransactionToLogg(toAccount, fromAccount, amount);
 #if RELEASE
             AnsiConsole.Progress()
           .AutoClear(true)
@@ -206,9 +208,9 @@ namespace Grupp4BankApp.Transaction
 #endif
 
         }
-        
-            // // Execute a pending transaction when the waiting time has passed
-         private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal belopp)
+
+        // // Execute a pending transaction when the waiting time has passed
+        private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal belopp)
         {
 
             // Keep the original amount when both accounts use the same currency
@@ -255,14 +257,8 @@ namespace Grupp4BankApp.Transaction
                 }
             }
 
-                 // Add the converted amount to the receiving account
-                 toAccount.AccountBalance += receivedAmount;
-
-
-
-         
-
-
+            // Add the converted amount to the receiving account
+            toAccount.AccountBalance += receivedAmount;
         }
 
 
@@ -280,7 +276,7 @@ namespace Grupp4BankApp.Transaction
                 }
 
                 AnsiConsole.WriteLine();
-               
+
 
 
                 AnsiConsole.Write(new Rule("[bold cyan]TRANSAKTIONSHISTORIK[/]").RuleStyle("cyan"));
@@ -404,7 +400,7 @@ namespace Grupp4BankApp.Transaction
             }
 
             AnsiConsole.Live(CreateTable())
-                .Start(ctx => 
+                .Start(ctx =>
                 {
                     ctx.UpdateTarget(CreateTable());
                     ctx.Refresh();
@@ -448,7 +444,7 @@ namespace Grupp4BankApp.Transaction
             return selectedAccount;
         }
 
-        public void AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount,decimal amount)
+        public void AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
 
 
@@ -493,6 +489,34 @@ namespace Grupp4BankApp.Transaction
             };
             fromAccount.TransactionsLogg.Add(SenderLogg);
             toAccount.TransactionsLogg.Add(ReciverLogg);
+        }
+
+        //add deposits/withdrawalls to transaction log
+        public void AddTransactionToLogg(BankAccount account, decimal amount, bool isDeposit)
+        {
+            Customer? owner = FindAccountOwner(account);
+
+            string plusMinus = isDeposit ? "+" : "-";
+
+            TransactionLogg logg = new TransactionLogg
+            {
+                Date = DateTime.Now,
+                Amount = new Amount
+                {
+                    PlusMinus = plusMinus,
+                    Value = amount,
+                    Currency = account.Currency
+                },
+                Description = isDeposit
+                    ? $"Insättning till {account.BankAccountName}"
+                    : $"Uttag från {account.BankAccountName}",
+
+                FromCustomerName = owner?.Name,
+                ToCustomerName = owner?.Name,
+                FromAccountName = account.BankAccountName
+            };
+
+            account.TransactionsLogg.Add(logg);
         }
     }
 }
