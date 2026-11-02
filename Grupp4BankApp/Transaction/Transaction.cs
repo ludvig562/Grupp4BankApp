@@ -209,7 +209,7 @@ namespace Grupp4BankApp.Transaction
 
         }
 
-        // // Execute a pending transaction when the waiting time has passed
+        // Execute a pending transaction when the waiting time has passed
         private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal belopp)
         {
 
@@ -261,7 +261,7 @@ namespace Grupp4BankApp.Transaction
             toAccount.AccountBalance += receivedAmount;
         }
 
-
+        // method to show the transaction log
         public void TransactionLog()
         {
             if (AuthenticationService.CurrentUser is Customer currentUser)
@@ -324,6 +324,7 @@ namespace Grupp4BankApp.Transaction
         }
 
 
+        //method to find the bankaccount owner
         private Customer? FindAccountOwner(BankAccount account)
         {
             return User.users.Values
