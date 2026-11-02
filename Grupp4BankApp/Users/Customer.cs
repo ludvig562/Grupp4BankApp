@@ -172,6 +172,7 @@ namespace Grupp4BankApp.Users
 
                         case 3: //return to main menu
                             accountTypeChosen = true;
+                            Console.Clear();
                             break;
 
                         default: //if user input is a number but not 1, 2 or 3
