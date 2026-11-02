@@ -17,7 +17,8 @@ namespace Grupp4BankApp.System
         public static decimal MediumTerm { get; private set; } = 0.00m;
         public static decimal LongTerm { get; private set; } = 0.02m;
 
-        public static decimal GetBaseInterest(Enums.CreditRating rating)// method to get the interest based on the rating
+        // method to get the interest based on the rating
+        public static decimal GetBaseInterest(Enums.CreditRating rating)
         {
             switch (rating)
             {
@@ -32,7 +33,8 @@ namespace Grupp4BankApp.System
             }
         }
 
-        public static decimal GetTermInterest(int years)// method to het the year intrest based on how logn they pay back the loan 
+        // method to het the year intrest based on how logn they pay back the loan 
+        public static decimal GetTermInterest(int years)
         {
             if (years <= 3)
             {
@@ -46,7 +48,9 @@ namespace Grupp4BankApp.System
 
             return LongTerm;
         }
-        public static decimal CalculateInterestRate(Enums.CreditRating rating, int years)// method to caculate the total intrest rate
+        
+        // method to caculate the total intrest rate
+        public static decimal CalculateInterestRate(Enums.CreditRating rating, int years)
         {
             decimal baseInterest = GetBaseInterest(rating);
             decimal termInterest = GetTermInterest(years);
@@ -54,7 +58,8 @@ namespace Grupp4BankApp.System
             return Math.Max(0m, baseInterest + termInterest);
         }
 
-        public static void UpdateBaseInterest(Enums.CreditRating rating, decimal uppdate)// method to update the properties in this class for base interest
+        // method to update the properties in this class for base interest
+        public static void UpdateBaseInterest(Enums.CreditRating rating, decimal uppdate)
         {
             switch (rating)
             {
@@ -70,7 +75,8 @@ namespace Grupp4BankApp.System
             }
         }
 
-        public static void UpdateTermInterest(int choise, decimal uppdate)// method to update the properties in this class for years interest
+        // method to update the properties in this class for years interest
+        public static void UpdateTermInterest(int choise, decimal uppdate)
         {
             switch (choise)
             {
