@@ -228,6 +228,7 @@ namespace Grupp4BankApp.Users
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
                 {
                     BankAccount account = FindBankAccount(bankNumber); //find the chosen bank account
+
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
@@ -237,6 +238,7 @@ namespace Grupp4BankApp.Users
 
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
+                    //add deposit to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
@@ -244,7 +246,7 @@ namespace Grupp4BankApp.Users
                     Console.ReadKey();
                     Console.Clear();
                 }
-                else
+                else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
                     Console.ReadKey();
@@ -303,6 +305,7 @@ namespace Grupp4BankApp.Users
                     }
                     decimal withdrawalMoneyAmount = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
                     account.Withdraw(withdrawalMoneyAmount); //method for withdrawing money (in bankaccount class)
+                    //add withdrawal to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, withdrawalMoneyAmount, false);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
@@ -310,7 +313,7 @@ namespace Grupp4BankApp.Users
                     Console.ReadKey();
                     Console.Clear();
                 }
-                else
+                else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
                     Console.ReadKey();
