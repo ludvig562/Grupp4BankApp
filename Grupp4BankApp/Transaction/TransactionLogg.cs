@@ -17,10 +17,11 @@ namespace Grupp4BankApp.Transaction
         public Amount Amount { get; set; } = new Amount();
         public string Description { get; set; } = string.Empty;
         public string FromAccountName { get; set; } = string.Empty;
+
         public string ToAccountName { get; set; } = string.Empty;
         public string FromCustomerName { get; set; } = string.Empty;
         public string ToCustomerName { get; set; } = string.Empty;
-
+        public int BankAccountNumber { get; set; }
 
         public override string ToString()
         {

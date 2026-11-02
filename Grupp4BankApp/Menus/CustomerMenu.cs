@@ -109,7 +109,7 @@ namespace Grupp4BankApp.Menus
 
                 var picked = AnsiConsole.Prompt(
                     new SelectionPrompt<string>()
-                        .HighlightStyle(new Style(Color.White, Color.Black))
+                        .HighlightStyle(new Style(Color.Black, Color.Yellow))
                         .WrapAround()
                         .AddChoices(
                             "Lista alla konto",
