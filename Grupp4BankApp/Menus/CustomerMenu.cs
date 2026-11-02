@@ -2,6 +2,7 @@
 using Grupp4BankApp.System;
 using Grupp4BankApp.Transaction;
 using Grupp4BankApp.Users;
+using Microsoft.VisualBasic;
 using Spectre.Console;
 using System.Security.Cryptography.X509Certificates;
 namespace Grupp4BankApp.Menus
@@ -119,6 +120,7 @@ namespace Grupp4BankApp.Menus
                             "Överför pengar",
                             "Låna pengar",
                             "Transaktioner",
+                            "Uppdatera information",
                             "Logga ut"
                         )
                 );
@@ -154,6 +156,10 @@ namespace Grupp4BankApp.Menus
                     case "Transaktioner":
                         Console.Clear();
                         transactionSystem.TransactionLog();
+                        break;
+                    case "Uppdatera information":
+                        Console.Clear();
+                        currentUser.UpdateCustomerInformation();
                         break;
                     case "Logga ut":
                         Console.Clear();
