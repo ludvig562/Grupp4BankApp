@@ -308,9 +308,7 @@ namespace Grupp4BankApp.Transaction
 
                 foreach (var item in pickedAccount.TransactionsLogg)
                 {
-                    string amountColor = item.Amount.PlusMinus == "+"
-                        ? "green"
-                        : "red";
+                    string amountColor = item.Amount.PlusMinus == "+"  ? "green" : "red";
 
                     string amount =
                         $"{item.Amount.PlusMinus}{item.Amount.Value:N2} {item.Amount.Currency}";
@@ -319,7 +317,7 @@ namespace Grupp4BankApp.Transaction
                         Markup.Escape(item.Date.ToString("yyyy-MM-dd HH:mm")),
                         Markup.Escape(item.Description),
                         Markup.Escape($"{item.FromAccountName} ({item.FromCustomerName})"),
-                        Markup.Escape($"{item.ToAccountName} ({item.ToCustomerName})"),
+                        Markup.Escape($"{item.BankAccountNumber} ({item.ToCustomerName})"),
                         $"[{amountColor}]{Markup.Escape(amount)}[/]"
                     );
                 }
@@ -496,6 +494,7 @@ namespace Grupp4BankApp.Transaction
                 ToCustomerName = reciever.Name,
                 FromAccountName = fromAccount.BankAccountName,
                 ToAccountName = toAccount.BankAccountName,
+                BankAccountNumber = toAccount.BankAccountNumber,
 
             };
 
@@ -514,6 +513,7 @@ namespace Grupp4BankApp.Transaction
                 ToCustomerName = reciever.Name,
                 FromAccountName = fromAccount.BankAccountName,
                 ToAccountName = toAccount.BankAccountName,
+                BankAccountNumber = toAccount.BankAccountNumber,
 
             };
             fromAccount.TransactionsLogg.Add(SenderLogg);
