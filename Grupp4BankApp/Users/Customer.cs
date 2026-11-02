@@ -13,16 +13,16 @@ namespace Grupp4BankApp.Users
 {
     internal class Customer : User
     {
-        //properties: lists for bankaccounts
-        public List<BankAccount> CheckingAccounts { get; set; }
-        public List<BankAccount> SavingsAccounts { get; set; }
-        public Enums.CreditRating CreditRating { get; set; }
-        public List<Loan> Loans { get; set; }
+        public List<BankAccount> CheckingAccounts { get; set; } //list for checking accounts
+        public List<BankAccount> SavingsAccounts { get; set; } //list for savings accounts
+        public Enums.CreditRating CreditRating { get; set; } //property for credit rating (related to loans)
+        public List<Loan> Loans { get; set; } //list for loans
+
 
         //constructor, child from User class
         public Customer(string username, string name, string email, string password) : base(username, name, email, password)
         {
-            Role = Enums.UserRole.customer; //automatically add the role of customer
+            Role = Enums.UserRole.customer; //automatically add the role of customer when creating a customer
             CheckingAccounts = new List<BankAccount>();
             SavingsAccounts = new List<BankAccount>();
             CreditRating = Enums.CreditRating.medium;
@@ -40,7 +40,8 @@ namespace Grupp4BankApp.Users
                 //ask customer which info they wish to update
                 Console.WriteLine("Vilken information vill du uppdatera?\n" +
                 "[1] Emailaddress\n" +
-                "[2] Lösenord\n");
+                "[2] Lösenord\n" +
+                "[3] Gå tillbaka till huvudmeny");
 
                 if (int.TryParse(Console.ReadLine(), out int updateInfoMenuChoice)) //check if user input is a number
                 {
@@ -54,7 +55,10 @@ namespace Grupp4BankApp.Users
                             UpdatePassword();
                             informationUpdated = true;
                             break;
-                        default:
+                        case 3: //return back to main menu
+                            informationUpdated = true;
+                            break;
+                        default: //if user input is not 1 or 2
                             Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
                             break;
                     }
