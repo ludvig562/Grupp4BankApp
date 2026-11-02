@@ -59,13 +59,13 @@ namespace Grupp4BankApp.Users
                             informationUpdated = true;
                             break;
                         default: //if user input is not 1 or 2
-                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 2.");
+                            Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 3.");
                             break;
                     }
                 }
-                else
+                else //if user input is not a number
                 {
-                    Console.WriteLine("Du måste ange en siffra mellan 1 och 2.");
+                    Console.WriteLine("Du måste ange en siffra! (Mellan 1 och 3).");
                 }
             }
         }
