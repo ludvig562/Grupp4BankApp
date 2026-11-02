@@ -59,6 +59,7 @@ namespace Grupp4BankApp.Users
 
                         case 3: //return back to main menu
                             informationUpdated = true;
+                            Console.Clear();
                             break;
 
                         default: //if user input is not 1 or 2
