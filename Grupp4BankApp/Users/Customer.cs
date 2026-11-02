@@ -445,8 +445,10 @@ namespace Grupp4BankApp.Users
             Console.Clear();
         }
 
+        //method for writing out a message about the interest on savings accounts
         public static void WriteMessageInterestSavingsAccount(BankAccount account)
         {
+            //check if account is savings account and if there is money on the account
             if (account.AccountType == Enums.AccountType.savingsAccount && account.AccountBalance > 0)
             {
                 decimal yearlyInterest = account.CalculateInterest();
