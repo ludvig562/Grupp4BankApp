@@ -51,13 +51,16 @@ namespace Grupp4BankApp.Users
                             UpdateEmail();
                             informationUpdated = true;
                             break;
+
                         case 2: //update password
                             UpdatePassword();
                             informationUpdated = true;
                             break;
+
                         case 3: //return back to main menu
                             informationUpdated = true;
                             break;
+
                         default: //if user input is not 1 or 2
                             Console.WriteLine("Oops. Du måste välja en siffra mellan 1 och 3.");
                             break;
@@ -142,14 +145,16 @@ namespace Grupp4BankApp.Users
         //method to open new bankaccount
         public void OpenBankAccount()
         {
-            // Which type of bankaccount do they want (check or savings)
-            Console.WriteLine("Vilken typ av konto vill du öppna?");
-            Console.WriteLine("[1] Vanligt konto");
-            Console.WriteLine("[2] Sparkonto");
             bool accountTypeChosen = false;
 
             while (!accountTypeChosen)
             {
+                // Which type of bankaccount do they want (check or savings)
+                Console.WriteLine("Vilken typ av konto vill du öppna?\n" +
+                    "[1] Vanligt konto\n" +
+                    "[2] Sparkonto\n" +
+                    "[3] Gå tillbaka till huvudmeny");
+
                 if (int.TryParse(Console.ReadLine(), out int accountType))
                 {
                     // Create a BankAccount object of the correct type
@@ -165,8 +170,12 @@ namespace Grupp4BankApp.Users
                             accountTypeChosen = true; //end while loop
                             break;
 
-                        default: //if user input is a number but not 1 or 2
-                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 2!\n");
+                        case 3: //return to main menu
+                            accountTypeChosen = true;
+                            break;
+
+                        default: //if user input is a number but not 1, 2 or 3
+                            Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 3!\n");
                             break;
                     }
                 }
