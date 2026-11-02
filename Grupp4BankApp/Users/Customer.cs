@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
+using System.Transactions;
 
 namespace Grupp4BankApp.Users
 {
@@ -223,6 +224,8 @@ namespace Grupp4BankApp.Users
 
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
+                    TransactionSystem transaction = new TransactionSystem();
+                    transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     depositCompleted = true;
                     Console.ReadKey();
@@ -285,8 +288,10 @@ namespace Grupp4BankApp.Users
                         Console.ReadKey();
                         continue;
                     }
-                    decimal withdrawalAmountMoney = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
-                    account.Withdraw(withdrawalAmountMoney); //method for withdrawing money (in bankaccount class)
+                    decimal withdrawalMoneyAmount = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
+                    account.Withdraw(withdrawalMoneyAmount); //method for withdrawing money (in bankaccount class)
+                    TransactionSystem transaction = new TransactionSystem();
+                    transaction.AddTransactionToLogg(account, withdrawalMoneyAmount, false);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     withdrawalCompleted = true;
                     Console.ReadKey();

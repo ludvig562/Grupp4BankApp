@@ -24,7 +24,7 @@ namespace Grupp4BankApp.Transaction
             Amount = amount;
 
             // Schedule the transaction 15 minutes after creation
-            ExecuteAtUtc = DateTimeOffset.UtcNow.AddMinutes(15);
+            ExecuteAtUtc = DateTimeOffset.UtcNow.AddMinutes(1);
         }
     }
 }

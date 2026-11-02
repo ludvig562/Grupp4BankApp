@@ -514,7 +514,6 @@ namespace Grupp4BankApp.Transaction
                 ToCustomerName = owner?.Name,
                 FromAccountName = account.BankAccountName
             };
-
             account.TransactionsLogg.Add(logg);
         }
     }
