@@ -127,6 +127,7 @@ namespace Grupp4BankApp.Transaction
                 if (fromAccount == null)
                 {
                     AnsiConsole.MarkupLine("[yellow]Överföringen avbröts.[/]");
+                    Console.Clear();
                     return;
                 }
 
