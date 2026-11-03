@@ -42,7 +42,6 @@ namespace Grupp4BankApp.Menus
                         case 1: //create a new user account
                             Admin.CreateCustomer();
                             break;
-
                         case 2: // Download and approve exchange rates
                             Admin.UpdateExchangeRates();
                             break;

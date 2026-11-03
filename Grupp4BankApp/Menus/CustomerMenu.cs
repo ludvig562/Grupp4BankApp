@@ -92,9 +92,9 @@ namespace Grupp4BankApp.Menus
 
             while (customerMenuRunning)
             {
-                var panel = new Panel( new Markup(
+                var panel = new Panel(new Markup(
                     "[bold cyan]Välkommen till banken![/]\n\n" +
-                    "[grey]Välj vad du vill göra i menyn.[/]" ))
+                    "[grey]Välj vad du vill göra i menyn.[/]"))
                 {
                     Header = new PanelHeader(" HUVUDMENY "),
                     Border = BoxBorder.Rounded,
@@ -176,11 +176,7 @@ namespace Grupp4BankApp.Menus
 #endif
                         Auth.Logout();
                         return;
-                    default:
-                        Console.WriteLine("Du måste skriva en siffra mellan 1 - 7");
-                        break;
                 }
-
             }
         }
     }
