@@ -59,7 +59,7 @@ namespace Grupp4BankApp.Menus
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();
                             return;
-                        default: //if user input is a number but not between 1 and 3
+                        default: //if user input is a number but not between 1 and 6
                             Console.WriteLine("Oops. Ogiltigt val. Välj en siffra mellan 1 och 6!\n");
                             break;
                     }
