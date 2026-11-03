@@ -485,7 +485,7 @@ namespace Grupp4BankApp.Users
             if (account.AccountType == Enums.AccountType.savingsAccount && account.AccountBalance > 0)
             {
                 decimal yearlyInterest = account.CalculateInterest();
-                Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest} {account.Currency}.\n");
+                Console.WriteLine($"Din beräknade årsränta är: {yearlyInterest:N2} {account.Currency}.\n");
             }
         }
 
