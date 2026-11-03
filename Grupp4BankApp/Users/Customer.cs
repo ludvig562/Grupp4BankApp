@@ -3,6 +3,7 @@ using Grupp4BankApp.System;
 using Grupp4BankApp.Transaction;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
@@ -279,16 +280,23 @@ namespace Grupp4BankApp.Users
         }
 
 
-        //method for depositing money into account
+        //method for withdrawing money from account
         public void WithDrawMoney()
         {
             bool withdrawalCompleted = false;
             while (!withdrawalCompleted)
             {
                 ShowBankAccounts(); //show overview of all their accounts
-                Console.WriteLine("Från vilket konto vill du ta ut pengar? Fyll i ditt bankkontonummer.");
+                Console.WriteLine("Från vilket konto vill du ta ut pengar? Fyll i ditt bankkontonummer.\n" +
+                    "(Eller angå 0 för att gå tillbaka till huvudmenyn.)");
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
                 {
+                    if (bankNumber == 0)
+                    {
+                        Console.Clear();
+                        return;
+                    }
+
                     BankAccount account = FindBankAccount(bankNumber); //find the chosen bank account
                     if (account == null) //if account number does not exist
                     {
