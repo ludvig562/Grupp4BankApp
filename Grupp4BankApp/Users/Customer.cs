@@ -14,6 +14,7 @@ namespace Grupp4BankApp.Users
 {
     internal class Customer : User
     {
+        TransactionSystem transaction = new TransactionSystem();
         public List<BankAccount> CheckingAccounts { get; set; } //list for checking accounts
         public List<BankAccount> SavingsAccounts { get; set; } //list for savings accounts
         public Enums.CreditRating CreditRating { get; set; } //property for credit rating (related to loans)
