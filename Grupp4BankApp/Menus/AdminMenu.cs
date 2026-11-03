@@ -1,6 +1,7 @@
 ﻿using Grupp4BankApp.Manager;
 using Grupp4BankApp.System;
 using Grupp4BankApp.Users;
+using Grupp4BankApp.Transaction;
 
 namespace Grupp4BankApp.Menus
 {
@@ -8,7 +9,7 @@ namespace Grupp4BankApp.Menus
     {
         public static AuthenticationService Auth = new();
 
-        public AdminMenu( )
+        public AdminMenu()
         {
         }
 
@@ -29,7 +30,8 @@ namespace Grupp4BankApp.Menus
                     "[2] Uppdatera växelkurs\n" +
                     "[3] Ändra ränta regler\n" +
                     "[4] Ändra kundens kreditvärdighet\n" +
-                    "[5] Avsluta meny/logga ut");
+                    "[5] Visa transaktionsstatistik\n" +
+                    "[6] Avsluta meny/logga ut");
 
                 //check if user input is a number
                 if (int.TryParse(Console.ReadLine(), out int adminMenuChoice)) //if user input is a number
@@ -50,7 +52,10 @@ namespace Grupp4BankApp.Menus
                         case 4:// update customers kredit rating
                             Admin.UpdateCustomerCreditRating();
                             break;
-                        case 5: //end admin menu
+                        case 5: // Show transaction statistics
+                            TransactionStatistics.ShowStatistics();
+                            break;
+                        case 6: //end admin menu
                             Console.Clear();
                             Console.WriteLine("Du har loggats ut ");
                             Auth.Logout();

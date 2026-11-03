@@ -75,21 +75,43 @@ namespace Grupp4BankApp.Transaction
                 TransactionSystem transactionSystem = new TransactionSystem();
 
                 foreach (PendingTransaction transaction in readyTransactions)
-                {
-                    try
+                    lock (transaction.FromAccount)
                     {
-                        transactionSystem.ExecuteTransfer(
-                            transaction.FromAccount,
-                            transaction.ToAccount,
-                            transaction.Amount);
+                        try
+                        {
+                            transactionSystem.ExecuteTransfer(
+                                transaction.FromAccount,
+                                transaction.ToAccount,
+                                transaction.Amount);
+                        }
+                        catch (Exception)
+                        {
+                            // Reports the error without automatically repeating the transfer
+                            Console.WriteLine(
+                                "Ett oväntat fel uppstod vid överföringen. " +
+                                "Kontrollera konton och transaktionshistorik.");
+                        }
+                        finally
+                        {
+                            // Releases the reservation after this transaction is processed
+                            transaction.FromAccount.ReservedAmount -= transaction.Amount;
+                        }
                     }
-                    catch (Exception)
-                    {
-                        // Report the error without automatically repeating the transfer
-                        Console.WriteLine("Ett oväntat fel uppstod vid överföringen. " +
-                            "Kontrollera konton och transaktionshistorik.");
-                    }
-                }
+                //{
+                //    try
+                //    {
+                //        transactionSystem.ExecuteTransfer(
+                //            transaction.FromAccount,
+                //            transaction.ToAccount,
+                //            transaction.Amount);
+                //    }
+                //    catch (Exception)
+                //    {
+                //        // Report the error without automatically repeating the transfer
+                //        Console.WriteLine("Ett oväntat fel uppstod vid överföringen. " +
+                //            "Kontrollera konton och transaktionshistorik.");
+                //    }
+                //}
             }
         }
 
@@ -99,7 +121,8 @@ namespace Grupp4BankApp.Transaction
             if (AuthenticationService.CurrentUser is Customer currentUser)
             {
 
-                BankAccount? fromAccount = SelectBankAccount(currentUser.CheckingAccounts, currentUser.SavingsAccounts, "Välj konto att överföra från");
+                BankAccount? fromAccount = SelectBankAccount(currentUser.CheckingAccounts,
+                    currentUser.SavingsAccounts, "Välj konto att överföra från");
 
                 if (fromAccount == null)
                 {
@@ -115,9 +138,9 @@ namespace Grupp4BankApp.Transaction
                     int bankNumber = AnsiConsole.Prompt(
                         new TextPrompt<int>("[bold white]Ange mottagarens banknummer:[/]")
                         .PromptStyle(Color.White)
-                            .ValidationErrorMessage("[red]Banknumret måste innehålla minst 4 siffror.[/]")
-                            .Validate(number => number >= 1000 ? ValidationResult.Success() : ValidationResult.Error("[red]Banknumret måste innehålla minst 4 siffror.[/]")
-                            )
+                        .ValidationErrorMessage("[red]Banknumret måste innehålla minst 4 siffror.[/]")
+                        .Validate(number => number >= 1000 ? ValidationResult.Success() :
+                        ValidationResult.Error("[red]Banknumret måste innehålla minst 4 siffror.[/]"))
                     );
 
                     AnsiConsole.WriteLine();
@@ -148,30 +171,32 @@ namespace Grupp4BankApp.Transaction
         public void TransferFunds(BankAccount fromAccount, BankAccount toAccount)
         {
 
-            AnsiConsole.MarkupLine($"[bold white]Tillgängligt saldo:[/] [green1]{fromAccount.AccountBalance:N2}[/][bold white] {fromAccount.Currency}[/]");
+            //AnsiConsole.MarkupLine($"[bold white]Tillgängligt saldo:[/] [green1]{fromAccount.AccountBalance:N2}[/][bold white] {fromAccount.Currency}[/]");
+            AnsiConsole.MarkupLine($"[bold white]Tillgängligt saldo:[/] [green1]{fromAccount.AvailableBalance:N2}[/][bold white] {fromAccount.Currency}[/]");
             AnsiConsole.WriteLine();
             decimal amount = AnsiConsole.Prompt(
                 new TextPrompt<decimal>("[bold white]Ange belopp att överföra:[/]")
                 .PromptStyle(Color.White)
-                    .ValidationErrorMessage("[red]Ange ett giltigt belopp.[/]")
-                    .Validate(value =>
+                .ValidationErrorMessage("[red]Ange ett giltigt belopp.[/]")
+                .Validate(value =>
+                {
+                    if (value < 1)
                     {
-                        if (value < 1)
-                        {
-                            return ValidationResult.Error(
-                                "[red]Beloppet måste vara minst 1.[/]"
-                            );
-                        }
+                        return ValidationResult.Error(
+                            "[red]Beloppet måste vara minst 1.[/]"
+                        );
+                    }
 
-                        if (value > fromAccount.AccountBalance)
-                        {
-                            return ValidationResult.Error(
-                                "[red]Du har inte tillräckligt med pengar på kontot.[/]"
-                            );
-                        }
+                    //if (value > fromAccount.AccountBalance)
+                    if (value > fromAccount.AvailableBalance)
+                    {
+                        return ValidationResult.Error(
+                            "[red]Du har inte tillräckligt med pengar på kontot.[/]"
+                        );
+                    }
 
-                        return ValidationResult.Success();
-                    })
+                    return ValidationResult.Success();
+                })
             );
 
             //fromAccount.AccountBalance -= amount;
@@ -181,12 +206,30 @@ namespace Grupp4BankApp.Transaction
             PendingTransaction transaction = new PendingTransaction(fromAccount, toAccount, amount);
 
             // Add the transaction to the queue
-            lock (queueLock)
+            //lock (queueLock)
+            // {
+            //    pendingTransactions.Enqueue(transaction);
+            // }
+
+            // Reserves the money and adds the transaction to the queue
+            lock (fromAccount)
             {
-                pendingTransactions.Enqueue(transaction);
+                // Checks the balance again before reserving the money
+                if (amount > fromAccount.AvailableBalance)
+                {
+                    AnsiConsole.MarkupLine(
+                        "[red]Du har inte tillräckligt med tillgängliga pengar.[/]");
+                    return;
+                }
+
+                lock (queueLock)
+                {
+                    pendingTransactions.Enqueue(transaction);
+                    fromAccount.ReservedAmount += amount;
+                }
             }
 
-       
+
 
             AddTransactionToLogg(fromAccount, toAccount, amount);
 #if RELEASE
@@ -286,7 +329,7 @@ namespace Grupp4BankApp.Transaction
 
                 if (pickedAccount.TransactionsLogg.Count == 0)
                 {
-                    AnsiConsole.MarkupLine("[yellow]Det finns inga transaktioner för detta konto.[/]"  );
+                    AnsiConsole.MarkupLine("[yellow]Det finns inga transaktioner för detta konto.[/]");
                     AnsiConsole.WriteLine();
                     AnsiConsole.MarkupLine("[grey]Any key to continue[/]");
                     Console.ReadLine();
@@ -308,7 +351,7 @@ namespace Grupp4BankApp.Transaction
 
                 foreach (var item in pickedAccount.TransactionsLogg)
                 {
-                    string amountColor = item.Amount.PlusMinus == "+"  ? "green" : "red";
+                    string amountColor = item.Amount.PlusMinus == "+" ? "green" : "red";
 
                     string amount =
                         $"{item.Amount.PlusMinus}{item.Amount.Value:N2} {item.Amount.Currency}";

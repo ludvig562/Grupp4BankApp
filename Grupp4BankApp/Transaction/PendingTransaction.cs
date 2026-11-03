@@ -17,7 +17,7 @@ namespace Grupp4BankApp.Transaction
         // Time when the transaction can be executed
         public DateTimeOffset ExecuteAtUtc { get; }
 
-        public PendingTransaction(BankAccount fromAccount,BankAccount toAccount,decimal amount)
+        public PendingTransaction(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
             FromAccount = fromAccount;
             ToAccount = toAccount;

@@ -142,7 +142,7 @@ namespace Grupp4BankApp.System
                 };
 
                 // Convert the rates to JSON and save them to a file
-                string json = JsonSerializer.Serialize(ratesToSave,new JsonSerializerOptions { WriteIndented = true });
+                string json = JsonSerializer.Serialize(ratesToSave, new JsonSerializerOptions { WriteIndented = true });
 
                 File.WriteAllText(ratesFilePath, json);
 
