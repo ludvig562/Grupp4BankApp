@@ -50,11 +50,13 @@ namespace Grupp4BankApp.Users
                     {
                         case 1: //update email address
                             UpdateEmail();
+                            Console.Clear();
                             informationUpdated = true;
                             break;
 
                         case 2: //update password
                             UpdatePassword();
+                            Console.Clear();
                             informationUpdated = true;
                             break;
 
