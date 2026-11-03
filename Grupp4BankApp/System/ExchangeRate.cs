@@ -9,9 +9,9 @@ namespace Grupp4BankApp.System
     // Data stored in the exchange rates file
     internal class ExchangeRateData
     {
-        public decimal EurRate { get; set; }
+        public decimal EurRate { get; set; } = 10.9596m;
 
-        public decimal UsdRate { get; set; }
+        public decimal UsdRate { get; set; } = 9.789m;
 
         public DateTime LastUpdated { get; set; }
     }
@@ -24,8 +24,8 @@ namespace Grupp4BankApp.System
         };
 
         // Store the value of one EUR and one USD in SEK
-        private static decimal eurRate;
-        private static decimal usdRate;
+        private static decimal eurRate = 10.9596m;
+        private static decimal usdRate = 9.789m;
 
         // Store the date when the administrator approved the rates
         private static DateTime? lastUpdated;
