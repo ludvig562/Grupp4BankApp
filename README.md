@@ -1,4 +1,4 @@
-A console-based banking application built as a group project by [**Svea**](https://github.com/Sfejaaa369), [**Mathias**](https://github.com/TofflanDev), [**Ludvig**](https://github.com/ludvig562), and [**Yvegeniy**](https://github.com/swimman88-spec).
+A console-based banking application built as a group project by [**Svea**](https://github.com/Sfejaaa369), [**Mathias**](https://github.com/TofflanDev), [**Ludvig**](https://github.com/ludvig562), and [**Yevgeniy**](https://github.com/swimman88-spec).
 
 ## Overview
 
