@@ -506,7 +506,7 @@ namespace Grupp4BankApp.Transaction
             if (amount >= 800)
             {
                 var senderMail = sender.Email;
-                var reciverMail = reciever.Email;
+                var reciverMail = receiver.Email;
                 try
                 {
                     await notificationService.SendTransactionEmailAsync(
