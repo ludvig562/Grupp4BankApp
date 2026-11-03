@@ -227,9 +227,16 @@ namespace Grupp4BankApp.Users
             while (!depositCompleted)
             {
                 ShowBankAccounts(); //show overview of all their accounts
-                Console.WriteLine("På vilket konto vill du sätta in pengar? Fyll i ditt bankkontonummer.");
+                Console.WriteLine("På vilket konto vill du sätta in pengar? Fyll i ditt bankkontonummer.\n" +
+                    "(Eller angå 0 för att gå tillbaka till huvudmenyn.)");
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
                 {
+                    if (bankNumber == 0)
+                    {
+                        Console.Clear();
+                        return;
+                    }
+
                     BankAccount account = FindBankAccount(bankNumber); //find the chosen bank account
 
                     if (account == null) //if account number does not exist
@@ -241,7 +248,7 @@ namespace Grupp4BankApp.Users
 
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
-                    //add deposit to transaction log
+                                                         //add deposit to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
