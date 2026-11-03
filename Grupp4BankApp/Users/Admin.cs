@@ -337,6 +337,8 @@ namespace Grupp4BankApp.Users
         }
 
         //------ UPDATE EXCHANGE RATES ------//
+
+        //method to allow admin to accept/deny daily updated exchange rates
         public static void UpdateExchangeRates()
         {
             try
