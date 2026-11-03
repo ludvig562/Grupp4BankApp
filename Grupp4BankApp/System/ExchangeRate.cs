@@ -105,86 +105,35 @@ namespace Grupp4BankApp.System
             return (rate, date);
         }
 
-        // Download and display both rates before asking for approval
-        public static async Task UpdateFromApiAsync()
+        //method for downloading rates
+        public static async Task<(decimal EurRate, decimal UsdRate, DateTime EurDate, DateTime UsdDate)> GetLatestRatesAsync()
         {
-            try
+            var eur = await FetchRateAsync("EUR");
+            var usd = await FetchRateAsync("USD");
+
+            return (eur.Rate, usd.Rate, eur.Date, usd.Date);
+        }
+
+        //save downloaded rates
+        public static void SaveRates(decimal eurRateToSave, decimal usdRateToSave)
+        {
+            ExchangeRateData ratesToSave = new ExchangeRateData
             {
-                Console.WriteLine("Hämtar växelkurser...\n");
+                EurRate = eurRateToSave,
+                UsdRate = usdRateToSave,
+                LastUpdated = DateTime.Today
+            };
 
-                var eur = await FetchRateAsync("EUR");
-                var usd = await FetchRateAsync("USD");
+            string json = JsonSerializer.Serialize(
+                ratesToSave,
+                new JsonSerializerOptions { WriteIndented = true });
 
-                Console.WriteLine($"1 EUR = {eur.Rate} SEK " +
-                    $"(kursdatum: {eur.Date:yyyy-MM-dd})");
+            File.WriteAllText(ratesFilePath, json);
 
-                Console.WriteLine($"1 USD = {usd.Rate} SEK " +
-                    $"(kursdatum: {usd.Date:yyyy-MM-dd})");
-
-                Console.WriteLine("\nVill du spara dessa kurser?");
-                Console.WriteLine("[1] Ja");
-                Console.WriteLine("[2] Nej");
-
-                string choice = Console.ReadLine() ?? "";
-
-                if (choice != "1")
-                {
-                    Console.WriteLine("Kurserna sparades inte.\n");
-                    return;
-                }
-
-                // Create the data that will be saved to the file
-                ExchangeRateData ratesToSave = new ExchangeRateData
-                {
-                    EurRate = eur.Rate,
-                    UsdRate = usd.Rate,
-                    LastUpdated = DateTime.Today
-                };
-
-                // Convert the rates to JSON and save them to a file
-                string json = JsonSerializer.Serialize(ratesToSave, new JsonSerializerOptions { WriteIndented = true });
-
-                File.WriteAllText(ratesFilePath, json);
-
-                // Update the rates in memory after the file has been saved
-                eurRate = ratesToSave.EurRate;
-                usdRate = ratesToSave.UsdRate;
-                lastUpdated = ratesToSave.LastUpdated;
-
-                Console.WriteLine("Växelkurserna har sparats.\n");
-            }
-            catch (HttpRequestException)
-            {
-                Console.WriteLine("Kunde inte hämta växelkurser. Kontrollera internetanslutningen.");
-            }
-            catch (TaskCanceledException)
-            {
-                Console.WriteLine("Förfrågan tog för lång tid. Försök igen.");
-            }
-            catch (JsonException)
-            {
-                Console.WriteLine("Kunde inte läsa svaret från valutatjänsten.");
-            }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine("Valutatjänsten skickade ogiltiga uppgifter.");
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("Valutatjänsten skickade ett ogiltigt format.");
-            }
-            catch (global::System.Collections.Generic.KeyNotFoundException)
-            {
-                Console.WriteLine("Valutatjänstens svar saknar uppgifter.");
-            }
-            catch (IOException)
-            {
-                Console.WriteLine("Kunde inte spara växelkurserna till fil.");
-            }
-            catch (UnauthorizedAccessException)
-            {
-                Console.WriteLine("Saknar behörighet att spara växelkurserna.");
-            }
+            // Update values in memory
+            eurRate = ratesToSave.EurRate;
+            usdRate = ratesToSave.UsdRate;
+            lastUpdated = ratesToSave.LastUpdated;
         }
 
         // Return the value of one currency unit in SEK

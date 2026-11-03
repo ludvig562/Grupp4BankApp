@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json;
 
 namespace Grupp4BankApp.Users
 {
@@ -11,13 +12,6 @@ namespace Grupp4BankApp.Users
         public Admin(string username, string name, string email, string password) : base(username, name, email, password)
         {
             Role = Enums.UserRole.admin; //automatically add the role of admin
-        }
-
-        // Download exchange rates and ask the administrator to approve them
-        public static void UpdateExchangeRates()
-        {
-            // Wait for the request because the existing console menu is synchronous
-            ExchangeRates.UpdateFromApiAsync().GetAwaiter().GetResult();
         }
 
         // ------CREATE NEW USER------ //
@@ -340,6 +334,80 @@ namespace Grupp4BankApp.Users
             LoanInterestRules.UpdateTermInterest(choice, adjustment / 100);
 
             Console.WriteLine("Lånetidens ränta har uppdaterats!");
+        }
+
+        //------ UPDATE EXCHANGE RATES ------//
+
+        //method to allow admin to accept/deny daily updated exchange rates
+        public static void UpdateExchangeRates()
+        {
+            try
+            {
+                Console.WriteLine("Hämtar växelkurser...\n");
+
+                var rates = ExchangeRates
+                    .GetLatestRatesAsync()
+                    .GetAwaiter()
+                    .GetResult();
+
+                Console.WriteLine(
+                    $"1 EUR = {rates.EurRate} SEK " +
+                    $"(kursdatum: {rates.EurDate:yyyy-MM-dd})");
+
+                Console.WriteLine(
+                    $"1 USD = {rates.UsdRate} SEK " +
+                    $"(kursdatum: {rates.UsdDate:yyyy-MM-dd})");
+
+                Console.WriteLine("\nVill du spara dessa kurser?");
+                Console.WriteLine("[1] Ja");
+                Console.WriteLine("[2] Nej");
+
+                string choice = Console.ReadLine() ?? "";
+
+                if (choice != "1")
+                {
+                    Console.WriteLine("Kurserna sparades inte.");
+                    return;
+                }
+
+                ExchangeRates.SaveRates(
+                    rates.EurRate,
+                    rates.UsdRate);
+
+                Console.WriteLine("Växelkurserna har sparats.");
+            }
+            catch (HttpRequestException)
+            {
+                Console.WriteLine("Kunde inte hämta växelkurser. Kontrollera internetanslutningen.");
+            }
+            catch (TaskCanceledException)
+            {
+                Console.WriteLine("Förfrågan tog för lång tid. Försök igen.");
+            }
+            catch (JsonException)
+            {
+                Console.WriteLine("Kunde inte läsa svaret från valutatjänsten.");
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Valutatjänsten skickade ogiltiga uppgifter.");
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("Valutatjänsten skickade ett ogiltigt format.");
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("Valutatjänstens svar saknar uppgifter.");
+            }
+            catch (IOException)
+            {
+                Console.WriteLine("Kunde inte spara växelkurserna till fil.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine("Saknar behörighet att spara växelkurserna.");
+            }
         }
     }
 }
