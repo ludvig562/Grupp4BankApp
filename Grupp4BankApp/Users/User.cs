@@ -9,13 +9,6 @@ namespace Grupp4BankApp.Users
     {
         public static Dictionary<string, User> users = new Dictionary<string, User>();
 
-        private static AuthenticationService? authentication;
-
-        public static void Init()
-        {
-            authentication = new AuthenticationService(users);
-        }
-
         //properties for users - set as protected? (can only be used in class+subclasses)
 
         public string Username { get; set; }

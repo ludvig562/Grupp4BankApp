@@ -8,11 +8,13 @@ namespace Grupp4BankApp.System
 {
     internal class PasswordHasher
     {
-        public static string HashPassword(string password)// Method used for hashing saved paswords
+        // Method used for hashing passwords before saving them
+        public static string HashPassword(string password)
         {
+            // Generates a random 16-byte salt
             byte[] salt = RandomNumberGenerator.GetBytes(16);
 
-            // method that dose a mathematical formula based on the algorith salt and the pasword and prints out a hash
+            // Creates a hash from the password and salt using PBKDF2 with SHA256
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
                 password,
                 salt,
@@ -21,19 +23,24 @@ namespace Grupp4BankApp.System
                 32
             );
 
-            //creates a string with the salt and hash and puts a : in betwen
+            // Converts the salt and hash to Base64 strings and separates them with :
             return Convert.ToBase64String(salt) + ":" +
                    Convert.ToBase64String(hash);
         }
 
-        public static bool VerifyPassword(string password, string storedPassword) // method to verify that entered pasword has the same hash as the saved pasword
+        // Method used to verify an entered password against a saved password hash
+        public static bool VerifyPassword(string password, string storedPassword) 
         {
-            string[] parts = storedPassword.Split(':');// splits the string where the : starts and creates 2 array elements
+            // Splits the stored string at : into two array elements
+            string[] parts = storedPassword.Split(':');
 
-            byte[] salt = Convert.FromBase64String(parts[0]);// takes the first element and ads the content to a byte array
-            byte[] storedHash = Convert.FromBase64String(parts[1]);// takes the second element in the array and creates a byte array
+            // Converts the first element (salt) from Base64 to a byte array
+            byte[] salt = Convert.FromBase64String(parts[0]);
 
-            // method that dose a mathematical formula based on the algorith salt and the pasword and returns true if the saved hash is the same as the entered pasword hash
+            // Converts the second element (stored hash) from Base64 to a byte array
+            byte[] storedHash = Convert.FromBase64String(parts[1]);
+
+            // Creates a new hash using the entered password and the saved salt
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
                 password,
                 salt,
@@ -42,6 +49,7 @@ namespace Grupp4BankApp.System
                 32
             );
 
+            // Compares both hashes and returns true if they match
             return CryptographicOperations.FixedTimeEquals(hash, storedHash);
         }
     }
