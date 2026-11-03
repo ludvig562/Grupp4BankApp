@@ -1,4 +1,4 @@
-A console-based banking application built as a group project by **Svea**, **Mathias**, **Ludvig**, and **Yvegeniy**.
+A console-based banking application built as a group project by [**Svea**](https://github.com/Sfejaaa369), [**Mathias**](https://github.com/TofflanDev), [**Ludvig**](https://github.com/ludvig562), and [**Yvegeniy**](https://github.com/swimman88-spec).
 
 ## Overview
 
@@ -63,7 +63,3 @@ The application uses:
 
 Transactions are scheduled for 15 minutes after creation before they are processed. Passwords are protected using salted PBKDF2 hashing with SHA-256.
 
-Svea: https://github.com/Sfejaaa369
-Mathias: https://github.com/TofflanDev 
-Ludvig: https://github.com/ludvig562
-Yvegeniy: https://github.com/swimman88-spec
