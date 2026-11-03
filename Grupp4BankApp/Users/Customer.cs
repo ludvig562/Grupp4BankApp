@@ -260,6 +260,7 @@ namespace Grupp4BankApp.Users
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
                     //add deposit to transaction log
+                    TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
                     depositCompleted = true;
