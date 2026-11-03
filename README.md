@@ -1,7 +1,11 @@
-Svea
-Mathias
-Ludvig
-Yvegeniy
+Svea: https://github.com/Sfejaaa369
+
+Mathias: https://github.com/TofflanDev
+
+Ludvig: https://github.com/ludvig562
+
+Yvegeniy: https://github.com/swimman88-spec
+
 
 Program: contains hardcoded users, one admin and two customers. Starts and initiates the program and starts a timer for a new thread.
 
