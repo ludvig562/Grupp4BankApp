@@ -13,8 +13,13 @@ namespace Grupp4BankApp.System
         //properties
         private static int _nextBankAccountNumber = 1000; //starting number for bank accounts
         public int BankAccountNumber { get; private set; }
-        public string BankAccountName { get; set; } 
+        public string BankAccountName { get; set; }
         public decimal AccountBalance { get; set; }
+        // Stores money reserved for pending transfers
+        public decimal ReservedAmount { get; set; } = 0m;
+
+        // Calculates the balance available for withdrawals and new transfers
+        public decimal AvailableBalance => AccountBalance - ReservedAmount;
         public decimal SavingsInterestRate { get; private set; } = 0.03m; //3% savings interest rate
         public Enums.CurrencyTypes Currency { get; private set; }
         public Enums.AccountType AccountType { get; private set; }
@@ -34,7 +39,7 @@ namespace Grupp4BankApp.System
         //method that deposits money in account
         public void Deposit(decimal amount)
         {
-            if(amount > 0)
+            if (amount > 0)
             {
                 AccountBalance += amount;
                 Console.WriteLine($"\n{amount} {Currency} har satts in på kontot {BankAccountName}.\n" +
@@ -50,15 +55,19 @@ namespace Grupp4BankApp.System
         //method that withdraws money from account
         public void Withdraw(decimal amount)
         {
-            if (amount > 0 && amount <= AccountBalance)
+            // Prevents simultaneous changes by withdrawals and outgoing transfers
+            lock (this)
             {
-                AccountBalance -= amount;
-                Console.WriteLine($"\n{amount} {Currency} har tagits ur kontot {BankAccountName}.\n" +
-                    $"Din balans är nu: {AccountBalance} {Currency}\n");
-            }
-            else
-            {
-                Console.WriteLine("Ogiltigt belopp.");
+                if (amount > 0 && amount <= AvailableBalance)
+                {
+                    AccountBalance -= amount;
+                    Console.WriteLine($"\n{amount} {Currency} har tagits ur kontot {BankAccountName}.\n" +
+                        $"Din balans är nu: {AccountBalance} {Currency}\n");
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt belopp.");
+                }
             }
         }
 

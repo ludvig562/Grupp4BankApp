@@ -242,7 +242,7 @@ namespace Grupp4BankApp.Users
             {
                 UpdateLoanBaseInterest();
             }
-            else if(choice == 2)
+            else if (choice == 2)
             {
                 UpdateLoanTermInterest();
             }
