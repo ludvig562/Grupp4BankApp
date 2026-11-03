@@ -1,4 +1,5 @@
-﻿using Grupp4BankApp.Users;
+﻿using Grupp4BankApp.Transaction;
+using Grupp4BankApp.Users;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -9,6 +10,7 @@ namespace Grupp4BankApp.System
 {
     internal class Loan
     {
+        TransactionSystem transaction = new TransactionSystem();
         private Customer? _customer => AuthenticationService.CurrentUser as Customer; // Gets the currently logged-in user as a Customer
 
         private decimal _interestRate; // Stores the interest rate for this loan
@@ -76,21 +78,22 @@ namespace Grupp4BankApp.System
                         continue;
                     }
 
-                    // Shows the customer's checking accounts
-                    PrintAccounts();
+                    Console.Clear();
+                    // Lets the customer select a bank account
+                    BankAccount? selectedAccount = transaction.SelectBankAccount(
+                        _customer.CheckingAccounts,
+                        _customer.SavingsAccounts,
+                        "Välj konto för lånet"
+                    );
 
-                    Console.WriteLine("Vilket konto ska pengarna sättas in i?\n" +
-                        "(Eller ange 0 för att avsluta lånförfrågan och gå tillbaka till lånmeny.)");
-                    string accountNumber = Console.ReadLine() ?? "";
-
-                    // Cancels the loan request if the user enters 0
-                    if (accountNumber == "0")
+                    // Cancels the loan request if the user presses Escape
+                    if (selectedAccount == null)
                     {
                         continue;
                     }
 
                     // Starts the process of creating the loan
-                    MakeLoan(loan, accountNumber);
+                    MakeLoan(loan, selectedAccount);
 
                     Console.ReadKey();
                     Console.Clear();
@@ -105,26 +108,27 @@ namespace Grupp4BankApp.System
         }
 
         // Creates a loan and deposits the money into the selected account
-        public void MakeLoan(decimal loan, string accountNumber)
+        public void MakeLoan(decimal loan, BankAccount selectedAccount)
         {
-            BankAccount? selectedAccount = null;
+            //Old code
+            //BankAccount? selectedAccount = null;
 
-            // Searches for the account matching the entered account number
-            foreach (BankAccount account in _customer.CheckingAccounts)
-            {
-                if (account.BankAccountNumber.ToString() == accountNumber)
-                {
-                    selectedAccount = account;
-                    break;
-                }
-            }
+            //// Searches for the account matching the entered account number
+            //foreach (BankAccount account in _customer.CheckingAccounts)
+            //{
+            //    if (account.BankAccountNumber.ToString() == selectedAccount)
+            //    {
+            //        selectedAccount = account;
+            //        break;
+            //    }
+            //}
 
-            // Stops if the account number does not exist
-            if (selectedAccount == null)
-            {
-                Console.WriteLine("Kontot finns inte.");
-                return;
-            }
+            //// Stops if the account number does not exist
+            //if (selectedAccount == null)
+            //{
+            //    Console.WriteLine("Kontot finns inte.");
+            //    return;
+            //}
 
             Console.Write("Ange återbetalningstid i år (1–10): ");
             int loanYears = 0;
@@ -167,18 +171,19 @@ namespace Grupp4BankApp.System
             Console.WriteLine($"Total återbetalning: {totalLoan:N2} kr");
         }
 
-        // Displays all checking accounts belonging to the customer
-        public void PrintAccounts()
-        {
-            Console.WriteLine("\n----- Dina konton -----\n");
-            foreach (BankAccount account in _customer.CheckingAccounts)
-            {
-                Console.WriteLine($"Namn: {account.BankAccountName}");
-                Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
-                Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
-                Console.WriteLine($"Valuta: {account.Currency}\n");
-            }
-        }
+        //Old code
+        //// Displays all checking accounts belonging to the customer
+        //public void PrintAccounts()
+        //{
+        //    Console.WriteLine("\n----- Dina konton -----\n");
+        //    foreach (BankAccount account in _customer.CheckingAccounts)
+        //    {
+        //        Console.WriteLine($"Namn: {account.BankAccountName}");
+        //        Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
+        //        Console.WriteLine($"KontoSaldo: {account.AccountBalance}");
+        //        Console.WriteLine($"Valuta: {account.Currency}\n");
+        //    }
+        //}
 
         // Checks if the customer can borrow up to five times their total balance
         public bool CheckCustomerMoney(decimal loan)
