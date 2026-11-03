@@ -216,11 +216,11 @@ namespace Grupp4BankApp.Transaction
         }
 
         // Execute a pending transaction when the waiting time has passed
-        private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal belopp)
+        private void ExecuteTransfer(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
 
             // Keep the original amount when both accounts use the same currency
-            decimal receivedAmount = belopp;
+            decimal receivedAmount = amount;
 
             // Convert the amount when the account currencies are different
             if (fromAccount.Currency != toAccount.Currency)
@@ -236,7 +236,7 @@ namespace Grupp4BankApp.Transaction
                 decimal toRate = ExchangeRates.GetRate(toAccount.Currency);
 
                 // Convert through SEK and round to two decimal places
-                receivedAmount = Math.Round(belopp * fromRate / toRate, 2, MidpointRounding.AwayFromZero);
+                receivedAmount = Math.Round(amount * fromRate / toRate, 2, MidpointRounding.AwayFromZero);
 
                 // Stop the transfer if the converted amount rounds to zero
                 if (receivedAmount <= 0)
@@ -245,13 +245,13 @@ namespace Grupp4BankApp.Transaction
                     return;
                 }
             }
-            if (fromAccount.AccountBalance >= belopp && belopp >= 1)
+            if (fromAccount.AccountBalance >= amount && amount >= 1)
             {
-                fromAccount.AccountBalance -= belopp;
+                fromAccount.AccountBalance -= amount;
             }
             else
             {
-                if (belopp < 1)
+                if (amount < 1)
                 {
                     Console.WriteLine("Det är under 1, skärp dig");
                     return;
@@ -343,9 +343,8 @@ namespace Grupp4BankApp.Transaction
         }
 
 
-        private BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
+        public BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
         {
-
             AnsiConsole.MarkupLine("[grey]Esc - Avbryt[/]");
             var accounts = checkingAccounts
                 .Select(a => (Account: a, Type: "Checkkonto"))
@@ -455,7 +454,7 @@ namespace Grupp4BankApp.Transaction
         public async Task AddTransactionToLogg(BankAccount fromAccount, BankAccount toAccount, decimal amount)
         {
             Customer? sender = FindAccountOwner(fromAccount);
-            Customer? reciever = FindAccountOwner(toAccount);
+            Customer? receiver = FindAccountOwner(toAccount);
 
             var configuration = AppConfig.AppConfig.Configuration;
             var notificationService = new NotificationService(configuration);
@@ -492,7 +491,7 @@ namespace Grupp4BankApp.Transaction
                 },
                 Description = $"Skickad till {toAccount.BankAccountName}",
                 FromCustomerName = sender.Name,
-                ToCustomerName = reciever.Name,
+                ToCustomerName = receiver.Name,
                 FromAccountName = fromAccount.BankAccountName,
                 ToAccountName = toAccount.BankAccountName,
                 BankAccountNumber = toAccount.BankAccountNumber,
@@ -500,7 +499,7 @@ namespace Grupp4BankApp.Transaction
             };
 
             //Reciever
-            TransactionLogg ReciverLogg = new TransactionLogg
+            TransactionLogg ReceiverLogg = new TransactionLogg
             {
                 Date = DateTime.Now,
                 Amount = new Amount
@@ -511,14 +510,14 @@ namespace Grupp4BankApp.Transaction
                 },
                 Description = $"Mottagen från {fromAccount.BankAccountName}",
                 FromCustomerName = sender.Name,
-                ToCustomerName = reciever.Name,
+                ToCustomerName = receiver.Name,
                 FromAccountName = fromAccount.BankAccountName,
                 ToAccountName = toAccount.BankAccountName,
                 BankAccountNumber = toAccount.BankAccountNumber,
 
             };
             fromAccount.TransactionsLogg.Add(SenderLogg);
-            toAccount.TransactionsLogg.Add(ReciverLogg);
+            toAccount.TransactionsLogg.Add(ReceiverLogg);
         }
 
 
