@@ -343,9 +343,8 @@ namespace Grupp4BankApp.Transaction
         }
 
 
-        private BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
+        public BankAccount? SelectBankAccount(List<BankAccount> checkingAccounts, List<BankAccount> savingsAccounts, string title)
         {
-
             AnsiConsole.MarkupLine("[grey]Esc - Avbryt[/]");
             var accounts = checkingAccounts
                 .Select(a => (Account: a, Type: "Checkkonto"))
