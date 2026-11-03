@@ -119,6 +119,11 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        // Displays reserved money and the available balance
+                        Console.WriteLine(
+                            $"Reserverat: {account.ReservedAmount:N2} {account.Currency}");
+                        Console.WriteLine(
+                            $"Tillgängligt: {account.AvailableBalance:N2} {account.Currency}");
                         Console.WriteLine("------------------------------------");
                     }
                 }
@@ -134,6 +139,11 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine($"Kontonummer: {account.BankAccountNumber}");
                         Console.WriteLine(
                             $"Saldo: {account.AccountBalance:N2} {account.Currency}");
+                        // Displays reserved money and the available balance
+                        Console.WriteLine(
+                            $"Reserverat: {account.ReservedAmount:N2} {account.Currency}");
+                        Console.WriteLine(
+                            $"Tillgängligt: {account.AvailableBalance:N2} {account.Currency}");
                         WriteMessageInterestSavingsAccount(account);
                         Console.WriteLine("------------------------------------");
                     }
@@ -311,11 +321,11 @@ namespace Grupp4BankApp.Users
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
                         continue;
                     }
-                    if (account.AccountBalance <= 0) //if the account balance is zero or less
+                    // Checks whether any unreserved money is available
+                    if (account.AvailableBalance <= 0)
                     {
                         Console.WriteLine(
-                            $"Du har inga pengar på kontot {account.BankAccountNumber}, " +
-                            $"så du kan inte ta ut pengar från detta konto. " +
+                            $"Du har inga tillgängliga pengar på kontot {account.BankAccountNumber}. " +
                             "Välj ett annat konto.");
                         continue;
                     }
@@ -346,16 +356,22 @@ namespace Grupp4BankApp.Users
             {
                 Console.WriteLine("Hur mycket vill du ta ut?");
 
-                if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount) && withDrawalAmount > 0
-                    && withDrawalAmount <= account.AccountBalance && account.AccountBalance > 0)
+                // Checks that the withdrawal does not exceed the available balance
+                if (decimal.TryParse(Console.ReadLine(), out withDrawalAmount)
+                    && withDrawalAmount > 0 && withDrawalAmount <= account.AvailableBalance)
                 {
                     validWithdrawalAmount = true;
                 }
                 else
                 {
-                    Console.WriteLine($"Ogiltigt belopp. " +
-                        $"Vänligen välj ett belopp större än noll " +
-                        $"och mindre än din balans på kontot: {account.AccountBalance} {account.Currency}.");
+                    Console.WriteLine(
+                        $"Ogiltigt belopp. Vänligen välj ett belopp större än noll " +
+                        $"och högst ditt tillgängliga saldo: " +
+                        $"{account.AvailableBalance:N2} {account.Currency}.");
+
+                    //Console.WriteLine($"Ogiltigt belopp. " +
+                    // $"Vänligen välj ett belopp större än noll " +
+                    // $"och mindre än din balans på kontot: {account.AccountBalance} {account.Currency}.");
                 }
             }
             while (!validWithdrawalAmount);
