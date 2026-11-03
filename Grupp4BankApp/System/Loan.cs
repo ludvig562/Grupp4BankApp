@@ -249,7 +249,7 @@ namespace Grupp4BankApp.System
                 Console.WriteLine($"Lånebelopp: {loan.LoanAmount} kr");
                 Console.WriteLine($"Årsränta: {loan._interestRate:P0}");
                 Console.WriteLine($"Återbetalningstid: {loan.LoanYears} år");
-                Console.WriteLine($"Total skuld: {loan.TotalLoan} kr");
+                Console.WriteLine($"Total skuld: {loan.TotalLoan:N3} kr");
                 Console.WriteLine();
                 i++;
             }
