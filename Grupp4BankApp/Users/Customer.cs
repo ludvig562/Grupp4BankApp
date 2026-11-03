@@ -223,10 +223,11 @@ namespace Grupp4BankApp.Users
         //method for depositing money into account
         public void DepositMoney()
         {
+            ShowBankAccounts(); //show overview of all their accounts
+
             bool depositCompleted = false;
             while (!depositCompleted)
             {
-                ShowBankAccounts(); //show overview of all their accounts
                 Console.WriteLine("På vilket konto vill du sätta in pengar? Fyll i ditt bankkontonummer.\n" +
                     "(Eller angå 0 för att gå tillbaka till huvudmenyn.)");
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
@@ -242,13 +243,12 @@ namespace Grupp4BankApp.Users
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
-                        Console.ReadKey();
                         continue;
                     }
 
                     decimal depositMoneyAmount = GetDepositAmount(); //use method to get the deposit money amount
                     account.Deposit(depositMoneyAmount); //method for depositing money (in bankaccount class)
-                                                         //add deposit to transaction log
+                    //add deposit to transaction log
                     TransactionSystem transaction = new TransactionSystem();
                     transaction.AddTransactionToLogg(account, depositMoneyAmount, true);
                     WriteMessageInterestSavingsAccount(account); //method for writing interest in savings account
@@ -259,7 +259,6 @@ namespace Grupp4BankApp.Users
                 else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
-                    Console.ReadKey();
                 }
             }
         }
@@ -290,10 +289,11 @@ namespace Grupp4BankApp.Users
         //method for withdrawing money from account
         public void WithDrawMoney()
         {
+            ShowBankAccounts(); //show overview of all their accounts
+
             bool withdrawalCompleted = false;
             while (!withdrawalCompleted)
             {
-                ShowBankAccounts(); //show overview of all their accounts
                 Console.WriteLine("Från vilket konto vill du ta ut pengar? Fyll i ditt bankkontonummer.\n" +
                     "(Eller angå 0 för att gå tillbaka till huvudmenyn.)");
                 if (int.TryParse(Console.ReadLine(), out int bankNumber))
@@ -308,7 +308,6 @@ namespace Grupp4BankApp.Users
                     if (account == null) //if account number does not exist
                     {
                         Console.WriteLine("Det finns inget konto med det kontonumret.");
-                        Console.ReadKey();
                         continue;
                     }
                     if (account.AccountBalance <= 0) //if the account balance is zero or less
@@ -317,7 +316,6 @@ namespace Grupp4BankApp.Users
                             $"Du har inga pengar på kontot {account.BankAccountNumber}, " +
                             $"så du kan inte ta ut pengar från detta konto. " +
                             "Välj ett annat konto.");
-                        Console.ReadKey();
                         continue;
                     }
                     decimal withdrawalMoneyAmount = GetWithdrawalAmount(account); //use method to get the withdrawal money amount
@@ -333,7 +331,6 @@ namespace Grupp4BankApp.Users
                 else //if user input is not a (bank account) number
                 {
                     Console.WriteLine("Oops. Du måste skriva ett bankkontonummer. Försök igen.");
-                    Console.ReadKey();
                 }
             }
         }
